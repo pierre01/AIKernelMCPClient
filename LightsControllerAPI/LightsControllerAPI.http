@@ -4,10 +4,29 @@
 GET {{LightsControllerAPI_HostAddress}}/openapi/v1/openapi.json
 ###
 
-GET {{LightsControllerAPI_HostAddress}}/lights/{id}
+GET {{LightsControllerAPI_HostAddress}}/lights/
 
 ###
 
+GET {{LightsControllerAPI_HostAddress}}/lights/3
+
+###
 GET {{LightsControllerAPI_HostAddress}}/rooms
+
+###
+
+PUT {{LightsControllerAPI_HostAddress}}/lights/dimTo/5/25
+
+###
+
+GET {{LightsControllerAPI_HostAddress}}/lights/6
+
+###
+
+PUT {{LightsControllerAPI_HostAddress}}/lights/dimTo/6/50
+
+###
+
+GET {{LightsControllerAPI_HostAddress}}/rooms/lights/5
 
 ###
