@@ -1,0 +1,13 @@
+@LightsControllerAPI_HostAddress = http://localhost:5042
+
+
+GET {{LightsControllerAPI_HostAddress}}/openapi/v1/openapi.json
+###
+
+GET {{LightsControllerAPI_HostAddress}}/lights/{id}
+
+###
+
+GET {{LightsControllerAPI_HostAddress}}/rooms
+
+###
