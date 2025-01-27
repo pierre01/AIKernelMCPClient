@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
+namespace LightsAPICommon;
 
 public class Light(int id, string name, int roomId, bool isOn = false, bool isRgb = false, string hexColor = "#FFFFFF", bool isDimable = false, int brightness = 100)
 {

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
+namespace LightsAPICommon;
+
 public class Room(int id, string name)
 {
     [Key]

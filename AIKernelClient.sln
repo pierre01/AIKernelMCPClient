@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightsControllerAPI", "Ligh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfHousePassiveClient", "WpfHousePassiveClient\WpfHousePassiveClient.csproj", "{50F619E3-27AC-4CD0-AAC7-B0172D4BC951}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightsAPICommon", "LightsAPICommon\LightsAPICommon.csproj", "{368525B7-A79D-44E5-B9F8-4185B22E3467}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{50F619E3-27AC-4CD0-AAC7-B0172D4BC951}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50F619E3-27AC-4CD0-AAC7-B0172D4BC951}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50F619E3-27AC-4CD0-AAC7-B0172D4BC951}.Release|Any CPU.Build.0 = Release|Any CPU
+		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

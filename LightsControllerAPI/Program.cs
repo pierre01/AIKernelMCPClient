@@ -1,8 +1,20 @@
+using LightsAPICommon;
 using Microsoft.AspNetCore.Builder;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+
+// Configure Kestrel to use HTTPS
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // You can configure the specific ports for HTTP/HTTPS here
+    //options.ListenAnyIP(5041); // HTTP
+    options.ListenAnyIP(5042, listenOptions =>
+    {
+        listenOptions.UseHttps(); // HTTPS
+    });
+});
 
 //// Protecting the API with JWT
 //builder.Services.AddAuthentication().AddJwtBearer();
@@ -21,42 +33,9 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 var app = builder.Build();
 app.MapOpenApi("/openapi/{documentName}/openapi.json");
 
-var sampleLights = new Light[] {
-    new(1, "Ceiling",1),
-    new(2, "Ceiling",2),
-    new(3, "Stairs Chandelier", 3),
-    new(4, "Main Light",4),
-    new(4, "Mirror Light",4),
-    new(5, "Left Nightstand Light", 5,isOn:true,isDimable:true),
-    new(6, "Right Nightstand Light", 5,isOn:true,isDimable:true),
-    new(7, "Over Bed Light", 5),
-    new(8, "Ceiling Light",6),
-    new(9, "Bar Light", 2),
-    new(10, "Cabinets Lights", 2),
-    new(11, "Ceiling", 2),
-    new(12, "Desk Light", 9),
-    new(13, "Main Light", 9),
-    new(14, "Mirror Light",4),
-    new(15, "Mirror Light",7),
-    new(16, "Closet",10),
-    new(17, "Closet",11),
-    new(18, "Wall",1),
-};
+var sampleLights = House.Lights;
 
-var SampleRooms = new Room[] {
-    new(1, "Living Room"),
-    new(2, "Kitchen"),
-    new(3, "Guest Bedroom"),
-    new(4, "Master Bathroom"),
-    new(5, "Master Bedroom"),
-    new(6, "Stairs"),
-    new(7, "Guest Bathroom"),
-    new(8, "Downstairs Bathroom"),
-    new(9, "Office"),
-    new(10, "Master Closet"),
-    new(11, "Guest Closet"),
-    new(12, "Laundry Room"),
-    };
+var SampleRooms = House.Rooms;
 
 var roomsApi = app.MapGroup("/rooms");
 roomsApi.WithTags("Rooms");
@@ -73,7 +52,7 @@ roomsApi.MapGet("/{id}", (int id) =>
   .WithDescription("What is the name of the room ");
 
 // Get all the lights in a room
-roomsApi.MapGet("/lights/{id}",(int id)=>
+roomsApi.MapGet("/{id}/lights",(int id)=>
 {
     var lights = sampleLights.Where(l => l.RoomId == id).ToArray();
     return lights.Any() ? Results.Ok(lights) : Results.NotFound();
@@ -98,25 +77,25 @@ lightsApi.MapGet("/{id}", (int id) =>
 //    return Results.Created($"/lights/{light.Id}", light);
 //});
 
-lightsApi.MapPut("/turnOn/{id}", (int id) =>
+lightsApi.MapPut("/{id}/turnOn", (int id) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
         return Results.NotFound();
     existingLight.IsOn = true;
-    return Results.Accepted(value:existingLight);
+    return Results.Ok(value:existingLight);
 });
 
-lightsApi.MapPut("/turnOff/{id}", (int id) =>
+lightsApi.MapPut("/{id}/turnOff", (int id) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
         return Results.NotFound();
     existingLight.IsOn = false;
-    return Results.Accepted(value:existingLight);
+    return Results.Ok(value:existingLight);
 });
 
-lightsApi.MapPut("/setColor/{id}/{color}", (int id, string color) =>
+lightsApi.MapPut("/{id}/setColor/{color}", (int id, string color) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
@@ -124,10 +103,10 @@ lightsApi.MapPut("/setColor/{id}/{color}", (int id, string color) =>
       if(!existingLight.IsRgb)
         return Results.BadRequest("Light can't change colors");
       existingLight.HexColor = color;
-    return Results.Accepted(value:existingLight);
+    return Results.Ok(value:existingLight);
 });
 
-lightsApi.MapPut("/dimTo/{id}/{brightness}", (int id, int brightness) =>
+lightsApi.MapPut("/{id}/dimTo/{brightness}", (int id, int brightness) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
@@ -141,14 +120,14 @@ lightsApi.MapPut("/dimTo/{id}/{brightness}", (int id, int brightness) =>
     
     existingLight.Brightness = brightness;
 
-    return Results.Accepted(value: existingLight);
+    return Results.Ok(value: existingLight);
 });
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.SwaggerEndpoint("/openapi/v1/openapi.json", "v1");
     });
 
 }

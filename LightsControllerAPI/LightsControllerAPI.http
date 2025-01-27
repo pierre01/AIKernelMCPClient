@@ -1,32 +1,39 @@
-@LightsControllerAPI_HostAddress = http://localhost:5042
+@LightsAPIHost = https://localhost:5042
 
 
-GET {{LightsControllerAPI_HostAddress}}/openapi/v1/openapi.json
+GET {{LightsAPIHost}}/openapi/v1/openapi.json
 ###
 
-GET {{LightsControllerAPI_HostAddress}}/lights/
+GET {{LightsAPIHost}}/lights
 
 ###
-
-GET {{LightsControllerAPI_HostAddress}}/lights/3
-
-###
-GET {{LightsControllerAPI_HostAddress}}/rooms
+GET {{LightsAPIHost}}/rooms
 
 ###
-
-PUT {{LightsControllerAPI_HostAddress}}/lights/dimTo/5/25
+GET {{LightsAPIHost}}/lights/3
 
 ###
 
-GET {{LightsControllerAPI_HostAddress}}/lights/6
+PUT {{LightsAPIHost}}/lights/5/dimTo/25
 
 ###
 
-PUT {{LightsControllerAPI_HostAddress}}/lights/dimTo/6/50
+GET {{LightsAPIHost}}/lights/6
 
 ###
 
-GET {{LightsControllerAPI_HostAddress}}/rooms/lights/5
+PUT {{LightsAPIHost}}/lights/6/dimTo/50
+
+###
+
+GET {{LightsAPIHost}}/rooms/5/lights
+
+###
+
+PUT {{LightsAPIHost}}/lights/5/turnOff
+
+###
+
+PUT {{LightsAPIHost}}/lights/5/turnOn
 
 ###
