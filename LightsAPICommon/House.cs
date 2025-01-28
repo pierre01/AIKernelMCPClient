@@ -13,7 +13,7 @@ public static class House
     static House()
     {
         var sampleLights = new Light[] {
-            new(1, "Ceiling",1),
+            new(1, "Ceiling",1, isRgb:true),
             new(2, "Ceiling",2),
             new(3, "Stairs Chandelier", 3),
             new(4, "Main Light",4),

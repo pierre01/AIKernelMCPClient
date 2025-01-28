@@ -51,13 +51,13 @@ roomsApi.MapGet("/{id}", (int id) =>
   .WithSummary("Retreive the room Name and unique ID used by the light RoomId")
   .WithDescription("What is the name of the room ");
 
-// Get all the lights in a room
-roomsApi.MapGet("/{id}/lights",(int id)=>
-{
-    var lights = sampleLights.Where(l => l.RoomId == id).ToArray();
-    return lights.Any() ? Results.Ok(lights) : Results.NotFound();
+//// Get all the lights in a room
+//roomsApi.MapGet("/{id}/lights",(int id)=>
+//{
+//    var lights = sampleLights.Where(l => l.RoomId == id).ToArray();
+//    return lights.Any() ? Results.Ok(lights) : Results.NotFound();
 
-});
+//});
 
 var lightsApi = app.MapGroup("/lights");
 
@@ -77,32 +77,53 @@ lightsApi.MapGet("/{id}", (int id) =>
 //    return Results.Created($"/lights/{light.Id}", light);
 //});
 
-lightsApi.MapPut("/{id}/turnOn", (int id) =>
+lightsApi.MapPut("/{id}/switch/{onoff}", (int id, string onoff) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
+    {
         return Results.NotFound();
-    existingLight.IsOn = true;
+    }
+
+    onoff = onoff.ToLower();
+    if (onoff == "on")
+    {
+        existingLight.IsOn = true;
+    }
+    else if (onoff == "off")
+    {
+        existingLight.IsOn = false;
+    }
+    else
+    {
+        return Results.BadRequest("Invalid value for onoff. Must be 'on' or 'off'");
+    }
+
     return Results.Ok(value:existingLight);
 });
 
-lightsApi.MapPut("/{id}/turnOff", (int id) =>
-{
-    var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
-    if (existingLight is null)
-        return Results.NotFound();
-    existingLight.IsOn = false;
-    return Results.Ok(value:existingLight);
-});
+
 
 lightsApi.MapPut("/{id}/setColor/{color}", (int id, string color) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
+    {
         return Results.NotFound();
-      if(!existingLight.IsRgb)
+    }
+
+    if (!existingLight.IsRgb)
+    {
         return Results.BadRequest("Light can't change colors");
-      existingLight.HexColor = color;
+    }
+    // TODO: validate color
+    color = color.ToUpper();
+    if (!System.Text.RegularExpressions.Regex.IsMatch(color, "^(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$"))
+    {
+        return Results.BadRequest("Invalid color format. Must be in the format RRGGBB");
+    }
+
+    existingLight.HexColor = color;
     return Results.Ok(value:existingLight);
 });
 
@@ -110,14 +131,21 @@ lightsApi.MapPut("/{id}/dimTo/{brightness}", (int id, int brightness) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
+    {
         return Results.NotFound();
-    if(!existingLight.IsDimable)
+    }
+
+    if (!existingLight.IsDimable)
+    {
         return Results.BadRequest("Light is not dimable");
+    }
     // TODO: validate brightness
-      // Validate brightness
+    // Validate brightness
     if (brightness < 0 || brightness > 100)
+    {
         return Results.BadRequest("Brightness must be between 0 and 100");
-    
+    }
+
     existingLight.Brightness = brightness;
 
     return Results.Ok(value: existingLight);

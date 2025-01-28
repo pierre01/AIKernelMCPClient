@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+		<TextBox x:Name="ResultTextBox" Margin="0,42,0,0">
 
-    </Grid>
+		</TextBox>
+		<Button Content="Fetch Data" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="94" Click="FetchDataButton_Click"/>
+
+	</Grid>
 </Window>

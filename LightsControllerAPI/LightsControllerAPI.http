@@ -18,6 +18,9 @@ PUT {{LightsAPIHost}}/lights/5/dimTo/25
 
 ###
 
+PUT {{LightsAPIHost}}/lights/5/dimto/25
+
+###
 GET {{LightsAPIHost}}/lights/6
 
 ###
@@ -26,14 +29,30 @@ PUT {{LightsAPIHost}}/lights/6/dimTo/50
 
 ###
 
-GET {{LightsAPIHost}}/rooms/5/lights
+PUT {{LightsAPIHost}}/lights/5/switch/Off
 
 ###
 
-PUT {{LightsAPIHost}}/lights/5/turnOff
+PUT {{LightsAPIHost}}/lights/5/switch/on
 
 ###
 
-PUT {{LightsAPIHost}}/lights/5/turnOn
+PUT {{LightsAPIHost}}/lights/1/setColor/FF0000
+
+###
+
+PUT {{LightsAPIHost}}/lights/1/setColor/00ff00
+
+###
+
+PUT {{LightsAPIHost}}/lights/1/setColor/FFffff
+
+###
+
+PUT {{LightsAPIHost}}/lights/1/setColor/F0000
+
+###
+
+PUT {{LightsAPIHost}}/lights/1/setColor/gF0000
 
 ###

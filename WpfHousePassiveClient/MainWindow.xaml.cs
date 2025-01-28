@@ -25,7 +25,7 @@ public partial class MainWindow : Window
     private async void FetchDataButton_Click(object sender, RoutedEventArgs e)
     {
         // Example endpoint: single lights from jsonplaceholder
-        string apiUrl = "http://localhost:5042/lights";
+        string apiUrl = "https://localhost:5042/lights";
 
         try
         {
@@ -41,19 +41,30 @@ public partial class MainWindow : Window
             List<Light>? lights = JsonSerializer.Deserialize<List<Light>>(rawJson);
             if (lights != null)
             {
-                // Display a property or the entire JSON
-                //ResultTextBlock.Text = $"Post Title: {lights.Title}\n" +
-                //                       $"Post Body: {lights.Body}";
+                foreach(var light in lights)
+                {
+                    // Display a property or the entire JSON
+                    ResultTextBox.Text += $"Light Id: {light.Id}\n" +
+                        $"Light Name: {light.Name}\n" +
+                        $"Light RoomId: {light.RoomId}\n" +
+                        $"Light IsOn: {light.IsOn}\n" +
+                        $"Light IsRgb: {light.IsRgb}\n" +
+                        $"Light HexColor: {light.HexColor}\n" +
+                        $"Light IsDimable: {light.IsDimable}\n" +
+                        $"Light Brightness: {light.Brightness}\n\n";
+                }
             }
             else
             {
-                //ResultTextBlock.Text = "No valid data returned.";
+                ResultTextBox.Text += "No valid data returned.\n";
             }
         }
         catch (Exception ex)
         {
-            //ResultTextBlock.Text = $"An error occurred: {ex.Message}";
+            ResultTextBox.Text = $"An error occurred: {ex.Message}";
         }
     }
+
+
 }
 

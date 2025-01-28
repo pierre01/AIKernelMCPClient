@@ -14,10 +14,3 @@ public class Room(int id, string name)
     public string Name { get; set; } = name;
 }
 
-//{
-//   "isOn": true,
-//   "hexColor": "#FF0000",
-//   "brightness": 100,
-//   "fadeDurationInMilliseconds": 500,
-//   "scheduledTime": "2023-07-12T12:00:00Z"
-//}
