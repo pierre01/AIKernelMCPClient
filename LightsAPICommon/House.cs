@@ -13,25 +13,26 @@ public static class House
     static House()
     {
         var sampleLights = new Light[] {
-            new(1, "Ceiling",1, isRgb:true),
-            new(2, "Ceiling",2),
-            new(3, "Stairs Chandelier", 3),
+            new(1, "Front Ceiling",1, isRgb:true,isDimable:true),
+            new(2, "Ceiling",2,isRgb:true,isDimable:true),
+            new(3, "Stairs Chandelier", 3,isDimable:true),
             new(4, "Main Light",4),
-            new(4, "Mirror Light",4),
-            new(5, "Left Nightstand Light", 5,isOn:true,isDimable:true),
-            new(6, "Right Nightstand Light", 5,isOn:true,isDimable:true),
+            new(5, "Left Nightstand Light", 5,isDimable:true),
+            new(6, "Right Nightstand Light", 5,isDimable:true),
             new(7, "Over Bed Light", 5),
             new(8, "Ceiling Light",6),
-            new(9, "Bar Light", 2),
-            new(10, "Cabinets Lights", 2),
+            new(9, "Bar Light", 2,isRgb:true,isDimable:true),
+            new(10, "Cabinets Lights", 2,isDimable:true),
             new(11, "Ceiling", 2),
             new(12, "Desk Light", 9),
-            new(13, "Main Light", 9),
+            new(13, "Main Light", 9,  isDimable : true),
             new(14, "Mirror Light",4),
             new(15, "Mirror Light",7),
             new(16, "Closet",10),
             new(17, "Closet",11),
             new(18, "Wall",1),
+            new(19, "Back Ceilling",1,isRgb:true,isDimable:true),
+            new(20, "Mirror Light",4),
         };
 
         var SampleRooms = new Room[] {

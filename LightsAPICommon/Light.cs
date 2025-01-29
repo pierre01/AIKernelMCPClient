@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 namespace LightsAPICommon;
 
-public class Light(int id, string name, int roomId, bool isOn = false, bool isRgb = false, string hexColor = "#FFFFFF", bool isDimable = false, int brightness = 100)
+public class Light(int id, string name, int roomId, bool isOn = false, bool isRgb = false, string hexColor = "FFFFFF", bool isDimable = false, int brightness = 100)
 {
-    [Description]
+    [Description("Unique Identifier for the light")]
     public int Id { get; set; } = id;
 
     [Required]
-    [Description]
+    [Description("The name of the light in the room (RoomId)")]
     public string Name { get; set; } = name;
 
     [Required]
@@ -17,7 +17,7 @@ public class Light(int id, string name, int roomId, bool isOn = false, bool isRg
     public int RoomId { get; set; } = roomId;
 
     [DefaultValue(false)]
-    [Description("Is the light switched on or off, active or inactive if it isOn=true the light is On")]
+    [Description("Is the light switched on or off, active or inactive, if  IsOn=true the light is On")]
     public bool IsOn { get; set; } = isOn;
 
     [DefaultValue(false)]
@@ -31,11 +31,11 @@ public class Light(int id, string name, int roomId, bool isOn = false, bool isRg
     public string HexColor { get; set; } = hexColor;
 
     [DefaultValue(false)]
-    [Description("Does the light have a dimmer in order to change its brightness")]
+    [Description("Does the light have a dimmer in order to change its brightness. If true the Brightness value can be changed")]
     public bool IsDimable { get; set; } = isDimable;
 
     [DefaultValue(100)]
     [Range(0, 100)]
-    [Description("If the light can be dimmed (i.e. IsDimmable=true) the brightness can be changed from 0 to 100. 100 is the maximum brightness for the specified light")]
+    [Description("If the light can be dimmed (i.e. IsDimmable=true) the brightness can be changed from 0 to 100. 100 is the maximum brightness for any light")]
     public int Brightness { get; set; } = brightness;
 }

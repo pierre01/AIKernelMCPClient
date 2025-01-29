@@ -40,43 +40,41 @@ var SampleRooms = House.Rooms;
 var roomsApi = app.MapGroup("/rooms");
 roomsApi.WithTags("Rooms");
 
+// Get all the rooms
 roomsApi.MapGet("/", () => SampleRooms)
-  .WithSummary("Retreive all the rooms Names and unique IDs used by the lights RoomId")
-  .WithDescription("of light id=1 and roomID=3 the room mame for this light will be the Room which Id=3");
+  .WithSummary("Retreive all the rooms Names and unique IDs used by the lights property RoomId")
+  .WithDescription("if light id=1 and roomID=3 the room mame for this light will be the Room which Id=3");
 
+// Get a specific room
 roomsApi.MapGet("/{id}", (int id) =>
     SampleRooms.FirstOrDefault(a => a.Id == id) is { } room
         ? Results.Ok(room)
         : Results.NotFound())
-  .WithSummary("Retreive the room Name and unique ID used by the light RoomId")
-  .WithDescription("What is the name of the room ");
+  .WithSummary("Retreive the room Name and unique ID (used by the lights property RoomId)")
+  .WithDescription("A room is representing a group of lights where the RoomId is the same. if a command is adressing the room without specifying the light name then all the lights in the room should be receiving the command ");
 
-//// Get all the lights in a room
-//roomsApi.MapGet("/{id}/lights",(int id)=>
-//{
-//    var lights = sampleLights.Where(l => l.RoomId == id).ToArray();
-//    return lights.Any() ? Results.Ok(lights) : Results.NotFound();
-
-//});
 
 var lightsApi = app.MapGroup("/lights");
 
+// Get all the lights
 lightsApi.MapGet("/", () => sampleLights)
   .WithSummary("Retreive all the lights information and state")
-  .WithDescription("This is a description.");
+  .WithDescription("Returns the list of the lights including their capabilities and current state");
 
+// Get a specific light
 lightsApi.MapGet("/{id}", (int id) =>
     sampleLights.FirstOrDefault(a => a.Id == id) is { } light
         ? Results.Ok(light)
         : Results.NotFound())  
   .WithSummary("Retreive the information for one light")
-  .WithDescription("This is a description.");
+  .WithDescription("Returns the capabilities and current state of a light");
 
 //lightsApi.MapPost("/", (Light light) =>
 //{
 //    return Results.Created($"/lights/{light.Id}", light);
 //});
 
+// Switch a light on or off
 lightsApi.MapPut("/{id}/switch/{onoff}", (int id, string onoff) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
@@ -100,10 +98,13 @@ lightsApi.MapPut("/{id}/switch/{onoff}", (int id, string onoff) =>
     }
 
     return Results.Ok(value:existingLight);
-});
+})  .WithSummary("Switch a light on or off")
+    .WithDescription("Change the light state. illuminate would make the parameter 'on'")
+    .WithTags("Lights");
 
 
 
+// Change the Light Color
 lightsApi.MapPut("/{id}/setColor/{color}", (int id, string color) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
@@ -114,9 +115,9 @@ lightsApi.MapPut("/{id}/setColor/{color}", (int id, string color) =>
 
     if (!existingLight.IsRgb)
     {
-        return Results.BadRequest("Light can't change colors");
+        return Results.BadRequest("This light can't change color");
     }
-    // TODO: validate color
+
     color = color.ToUpper();
     if (!System.Text.RegularExpressions.Regex.IsMatch(color, "^(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$"))
     {
@@ -125,8 +126,10 @@ lightsApi.MapPut("/{id}/setColor/{color}", (int id, string color) =>
 
     existingLight.HexColor = color;
     return Results.Ok(value:existingLight);
-});
+})  .WithSummary("Change the color of a light that accepts RGB values (i.e. IsRgb=true)")
+    .WithDescription(@"Color of the light in exadecimal format: RRGGBB  Each pair of characters (RR, GG, BB) represents the intensity of Red, Green, and Blue from 00 to FF (in decimal: 0 to 255). Red would be FF0000, Blue: 0000FF, Green: 00FF00, and other colors like Yellow: FFFF00 or Purple: 800080 ");
 
+// Dim the light
 lightsApi.MapPut("/{id}/dimTo/{brightness}", (int id, int brightness) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
@@ -137,19 +140,21 @@ lightsApi.MapPut("/{id}/dimTo/{brightness}", (int id, int brightness) =>
 
     if (!existingLight.IsDimable)
     {
-        return Results.BadRequest("Light is not dimable");
+        return Results.BadRequest("This light is not dimable");
     }
     // TODO: validate brightness
     // Validate brightness
     if (brightness < 0 || brightness > 100)
     {
-        return Results.BadRequest("Brightness must be between 0 and 100");
+        return Results.BadRequest("Brightness value must be between 0 and 100");
     }
 
     existingLight.Brightness = brightness;
 
     return Results.Ok(value: existingLight);
-});
+}).WithSummary("Change the light brightness for lights that can be dimmed (i.e. IsDimable=true) otherwise the value is 100 and cannot be changed")
+  .WithDescription(@"The value 100 is the maximum intensity for the light. It can be addressed as a percentage also, 0 is complete dark similar to off, 100 is full brightness. Lighten would increase it by 25, darken would decrease it by 25");
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -169,10 +174,3 @@ internal partial class AppJsonSerializerContext : JsonSerializerContext
 
 }
 
-//{
-//   "isOn": true,
-//   "hexColor": "#FF0000",
-//   "brightness": 100,
-//   "fadeDurationInMilliseconds": 500,
-//   "scheduledTime": "2023-07-12T12:00:00Z"
-//}

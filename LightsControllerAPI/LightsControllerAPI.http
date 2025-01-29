@@ -49,10 +49,61 @@ PUT {{LightsAPIHost}}/lights/1/setColor/FFffff
 
 ###
 
-PUT {{LightsAPIHost}}/lights/1/setColor/F0000
+PUT {{LightsAPIHost}}/lights/1/setColor/F00000
 
 ###
 
-PUT {{LightsAPIHost}}/lights/1/setColor/gF0000
+PUT {{LightsAPIHost}}/lights/1/setColor/Ff00ff
 
 ###
+
+# Living Room Lights ------------------------------------------------
+PUT {{LightsAPIHost}}/lights/1/switch/on
+
+###
+
+PUT {{LightsAPIHost}}/lights/1/switch/off
+
+
+###
+
+PUT {{LightsAPIHost}}/lights/1/dimTo/50
+
+###
+
+PUT {{LightsAPIHost}}/lights/1/dimTo/100
+
+###
+
+PUT {{LightsAPIHost}}/lights/18/switch/on
+
+###
+
+PUT {{LightsAPIHost}}/lights/18/switch/off
+
+
+###
+
+PUT {{LightsAPIHost}}/lights/19/switch/on
+
+###
+
+PUT {{LightsAPIHost}}/lights/19/switch/off
+
+
+###
+
+PUT {{LightsAPIHost}}/lights/19/dimTo/50
+
+###
+
+PUT {{LightsAPIHost}}/lights/19/dimTo/100
+
+###
+PUT {{LightsAPIHost}}/lights/19/setColor/FF0000  
+
+###
+PUT {{LightsAPIHost}}/lights/19/setColor/00ff00  
+
+###
+PUT {{LightsAPIHost}}/lights/19/setColor/0000ff  
