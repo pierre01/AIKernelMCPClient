@@ -25,7 +25,8 @@ public partial class LightViewModel : ObservableObject
         //string hexBrightStr = $"#{hexBright:X2}{light.HexColor}";
         LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString($"#{hexBright:X2}{light.HexColor}"));
         OriginPointColor = (Color)ColorConverter.ConvertFromString($"#{hexOriginPoint:X2}{light.HexColor}");
-        Brightness = light.Brightness;
+         EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.HexColor}");
+       Brightness = light.Brightness;
         HexColor = light.HexColor;
         SwitchLightOnOrOff(light);
 
@@ -63,6 +64,7 @@ public partial class LightViewModel : ObservableObject
             OriginPointColor = Colors.Transparent;
             OnPropertyChanged(nameof(LightColor));
             OnPropertyChanged(nameof(OriginPointColor));
+            OnPropertyChanged(nameof(EndPointColor));
             LightSwitched?.Invoke(this, false);
         }
         else
@@ -70,6 +72,7 @@ public partial class LightViewModel : ObservableObject
             UpdateLightAndHalo(light);
             OnPropertyChanged(nameof(LightColor));
             OnPropertyChanged(nameof(OriginPointColor));
+            OnPropertyChanged(nameof(EndPointColor));
             LightSwitched?.Invoke(this, false);
         }
     }
@@ -81,6 +84,7 @@ public partial class LightViewModel : ObservableObject
         var hexOriginPoint = (int)Math.Round(hexBright * 0.75);
         LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString($"#{hexBright:X2}{light.HexColor}"));
         OriginPointColor = (Color)ColorConverter.ConvertFromString($"#{hexOriginPoint:X2}{light.HexColor}");
+        EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.HexColor}");
     }
 
     public int Id => _light.Id;
@@ -89,6 +93,7 @@ public partial class LightViewModel : ObservableObject
 
     public Brush LightColor { get; set; }
     public Color OriginPointColor { get; set; }
+    public Color EndPointColor { get; set; }
 
     public string HexColor
     {
@@ -98,6 +103,7 @@ public partial class LightViewModel : ObservableObject
             SetProperty(_light.HexColor, value, _light, (light, v) => light.HexColor = v);
             OnPropertyChanged(nameof(LightColor));
             OnPropertyChanged(nameof(OriginPointColor));
+            OnPropertyChanged(nameof(EndPointColor));
         }
     }
 
@@ -115,6 +121,7 @@ public partial class LightViewModel : ObservableObject
             SetProperty(_light.Brightness, value, _light, (light, v) => light.Brightness = v);
             OnPropertyChanged(nameof(LightColor));
             OnPropertyChanged(nameof(OriginPointColor));
+            OnPropertyChanged(nameof(EndPointColor));
         }
     }
 }

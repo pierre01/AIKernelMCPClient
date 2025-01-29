@@ -71,6 +71,10 @@ PUT {{LightsAPIHost}}/lights/1/dimTo/50
 
 ###
 
+PUT {{LightsAPIHost}}/lights/1/dimTo/25
+
+###
+
 PUT {{LightsAPIHost}}/lights/1/dimTo/100
 
 ###

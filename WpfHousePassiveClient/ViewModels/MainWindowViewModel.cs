@@ -59,9 +59,7 @@ class MainWindowViewModel:ObservableObject
 
             // Get raw JSON
             string rawJson = await response.Content.ReadAsStringAsync();
-            //List<Post>? posts = JsonSerializer.Deserialize<List<Post>>(rawJson);
 
-            // Option 1: Work with a strongly-typed model
             List<Light> lights = JsonSerializer.Deserialize<List<Light>>(rawJson,_serializerOptions);
             if (lights != null)
             {

@@ -12,28 +12,28 @@
 	mc:Ignorable="d">
 	<Grid ClipToBounds="True">
 		<Rectangle x:Name="RoomDark"  Fill="#FF1a1a1a" />
-		<Rectangle x:Name="RoomLight" Visibility="{Binding IsRoomDark}"  Fill="#FF676767"  />
+		<Rectangle x:Name="RoomLight" Visibility="{Binding IsRoomLighten}"  Fill="#727272"  />
 		<Ellipse x:Name="FrontLightGlow" HorizontalAlignment="Left" Height="450" VerticalAlignment="Center" Width="400">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding FrontLights.OriginPointColor}" Offset="0.073"/>
-					<GradientStop Color="Transparent" Offset="0.913"/>
+					<GradientStop Color="{Binding FrontLights.OriginPointColor}" Offset="0.4"/>
+					<GradientStop Color="{Binding FrontLights.EndPointColor}" Offset="1"/>
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
 		<Ellipse x:Name="WallLightGlow" HorizontalAlignment="Left" Height="220" Margin="241,342,0,0" VerticalAlignment="Top" Width="294">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding WallLight.OriginPointColor}" Offset="0.073"/>
-					<GradientStop Color="Transparent" Offset="0.913"/>
+					<GradientStop Color="{Binding WallLight.OriginPointColor}" Offset="0.4"/>
+					<GradientStop Color="{Binding WallLight.EndPointColor}" Offset="1"/>
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
 		<Ellipse x:Name="BackLightGlow" HorizontalAlignment="Left" Height="412" VerticalAlignment="Top" Width="400" Margin="362,-7,0,0">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding BackLights.OriginPointColor}" Offset="0.073"/>
-					<GradientStop Color="Transparent" Offset="0.913"/>
+					<GradientStop Color="{Binding BackLights.OriginPointColor}" Offset="0.4"/>
+					<GradientStop Color="{Binding BackLights.EndPointColor}" Offset="1"/>
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>

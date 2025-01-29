@@ -15,9 +15,9 @@ public partial class LivingRoomViewModel : ObservableObject
     {
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
-            LightViewModel front = new LightViewModel(new Light(1, "Front", 1, true, true, "FFFFFF", true, 100));
+            LightViewModel front = new LightViewModel(new Light(1, "Front", 1, true, true, "FFFFFF", true, 30));
            
-            LightViewModel back = new LightViewModel(new Light(19, "Back", 1, true, true, "FF0000", true, 50));
+            LightViewModel back = new LightViewModel(new Light(19, "Back", 1, true, true, "FF0000", true, 100));
          
             LightViewModel wall = new LightViewModel(new Light(18, "Wall", 1, true, false, "FFFFFF", true, 100));
 
@@ -48,7 +48,7 @@ public partial class LivingRoomViewModel : ObservableObject
     public partial LightViewModel WallLight { get; set; }
 
 
-    public Visibility IsRoomDark
+    public Visibility IsRoomLighten
     {
         get
         {
@@ -65,6 +65,6 @@ public partial class LivingRoomViewModel : ObservableObject
 
     private void Lights_LightSwitched(object sender, bool e)
     {
-        OnPropertyChanged(nameof(IsRoomDark));
+        OnPropertyChanged(nameof(IsRoomLighten));
     }
 }
