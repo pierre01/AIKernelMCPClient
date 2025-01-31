@@ -9,33 +9,34 @@ using System.Windows;
 
 namespace WpfHousePassiveClient.ViewModels;
 
-public partial class StairsViewModel:ObservableObject
+
+public partial class MasterClosetViewModel:ObservableObject
 {
-    public StairsViewModel()
+    public MasterClosetViewModel()
     {
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
            
-            ChandelierLight = new LightViewModel(new Light(3, "Vanity", 3, true, true, "FFFFFF", true, 100));
+            CeilingLight = new LightViewModel(new Light(3, "ceiling", 3, true, true, "FFFFFF", true, 100));
 
         }
     }
 
-    public StairsViewModel(LightViewModel chandelierLight)
+    public MasterClosetViewModel(LightViewModel ceillingLight)
     {
-        ChandelierLight = chandelierLight;
-        ChandelierLight.LightSwitched += Lights_LightSwitched;
+        CeilingLight = ceillingLight;
+        CeilingLight.LightSwitched += Lights_LightSwitched;
     }
 
 
     [ObservableProperty]
-    public partial LightViewModel ChandelierLight  { get; set; }
+    public partial LightViewModel CeilingLight  { get; set; }
     
     public Visibility IsRoomLighten
     {
         get
         {
-            if (ChandelierLight.IsOn )
+            if (CeilingLight.IsOn )
             {
                 return Visibility.Visible;
             }
@@ -50,3 +51,6 @@ public partial class StairsViewModel:ObservableObject
         OnPropertyChanged(nameof(IsRoomLighten));
     }
 }
+
+
+

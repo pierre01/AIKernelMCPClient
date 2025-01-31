@@ -4,5 +4,34 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:WpfHousePassiveClient"
 	StartupUri="MainWindow.xaml">
-	<Application.Resources />
+	<Application.Resources>
+		<Color x:Key="Primary">#512BD4</Color>
+		<Color x:Key="PrimaryDark">#ac99ea</Color>
+		<Color x:Key="PrimaryDarkText">#242424</Color>
+		<Color x:Key="Secondary">#DFD8F7</Color>
+		<Color x:Key="SecondaryDarkText">#9880e5</Color>
+		<Color x:Key="Tertiary">#2B0B98</Color>
+		<Color x:Key="FurnitureTop">#20ffffff</Color>
+		<Color x:Key="RoomDark">#FF1a1a1a</Color>
+		<Color x:Key="RoomLight">#727272</Color>
+		<SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+		<SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDark}" />
+		<SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}" />
+		<SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}" />
+		<SolidColorBrush x:Key="FurnitureTopBrush" Color="{StaticResource FurnitureTop}" />
+		<SolidColorBrush x:Key="RoomDarkBrush" Color="{StaticResource RoomDark}" />
+		<SolidColorBrush x:Key="RoomLightBrush" Color="{StaticResource RoomLight}" />
+
+		<!--  Furniture  StrokeThickness="4" RadiusX="6" RadiusY="6" StrokeDashOffset="4" StrokeDashArray="2"  -->
+		<Style x:Key="Furniture" TargetType="Rectangle">
+			<Setter Property="Stroke" Value="{StaticResource PrimaryDarkBrush}" />
+			<Setter Property="Fill" Value="{StaticResource FurnitureTopBrush}" />
+			<Setter Property="StrokeThickness" Value="4" />
+			<Setter Property="RadiusX" Value="6" />
+			<Setter Property="RadiusY" Value="6" />
+			<Setter Property="StrokeDashOffset" Value="4" />
+			<Setter Property="StrokeDashArray" Value="2" />
+		</Style>
+
+	</Application.Resources>
 </Application>

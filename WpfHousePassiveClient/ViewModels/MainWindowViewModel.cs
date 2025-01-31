@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Drawing;
 using System.Diagnostics;
+using WpfHousePassiveClient.Views;
 
 namespace WpfHousePassiveClient.ViewModels;
 
@@ -42,11 +43,24 @@ class MainWindowViewModel:ObservableObject
         }
 
         LivingRoom = new LivingRoomViewModel(_lightViewModels[1],_lightViewModels[19],_lightViewModels[18]);
+        Office = new OfficeViewModel(_lightViewModels[12],_lightViewModels[13]);
 
        Start().ConfigureAwait(false);
     }
 
+    // All the rooms (areas with light) in the House
+    public DownstairsBathroomViewModel DownstairsBathroom { get; }
+    public GuestBathroomViewModel GuestBathroom { get; }
+    public GuestBedroomViewModel GuestBedroom { get; }
+    public GuestClosetViewModel GuestCloset { get; }
+    public KitchenViewModel Kitchen { get; }
+    public LaundryRoomViewModel laundryRoom { get; }
     public LivingRoomViewModel LivingRoom { get; }
+    public MasterBathroomViewModel MasterBathroom { get; }
+    public MasterBedroomViewModel MasterBedroom { get; }
+    public MasterClosetViewModel MasterCloset { get; }
+    public OfficeViewModel Office { get; }
+    public StairsViewModel Stairs { get; }
 
     private async Task FetchData()
     {

@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LightsAPICommon;
 
+[JsonSerializable(typeof(Room))]
+[Description("A Room where one or more lights are located")]
 public class Room(int id, string name)
 {
     [Key]

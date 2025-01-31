@@ -1,5 +1,6 @@
 using LightsAPICommon;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing.Constraints;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -23,6 +24,9 @@ builder.WebHost.ConfigureKestrel(options =>
 //    o.AddPolicy("ApiTesterPolicy", b => b.RequireRole("tester"));
 //});
 
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
+
 builder.Services.AddOpenApi(); // documentNAme =v1
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -32,6 +36,12 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 var app = builder.Build();
 app.MapOpenApi("/openapi/{documentName}/openapi.json");
+//app.UseSwagger();
+//app.UseSwaggerUI(options =>
+//{
+//        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+//        options.RoutePrefix = string.Empty;
+//});
 
 var sampleLights = House.Lights;
 
@@ -65,7 +75,7 @@ lightsApi.MapGet("/", () => sampleLights)
 lightsApi.MapGet("/{id}", (int id) =>
     sampleLights.FirstOrDefault(a => a.Id == id) is { } light
         ? Results.Ok(light)
-        : Results.NotFound())  
+        : Results.NotFound())
   .WithSummary("Retreive the information for one light")
   .WithDescription("Returns the capabilities and current state of a light");
 
@@ -97,8 +107,8 @@ lightsApi.MapPut("/{id}/switch/{onoff}", (int id, string onoff) =>
         return Results.BadRequest("Invalid value for onoff. Must be 'on' or 'off'");
     }
 
-    return Results.Ok(value:existingLight);
-})  .WithSummary("Switch a light on or off")
+    return Results.Ok(value: existingLight);
+}).WithSummary("Switch a light on or off")
     .WithDescription("Change the light state. illuminate would make the parameter 'on'")
     .WithTags("Lights");
 
@@ -125,8 +135,8 @@ lightsApi.MapPut("/{id}/setColor/{color}", (int id, string color) =>
     }
 
     existingLight.HexColor = color;
-    return Results.Ok(value:existingLight);
-})  .WithSummary("Change the color of a light that accepts RGB values (i.e. IsRgb=true)")
+    return Results.Ok(value: existingLight);
+}).WithSummary("Change the color of a light that accepts RGB values (i.e. IsRgb=true)")
     .WithDescription(@"Color of the light in exadecimal format: RRGGBB  Each pair of characters (RR, GG, BB) represents the intensity of Red, Green, and Blue from 00 to FF (in decimal: 0 to 255). Red would be FF0000, Blue: 0000FF, Green: 00FF00, and other colors like Yellow: FFFF00 or Purple: 800080 ");
 
 // Dim the light
@@ -155,15 +165,6 @@ lightsApi.MapPut("/{id}/dimTo/{brightness}", (int id, int brightness) =>
 }).WithSummary("Change the light brightness for lights that can be dimmed (i.e. IsDimable=true) otherwise the value is 100 and cannot be changed")
   .WithDescription(@"The value 100 is the maximum intensity for the light. It can be addressed as a percentage also, 0 is complete dark similar to off, 100 is full brightness. Lighten would increase it by 25, darken would decrease it by 25");
 
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1/openapi.json", "v1");
-    });
-
-}
 
 app.Run();
 

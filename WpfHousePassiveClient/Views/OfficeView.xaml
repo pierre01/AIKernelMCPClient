@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="WpfHousePassiveClient.Views.OfficeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
+			 xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
+			 d:DataContext="{d:DesignInstance vm:OfficeViewModel, IsDesignTimeCreatable=True}"
+Width="300" Height="300"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<Grid ClipToBounds="True">
+		<Rectangle x:Name="RoomDark"  Fill="{StaticResource RoomDarkBrush}" d:IsLocked="True" />
+		<Rectangle x:Name="RoomLight" Visibility="{Binding IsRoomLighten}"  Fill="{StaticResource RoomLightBrush}" d:IsLocked="True"  />
+		<Rectangle x:Name="Desk" HorizontalAlignment="Right" Height="64" Margin="0,136,2,0" Style="{StaticResource Furniture}" VerticalAlignment="Top" Width="170" d:IsLocked="True"/>
+		<Ellipse x:Name="DeskLightGlow" HorizontalAlignment="Left" Height="305" VerticalAlignment="Top" Width="361" Margin="94,18,0,0">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Color="{Binding DeskLight.OriginPointColor}" Offset="0.4"/>
+					<GradientStop Color="{Binding DeskLight.EndPointColor}" Offset="1"/>
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse x:Name="DeskLight" HorizontalAlignment="Left" Height="36" Margin="255,150,0,0" Stroke="#7FFFFFFF" VerticalAlignment="Top" Width="35" StrokeThickness="5" Fill="{Binding DeskLight.LightColor}"/>
+		<Ellipse x:Name="FloorLightGlow" HorizontalAlignment="Left" Height="478" VerticalAlignment="Top" Width="464" Margin="-126,27,0,0" d:IsLocked="True">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Color="{Binding FloorLight.OriginPointColor}" Offset="0.4"/>
+					<GradientStop Color="{Binding FloorLight.EndPointColor}" Offset="1"/>
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse x:Name="FloorLight" HorizontalAlignment="Left" Height="50" Margin="77,241,0,0" Stroke="#7FFFFFFF" VerticalAlignment="Top" Width="50" StrokeThickness="5"  Fill="{Binding FloorLight.LightColor}"/>
+
+
+	</Grid>
+</UserControl>
