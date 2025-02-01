@@ -66,21 +66,31 @@ PUT {{LightsAPIHost}}/lights/18/switch/on
 ###
 PUT {{LightsAPIHost}}/lights/19/switch/on
 ###
+# Adjust the color of the lights
+PUT {{LightsAPIHost}}/lights/1/setColor/FF0000
+###
+PUT {{LightsAPIHost}}/lights/19/setColor/FF0ff00
+###
+# Adjust the brightness of the lights
+PUT {{LightsAPIHost}}/lights/1/dimto/60
+###
+PUT {{LightsAPIHost}}/lights/18/dimto/60
+###
+PUT {{LightsAPIHost}}/lights/19/dimto/60
+###
 
 # Office Lights -----------------------------------------------------
-PUT {{LightsAPIHost}}/lights/12/switch/on
+
+# Switch on the lights
+PUT {{LightsAPIHost}}/lights/11/switch/off
 ###
 PUT {{LightsAPIHost}}/lights/13/switch/on
 ###
 PUT {{LightsAPIHost}}/lights/13/dimTo/40
 ###
-
 PUT {{LightsAPIHost}}/lights/1/dimTo/25
-
 ###
-
 PUT {{LightsAPIHost}}/lights/1/dimTo/100
-
 ###
 
 PUT {{LightsAPIHost}}/lights/18/switch/on

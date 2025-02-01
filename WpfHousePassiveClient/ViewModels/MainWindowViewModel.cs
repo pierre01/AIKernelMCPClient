@@ -44,8 +44,11 @@ class MainWindowViewModel:ObservableObject
 
         LivingRoom = new LivingRoomViewModel(_lightViewModels[1],_lightViewModels[19],_lightViewModels[18]);
         Office = new OfficeViewModel(_lightViewModels[12],_lightViewModels[13]);
-
-       Start().ConfigureAwait(false);
+        Stairs = new StairsViewModel(_lightViewModels[3]);
+        Kitchen = new KitchenViewModel(_lightViewModels[9], _lightViewModels[2], _lightViewModels[10]);
+        LaundryRoom = new LaundryRoomViewModel(_lightViewModels[21]);
+        DownstairsBathroom = new DownstairsBathroomViewModel(_lightViewModels[11]);
+        Start().ConfigureAwait(false);
     }
 
     // All the rooms (areas with light) in the House
@@ -54,7 +57,7 @@ class MainWindowViewModel:ObservableObject
     public GuestBedroomViewModel GuestBedroom { get; }
     public GuestClosetViewModel GuestCloset { get; }
     public KitchenViewModel Kitchen { get; }
-    public LaundryRoomViewModel laundryRoom { get; }
+    public LaundryRoomViewModel LaundryRoom { get; }
     public LivingRoomViewModel LivingRoom { get; }
     public MasterBathroomViewModel MasterBathroom { get; }
     public MasterBedroomViewModel MasterBedroom { get; }

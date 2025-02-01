@@ -12,8 +12,8 @@
 		<Color x:Key="SecondaryDarkText">#9880e5</Color>
 		<Color x:Key="Tertiary">#2B0B98</Color>
 		<Color x:Key="FurnitureTop">#20ffffff</Color>
-		<Color x:Key="RoomDark">#FF1a1a1a</Color>
-		<Color x:Key="RoomLight">#727272</Color>
+		<Color x:Key="RoomDark">#FF1f1f1f</Color>
+		<Color x:Key="RoomLight">#FF252526</Color>
 		<SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
 		<SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDark}" />
 		<SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}" />
@@ -21,6 +21,13 @@
 		<SolidColorBrush x:Key="FurnitureTopBrush" Color="{StaticResource FurnitureTop}" />
 		<SolidColorBrush x:Key="RoomDarkBrush" Color="{StaticResource RoomDark}" />
 		<SolidColorBrush x:Key="RoomLightBrush" Color="{StaticResource RoomLight}" />
+		
+		<!--Bulb Warmth levels : 2000K, 2700K, 3500K, 4500K, 6500K-->
+		<Color x:Key="VeryWarm">#ff9329</Color>
+		<Color x:Key="Warm">#ffc58f</Color>
+		<Color x:Key="NeutralWarm ">#ffe3c8</Color>
+		<Color x:Key="CoolWhite">#fff1ff</Color>
+		<Color x:Key="Daylight">#ffffff</Color>
 
 		<!--  Furniture  StrokeThickness="4" RadiusX="6" RadiusY="6" StrokeDashOffset="4" StrokeDashArray="2"  -->
 		<Style x:Key="Furniture" TargetType="Rectangle">

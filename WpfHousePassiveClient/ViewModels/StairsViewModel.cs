@@ -16,7 +16,7 @@ public partial class StairsViewModel:ObservableObject
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
            
-            ChandelierLight = new LightViewModel(new Light(3, "Vanity", 3, true, true, "FFFFFF", true, 100));
+            ChandelierLight = new LightViewModel(new Light(3, "Chandelier", 3, true, true, "FFFFFF", true, 100));
 
         }
     }

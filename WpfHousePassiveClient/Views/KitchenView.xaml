@@ -1,12 +1,168 @@
-﻿<UserControl x:Class="WpfHousePassiveClient.Views.KitchenView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+﻿<UserControl
+	x:Class="WpfHousePassiveClient.Views.KitchenView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
+	Width="450"	 MaxWidth="450"
+	Height="800" MaxHeight="800" 
+	d:DataContext="{d:DesignInstance vm:KitchenViewModel,
+	                                 IsDesignTimeCreatable=True}"
+	d:DesignHeight="800"
+	d:DesignWidth="450"
+	mc:Ignorable="d">
+	<Grid ClipToBounds="True">
+		<Rectangle
+			x:Name="RoomDark"
+			d:IsLocked="True"
+			Fill="{StaticResource RoomDarkBrush}" />
+		<TextBlock
+			x:Name="Legend"
+			Margin="0,141,0,0"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Top"
+			FontSize="48"
+			Foreground="White"
+			Text="Kitchen"
+			TextWrapping="Wrap" />
+		<Rectangle
+			x:Name="RoomLight"
+			d:IsHidden="True"
+			Fill="{StaticResource RoomLightBrush}"
+			Visibility="{Binding IsRoomLighten}" />
+		<Rectangle
+			x:Name="BarFurniture"
+			Width="89"
+			Height="182"
+			Margin="-10,93,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Style="{StaticResource Furniture}" />
+		<Rectangle
+			Width="302"
+			Height="100"
+			Margin="155,314,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Style="{Binding Mode=OneWay, Source={StaticResource Furniture}}" />
+		<Rectangle
+			Width="83"
+			Height="403"
+			Margin="0,406,-7,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Style="{Binding Mode=OneWay, Source={StaticResource Furniture}}" />
+		<Ellipse
+			x:Name="CupboardLight1"
+			Width="35"
+			Height="36"
+			Margin="0,458,17,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding CabinetLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="CupboardLight2"
+			Width="35"
+			Height="36"
+			Margin="0,580,17,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding CabinetLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="CupboardLight3"
+			Width="35"
+			Height="36"
+			Margin="0,703,17,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding CabinetLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="Barlight1"
+			Width="50"
+			Height="50"
+			Margin="91,84,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding BarLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="Barlight2"
+			Width="50"
+			Height="50"
+			Margin="91,238,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding BarLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="Barlight3"
+			Width="50"
+			Height="50"
+			Margin="300,84,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding BarLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="Barlight4"
+			Width="50"
+			Height="50"
+			Margin="300,238,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding BarLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="MainLight1"
+			Width="50"
+			Height="50"
+			Margin="91,444,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding MainLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="MainLight2"
+			Width="50"
+			Height="50"
+			Margin="300,645,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding MainLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="MainLight3"
+			Width="50"
+			Height="50"
+			Margin="91,645,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding MainLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="MainLight4"
+			Width="50"
+			Height="50"
+			Margin="300,444,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding MainLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+	</Grid>
 </UserControl>

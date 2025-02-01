@@ -15,9 +15,9 @@ public partial class OfficeViewModel : ObservableObject
     {
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
-            LightViewModel deskLight = new LightViewModel(new Light(1, "desk", 1, true, true, "f6cdbf", true, 70));
+            LightViewModel deskLight = new LightViewModel(new Light(1, "desk", 1, true, true, "ffc58f", true, 70));
            
-            LightViewModel floorLight = new LightViewModel(new Light(19, "floorLamp", 1, true, false, "FFFFFF", false, 100));
+            LightViewModel floorLight = new LightViewModel(new Light(19, "floorLamp", 1, true, false, "FFFFFF", false, 60));
          
 
             DeskLight = deskLight;

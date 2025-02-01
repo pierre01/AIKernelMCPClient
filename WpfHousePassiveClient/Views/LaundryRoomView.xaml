@@ -4,9 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
+	Width="290" Height="320"
+	d:DataContext="{d:DesignInstance vm:LaundryRoomViewModel,
+	                                 IsDesignTimeCreatable=True}"
+			 MaxWidth="290" MaxHeight="320"
+	d:DesignHeight="320"
+	d:DesignWidth="290"
+	mc:Ignorable="d">
+	<Grid ClipToBounds="True">
+		<Rectangle
+			x:Name="RoomDark"
+			d:IsLocked="True"
+			Fill="{StaticResource RoomDarkBrush}" />
+		<TextBlock
+			x:Name="Legend"
+			Margin="0,141,0,0"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Top"
+			FontSize="48"
+			Foreground="White"
+			Text="Laundry"
+			TextWrapping="Wrap" />
+		<Rectangle
+			x:Name="RoomLight"
+			d:IsHidden="True"
+			Fill="{StaticResource RoomLightBrush}"
+			Visibility="{Binding IsRoomLighten}" />
+		<Ellipse x:Name="BackLightGlow" HorizontalAlignment="Center" Height="356" VerticalAlignment="Top" Width="356" Margin="0,-61,0,0">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Color="{Binding CeilingLight.OriginPointColor}" Offset="0.4"/>
+					<GradientStop Color="{Binding CeilingLight.EndPointColor}" Offset="1"/>
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse x:Name="BackLight4" HorizontalAlignment="Center" Height="50" Margin="0,86,0,0" Stroke="#7FFFFFFF" VerticalAlignment="Top" Width="50" StrokeThickness="5"  Fill="{Binding CeilingLight.LightColor}"/>
+
+	</Grid>
 </UserControl>
