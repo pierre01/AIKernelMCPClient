@@ -58,12 +58,12 @@ namespace AIKernelClient
         _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
     }
 
-    void OnRecognitionTextUpdated(object? sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
+    void OnRecognitionTextUpdated(object sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
     {
         //RecognitionText += args.RecognitionResult;
     }
 
-    void OnRecognitionTextCompleted(object? sender, SpeechToTextRecognitionResultCompletedEventArgs args)
+    void OnRecognitionTextCompleted(object sender, SpeechToTextRecognitionResultCompletedEventArgs args)
     {
         //RecognitionText = args.RecognitionResult;
     }

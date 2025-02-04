@@ -7,7 +7,12 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Image
+
+				<Label
+					Text="AI Kernel Client"
+					FontSize="32"
+					SemanticProperties.HeadingLevel="Level1" />
+				<Image
                 Source="dotnet_bot.png"
                 HeightRequest="185"
                 Aspect="AspectFit"

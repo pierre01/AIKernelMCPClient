@@ -16,7 +16,7 @@ public class Light(int id, string name, int roomId, bool isOn = false, bool isRg
     public string Name { get; set; } = name;
 
     [Required]
-    [Description("Room unique identifier that indicates where the light is located, correspomnd to the Id of a Room")]
+    [Description("Room unique identifier that indicates where the light is located, correspomnd to the RoomId of a Room")]
     public int RoomId { get; set; } = roomId;
 
     [DefaultValue(false)]

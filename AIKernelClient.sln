@@ -15,6 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfHousePassiveClient", "Wp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightsAPICommon", "LightsAPICommon\LightsAPICommon.csproj", "{368525B7-A79D-44E5-B9F8-4185B22E3467}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePluginTester", "ConsolePluginTester\ConsolePluginTester.csproj", "{48054301-41C6-395B-4085-E4B2F96E0448}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69F64316-DCD1-44D6-B0C7-3477838E6978}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +44,10 @@ Global
 		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48054301-41C6-395B-4085-E4B2F96E0448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48054301-41C6-395B-4085-E4B2F96E0448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48054301-41C6-395B-4085-E4B2F96E0448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48054301-41C6-395B-4085-E4B2F96E0448}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,129 +1,89 @@
 @LightsAPIHost = https://localhost:5042
 
-
+# OpenAPI Description
 GET {{LightsAPIHost}}/openapi/v1/openapi.json
 ###
 
-GET {{LightsAPIHost}}/lights
-
-###
-GET {{LightsAPIHost}}/rooms
-
-###
-GET {{LightsAPIHost}}/lights/3
-
-###
-
-PUT {{LightsAPIHost}}/lights/5/dimTo/25
-
-###
-
-PUT {{LightsAPIHost}}/lights/5/dimto/25
-
-###
-GET {{LightsAPIHost}}/lights/6
-
-###
-
-PUT {{LightsAPIHost}}/lights/6/dimTo/50
-
-###
-
-PUT {{LightsAPIHost}}/lights/5/switch/Off
-
-###
-
-PUT {{LightsAPIHost}}/lights/5/switch/on
-
-###
-
-PUT {{LightsAPIHost}}/lights/1/setColor/FF0000
-
-###
-
-PUT {{LightsAPIHost}}/lights/1/setColor/00ff00
-
-###
-
-PUT {{LightsAPIHost}}/lights/1/setColor/FFffff
-
-###
-
-PUT {{LightsAPIHost}}/lights/1/setColor/F00000
-
-###
-
-PUT {{LightsAPIHost}}/lights/1/setColor/Ff00ff
-
-###
-
 # Living Room Lights ------------------------------------------------
-
 # Switch on the lights
-PUT {{LightsAPIHost}}/lights/1/switch/on
+PUT {{LightsAPIHost}}/lights/1/switch/true
 ###
-PUT {{LightsAPIHost}}/lights/18/switch/on
+PUT {{LightsAPIHost}}/lights/2/switch/true
 ###
-PUT {{LightsAPIHost}}/lights/19/switch/on
+PUT {{LightsAPIHost}}/lights/3/switch/true
 ###
 # Adjust the color of the lights
 PUT {{LightsAPIHost}}/lights/1/setColor/FF0000
 ###
-PUT {{LightsAPIHost}}/lights/19/setColor/FF0ff00
+PUT {{LightsAPIHost}}/lights/2/setColor/00ff00
 ###
 # Adjust the brightness of the lights
 PUT {{LightsAPIHost}}/lights/1/dimto/60
 ###
-PUT {{LightsAPIHost}}/lights/18/dimto/60
+PUT {{LightsAPIHost}}/lights/2/dimto/60
 ###
-PUT {{LightsAPIHost}}/lights/19/dimto/60
+PUT {{LightsAPIHost}}/lights/3/dimto/60
+###
+# Switch off the lights
+PUT {{LightsAPIHost}}/lights/1/switch/false
+###
+PUT {{LightsAPIHost}}/lights/2/switch/false
+###
+PUT {{LightsAPIHost}}/lights/3/switch/false
 ###
 
 # Office Lights -----------------------------------------------------
-
 # Switch on the lights
-PUT {{LightsAPIHost}}/lights/11/switch/off
+PUT {{LightsAPIHost}}/lights/9/switch/true
 ###
-PUT {{LightsAPIHost}}/lights/13/switch/on
+PUT {{LightsAPIHost}}/lights/10/switch/true
 ###
-PUT {{LightsAPIHost}}/lights/13/dimTo/40
+#Dim the lights
+PUT {{LightsAPIHost}}/lights/9/dimTo/40
 ###
-PUT {{LightsAPIHost}}/lights/1/dimTo/25
+PUT {{LightsAPIHost}}/lights/10/dimTo/25
 ###
-PUT {{LightsAPIHost}}/lights/1/dimTo/100
+PUT {{LightsAPIHost}}/lights/10/dimTo/100
 ###
-
-PUT {{LightsAPIHost}}/lights/18/switch/on
-
+# Switch off the lights
+PUT {{LightsAPIHost}}/lights/9/switch/false
 ###
-
-PUT {{LightsAPIHost}}/lights/18/switch/off
-
-
+PUT {{LightsAPIHost}}/lights/10/switch/false
 ###
-
-PUT {{LightsAPIHost}}/lights/19/switch/on
-
+# Kitchen Lights -----------------------------------------------------
+# Switch on the lights
+PUT {{LightsAPIHost}}/lights/4/switch/true
 ###
-
-PUT {{LightsAPIHost}}/lights/19/switch/off
-
-
+PUT {{LightsAPIHost}}/lights/5/switch/true
 ###
-
-PUT {{LightsAPIHost}}/lights/19/dimTo/50
-
+PUT {{LightsAPIHost}}/lights/6/switch/true
 ###
-
-PUT {{LightsAPIHost}}/lights/19/dimTo/100
-
+# Switch off the lights
+PUT {{LightsAPIHost}}/lights/4/switch/False
 ###
-PUT {{LightsAPIHost}}/lights/19/setColor/FF0000  
-
+PUT {{LightsAPIHost}}/lights/5/switch/false
 ###
-PUT {{LightsAPIHost}}/lights/19/setColor/00ff00  
-
+PUT {{LightsAPIHost}}/lights/6/switch/false
 ###
-PUT {{LightsAPIHost}}/lights/19/setColor/0000ff  
+# Downstairs Bathroom -----------------------------------------------------
+# Switch on the lights
+PUT {{LightsAPIHost}}/lights/7/switch/true
 ###
-PUT {{LightsAPIHost}}/lights/19/setColor/00ff00  
+PUT {{LightsAPIHost}}/lights/7/switch/false
+###
+# Laundry room -----------------------------------------------------
+# Switch on the lights
+PUT {{LightsAPIHost}}/lights/8/switch/true
+###
+PUT {{LightsAPIHost}}/lights/8/switch/false
+###
+# Stairs -----------------------------------------------------
+# Switch on the light
+PUT {{LightsAPIHost}}/lights/11/switch/true
+###
+# Dim the light
+PUT {{LightsAPIHost}}/lights/11/dimTo/25
+###
+# Switch off the light
+PUT {{LightsAPIHost}}/lights/11/switch/false
+###

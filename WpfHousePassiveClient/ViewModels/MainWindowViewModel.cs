@@ -42,12 +42,12 @@ class MainWindowViewModel:ObservableObject
             _lightViewModels.Add(light.Id, lightViewModel);
         }
 
-        LivingRoom = new LivingRoomViewModel(_lightViewModels[1],_lightViewModels[19],_lightViewModels[18]);
-        Office = new OfficeViewModel(_lightViewModels[12],_lightViewModels[13]);
-        Stairs = new StairsViewModel(_lightViewModels[3]);
-        Kitchen = new KitchenViewModel(_lightViewModels[9], _lightViewModels[2], _lightViewModels[10]);
-        LaundryRoom = new LaundryRoomViewModel(_lightViewModels[21]);
-        DownstairsBathroom = new DownstairsBathroomViewModel(_lightViewModels[11]);
+        LivingRoom = new LivingRoomViewModel(_lightViewModels[1],_lightViewModels[2],_lightViewModels[3]);
+        Office = new OfficeViewModel(_lightViewModels[9],_lightViewModels[10]);
+        Stairs = new StairsViewModel(_lightViewModels[11]);
+        Kitchen = new KitchenViewModel(_lightViewModels[4], _lightViewModels[5], _lightViewModels[6]);
+        LaundryRoom = new LaundryRoomViewModel(_lightViewModels[8]);
+        DownstairsBathroom = new DownstairsBathroomViewModel(_lightViewModels[7]);
         Start().ConfigureAwait(false);
     }
 

@@ -13,27 +13,37 @@ public static class House
     static House()
     {
         var sampleLights = new Light[] {
+            // Living room
             new(1, "Front Ceiling",1, isRgb:true,isDimable:true),
-            new(2, "Main Ceiling Light",2,isRgb:true,isDimable:true),
-            new(3, "Stairs Chandelier", 3,isDimable:true),
-            new(4, "Main Light",4),
-            new(5, "Left Nightstand Light", 5,isDimable:true),
-            new(6, "Right Nightstand Light", 5,isDimable:true),
-            new(7, "Over Bed Light", 5),
-            new(8, "Ceiling Light",6),
-            new(9, "Bar Light", 2,isRgb:true,isDimable:true),
-            new(10, "Cabinets Lights", 2,isDimable:true),
-            new(11, "Vanity Light", 8),
-            new(12, "Desk Light", 9,  isDimable : true, isRgb:true,brightness:70),
-            new(13, "Floor Lamp Light", 9,  isDimable : true),
-            new(14, "Mirror Light",4),
-            new(15, "Mirror Light",7),
-            new(16, "Closet",10),
-            new(17, "Closet",11),
-            new(18, "Wall",1,isDimable:true),
-            new(19, "Back Ceilling",1,isRgb:true,isDimable:true),
-            new(20, "Mirror Light",4),
-            new(21, "Ceiling Light",12),
+            new(2, "Back Ceilling",1,isRgb:true,isDimable:true),
+            new(3, "Wall",1,isDimable:true),
+            // Kitchen
+            new(4, "Bar Light", 2,isRgb:true,isDimable:true),
+            new(5, "Main Ceiling Light",2,isRgb:true,isDimable:true),
+            new(6, "Cabinets Lights", 2,isDimable:true),
+            // Downstairs Bathroom
+            new(7, "Vanity Light", 8),            
+            // Laundry room
+            new(8, "Ceiling Light",12),            
+            // Office
+            new(9, "Desk Light", 9,  isDimable : true, isRgb:true,brightness:70),
+            new(10, "Floor Lamp Light", 9,  isDimable : true, isRgb:true),            
+            // Stairs
+            new(11, "Stairs Chandelier", 6,isDimable:true),
+            // Master Bedroom
+            new(12, "Left Nightstand Light", 5,isDimable:true),
+            new(13, "Right Nightstand Light", 5,isDimable:true),
+            new(14, "Over Bed Light", 5),
+            // Master Bathroom
+            new(15, "Main Light",4),
+            new(16, "Mirror Light",4),
+            // Guest Bathroom
+            new(17, "Mirror Light",7),
+            new(18, "Main Light",7),
+            // Master Bedroom Closet
+            new(19, "Closet",10),
+            // Guest Bedroom Closet
+            new(20, "Closet",11),
        };
 
         var SampleRooms = new Room[] {
@@ -46,8 +56,8 @@ public static class House
             new(7, "Guest Bathroom"),
             new(8, "Downstairs Bathroom"),
             new(9, "Office"),
-            new(10, "Master Closet"),
-            new(11, "Guest Closet"),
+            new(10, "Master Bedroom Closet"),
+            new(11, "Guest Bedroom Closet"),
             new(12, "Laundry Room"),
             };
         Lights = sampleLights;
