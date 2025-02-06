@@ -21,8 +21,8 @@
 		<SolidColorBrush x:Key="FurnitureTopBrush" Color="{StaticResource FurnitureTop}" />
 		<SolidColorBrush x:Key="RoomDarkBrush" Color="{StaticResource RoomDark}" />
 		<SolidColorBrush x:Key="RoomLightBrush" Color="{StaticResource RoomLight}" />
-		
-		<!--Bulb Warmth levels : 2000K, 2700K, 3500K, 4500K, 6500K-->
+
+		<!--  Bulb Warmth levels : 2000K, 2700K, 3500K, 4500K, 6500K  -->
 		<Color x:Key="VeryWarm">#ff9329</Color>
 		<Color x:Key="Warm">#ffc58f</Color>
 		<Color x:Key="NeutralWarm ">#ffe3c8</Color>

@@ -1,14 +1,17 @@
-﻿<UserControl x:Class="WpfHousePassiveClient.Views.LaundryRoomView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
+﻿<UserControl
+	x:Class="WpfHousePassiveClient.Views.LaundryRoomView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
-	Width="290" Height="320"
+	Width="290"
+	Height="320"
+	MaxWidth="290"
+	MaxHeight="320"
 	d:DataContext="{d:DesignInstance vm:LaundryRoomViewModel,
 	                                 IsDesignTimeCreatable=True}"
-			 MaxWidth="290" MaxHeight="320"
 	d:DesignHeight="320"
 	d:DesignWidth="290"
 	mc:Ignorable="d">
@@ -31,15 +34,30 @@
 			d:IsHidden="True"
 			Fill="{StaticResource RoomLightBrush}"
 			Visibility="{Binding IsRoomLighten}" />
-		<Ellipse x:Name="BackLightGlow" HorizontalAlignment="Center" Height="356" VerticalAlignment="Top" Width="356" Margin="0,-61,0,0">
+		<Ellipse
+			x:Name="BackLightGlow"
+			Width="356"
+			Height="356"
+			Margin="0,-61,0,0"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding CeilingLight.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding CeilingLight.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding CeilingLight.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding CeilingLight.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="BackLight4" HorizontalAlignment="Center" Height="50" Margin="0,86,0,0" Stroke="#7FFFFFFF" VerticalAlignment="Top" Width="50" StrokeThickness="5"  Fill="{Binding CeilingLight.LightColor}"/>
+		<Ellipse
+			x:Name="BackLight4"
+			Width="50"
+			Height="50"
+			Margin="0,86,0,0"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Top"
+			Fill="{Binding CeilingLight.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
 
 	</Grid>
 </UserControl>

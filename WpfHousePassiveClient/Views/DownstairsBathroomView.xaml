@@ -6,8 +6,10 @@
 	xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
-	Width="150" MaxWidth="150"
-	Height="150" MaxHeight="150"
+	Width="150"
+	Height="150"
+	MaxWidth="150"
+	MaxHeight="150"
 	d:DataContext="{d:DesignInstance vm:DownstairsBathroomViewModel,
 	                                 IsDesignTimeCreatable=True}"
 	d:DesignHeight="150"

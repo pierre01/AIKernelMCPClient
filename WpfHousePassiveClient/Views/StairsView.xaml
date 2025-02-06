@@ -6,8 +6,10 @@
 	xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
-	Height="325" MaxHeight="325"
-	Width="150"	MaxWidth="150"
+	Width="150"
+	Height="325"
+	MaxWidth="150"
+	MaxHeight="325"
 	d:DataContext="{d:DesignInstance vm:StairsViewModel,
 	                                 IsDesignTimeCreatable=True}"
 	d:DesignHeight="325"
@@ -23,7 +25,6 @@
 			Margin="0,0,0,0"
 			HorizontalAlignment="Center"
 			VerticalAlignment="Top"
-			
 			FontSize="48"
 			Foreground="White"
 			Text="Stairs"

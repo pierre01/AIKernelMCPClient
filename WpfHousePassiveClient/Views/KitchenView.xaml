@@ -6,8 +6,10 @@
 	xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
-	Width="450"	 MaxWidth="450"
-	Height="800" MaxHeight="800" 
+	Width="450"
+	Height="800"
+	MaxWidth="450"
+	MaxHeight="800"
 	d:DataContext="{d:DesignInstance vm:KitchenViewModel,
 	                                 IsDesignTimeCreatable=True}"
 	d:DesignHeight="800"
@@ -54,91 +56,157 @@
 			HorizontalAlignment="Right"
 			VerticalAlignment="Top"
 			Style="{Binding Mode=OneWay, Source={StaticResource Furniture}}" />
-		<Ellipse x:Name="BarLight1Glow" HorizontalAlignment="Left" Height="205" VerticalAlignment="Top" Width="213" Margin="-50,25,0,0">
+		<Ellipse
+			x:Name="BarLight1Glow"
+			Width="213"
+			Height="205"
+			Margin="-50,25,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding BarLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding BarLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding BarLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding BarLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="BarLight2Glow" HorizontalAlignment="Left" Height="204" VerticalAlignment="Top" Width="213" Margin="-50,128,0,0">
+		<Ellipse
+			x:Name="BarLight2Glow"
+			Width="213"
+			Height="204"
+			Margin="-50,128,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding BarLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding BarLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding BarLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding BarLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="BarLight3Glow" HorizontalAlignment="Left" Height="426" VerticalAlignment="Top" Width="322" Margin="48,-26,0,0">
+		<Ellipse
+			x:Name="BarLight3Glow"
+			Width="322"
+			Height="426"
+			Margin="48,-26,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding BarLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding BarLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding BarLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding BarLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="BarLigh4Glow" HorizontalAlignment="Left" Height="426" VerticalAlignment="Top" Width="348" Margin="168,-26,0,0">
+		<Ellipse
+			x:Name="BarLigh4Glow"
+			Width="348"
+			Height="426"
+			Margin="168,-26,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding BarLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding BarLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding BarLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding BarLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="MainLight1Glow" HorizontalAlignment="Left" Height="313" VerticalAlignment="Top" Width="320" Margin="-42,314,0,0">
+		<Ellipse
+			x:Name="MainLight1Glow"
+			Width="320"
+			Height="313"
+			Margin="-42,314,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding MainLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding MainLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding MainLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding MainLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="MainLight2Glow" HorizontalAlignment="Left" Height="314" VerticalAlignment="Top" Width="320" Margin="165,312,0,0">
+		<Ellipse
+			x:Name="MainLight2Glow"
+			Width="320"
+			Height="314"
+			Margin="165,312,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding MainLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding MainLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding MainLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding MainLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="MainLight3Glow" HorizontalAlignment="Left" Height="312" VerticalAlignment="Top" Width="320" Margin="-44,514,0,0">
+		<Ellipse
+			x:Name="MainLight3Glow"
+			Width="320"
+			Height="312"
+			Margin="-44,514,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding MainLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding MainLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding MainLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding MainLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="MainLight4Glow" HorizontalAlignment="Left" Height="313" VerticalAlignment="Top" Width="320" Margin="165,514,0,0">
+		<Ellipse
+			x:Name="MainLight4Glow"
+			Width="320"
+			Height="313"
+			Margin="165,514,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding MainLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding MainLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding MainLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding MainLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="CupBoardLight1Glow" HorizontalAlignment="Left" Height="180" VerticalAlignment="Top" Width="171" Margin="330,386,0,0">
+		<Ellipse
+			x:Name="CupBoardLight1Glow"
+			Width="171"
+			Height="180"
+			Margin="330,386,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding CabinetLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding CabinetLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding CabinetLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding CabinetLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="CupBoardLight2Glow" HorizontalAlignment="Left" Height="180" VerticalAlignment="Top" Width="171" Margin="330,508,0,0">
+		<Ellipse
+			x:Name="CupBoardLight2Glow"
+			Width="171"
+			Height="180"
+			Margin="330,508,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding CabinetLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding CabinetLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding CabinetLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding CabinetLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>
-		<Ellipse x:Name="CupBoardLight3Glow" HorizontalAlignment="Left" Height="180" VerticalAlignment="Top" Width="171" Margin="330,631,0,0">
+		<Ellipse
+			x:Name="CupBoardLight3Glow"
+			Width="171"
+			Height="180"
+			Margin="330,631,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
-					<GradientStop Color="{Binding CabinetLights.OriginPointColor}" Offset="0.4"/>
-					<GradientStop Color="{Binding CabinetLights.EndPointColor}" Offset="1"/>
+					<GradientStop Offset="0.4" Color="{Binding CabinetLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding CabinetLights.EndPointColor}" />
 				</RadialGradientBrush>
 			</Ellipse.Fill>
 		</Ellipse>

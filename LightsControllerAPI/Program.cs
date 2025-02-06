@@ -63,7 +63,7 @@ roomsApi.MapGet("/{roomId}", ([Description("Unique room identifier")] int roomId
         ? Results.Ok(room)
         : Results.NotFound())
   .WithName("get_room_by_id")
-  .WithSummary("Retreive the room Name and unique RoomId (used by the lights property RoomId)")
+  .WithSummary("Retreive the room Name and unique RoomId (used by the lights property RoomId)") 
   .WithDescription("A room is representing a group of lights where the RoomId is the same. if a command is adressing the room without specifying the light name then all the lights in the room should be receiving the command ");
 
 
@@ -72,7 +72,7 @@ var lightsApi = app.MapGroup("/lights");
 // Get all the lights
 lightsApi.MapGet("/", () => sampleLights)
   .WithName("get_all_lights")
-  .WithSummary("Retreive all the lights information and state inside the house")
+  .WithSummary("Retreive all the lights location, capabilities, and state inside the house")
   .WithDescription("Returns the list of the lights including their capabilities and current state");
 
 // Get a specific light
@@ -83,10 +83,11 @@ lightsApi.MapGet("/{id}", ([Description("Unique Identifier for the light")] int 
   .WithName("get_light_by_id")
   .WithSummary("Retreive the information for one light in the house")
   .WithDescription("Returns the capabilities and current state of a light");
+  //.ExcludeFromDescription();
 
 //lightsApi.MapPost("/", (Light light) =>
 //{
-//    return Results.Created($"/lights/{light.RoomId}", light);
+//    return Results.Created($"/lights/{light.Id}", light);
 //});
 
 // Switch a light on or off

@@ -1,7 +1,14 @@
+@LightsControllerAPI_HostAddress = https://localhost:5042
 @LightsAPIHost = https://localhost:5042
 
 # OpenAPI Description
 GET {{LightsAPIHost}}/openapi/v1/openapi.json
+###
+# Get All the lights
+GET {{LightsControllerAPI_HostAddress}}/lights
+###
+# Get All the rooms
+GET {{LightsControllerAPI_HostAddress}}/rooms
 ###
 
 # Living Room Lights ------------------------------------------------
@@ -87,3 +94,5 @@ PUT {{LightsAPIHost}}/lights/11/dimTo/25
 # Switch off the light
 PUT {{LightsAPIHost}}/lights/11/switch/false
 ###
+
+
