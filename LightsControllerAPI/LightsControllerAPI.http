@@ -89,7 +89,7 @@ PUT {{LightsAPIHost}}/lights/8/switch/false
 PUT {{LightsAPIHost}}/lights/11/switch/true
 ###
 # Dim the light
-PUT {{LightsAPIHost}}/lights/11/dimTo/25
+PUT {{LightsAPIHost}}/lights/11/dimTo/100
 ###
 # Switch off the light
 PUT {{LightsAPIHost}}/lights/11/switch/false

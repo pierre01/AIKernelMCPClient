@@ -132,10 +132,6 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Border">
-		<Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
-		<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
-    </Style>
 
     <Style TargetType="ImageButton">
         <Setter Property="Opacity" Value="1" />

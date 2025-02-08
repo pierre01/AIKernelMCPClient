@@ -24,7 +24,7 @@ public class Light(int id, string name, int roomId, bool isOn = false, bool isRg
     public bool IsOn { get; set; } = isOn;
 
     [DefaultValue(false)]
-    [Description("Does this light allows color changing (i.e. can the user modify the HexColor Property) Those lights are also called color lights")]
+    [Description("Does this light allow color changing")]
     public bool IsRgb { get; set; } = isRgb;
 
     [DefaultValue("FFFFFF")]
@@ -34,7 +34,7 @@ public class Light(int id, string name, int roomId, bool isOn = false, bool isRg
     public string HexColor { get; set; } = hexColor;
 
     [DefaultValue(false)]
-    [Description("Does the light have a dimmer in order to change its brightness. If true the Brightness value can be changed, if false the brightness stays at 100")]
+    [Description("Does the allow to change its brightness. If true the Brightness value can be changed, if false the brightness stays at 100")]
     public bool IsDimable { get; set; } = isDimable;
 
     [DefaultValue(100)]

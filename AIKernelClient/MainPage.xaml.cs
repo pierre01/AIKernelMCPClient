@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using AIKernelClient.ViewModels;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Media;
 using System.Globalization;
 
@@ -6,14 +7,15 @@ namespace AIKernelClient
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
+    private MainPageViewModel _viewModel;
     private readonly ISpeechToText _speechToText;
     private bool _isListening = false;
     private bool _isSpeechEnabled = false;
 
-    public MainPage(ISpeechToText speechToText)
+    public MainPage(ISpeechToText speechToText, MainPageViewModel viewModel)
     {
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
         InitializeComponent();
         this._speechToText = speechToText;
     }
@@ -69,17 +71,6 @@ namespace AIKernelClient
     }
 
 
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui;
+﻿using AIKernelClient.ViewModels;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Media;
 using Microsoft.Extensions.Logging;
 
@@ -35,10 +36,12 @@ public static class MauiProgram
     }    
     public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
     {
+        mauiAppBuilder.Services.AddSingleton<MainPageViewModel>();
         return mauiAppBuilder;
     }   
     public static MauiAppBuilder RegisterViews(this MauiAppBuilder mauiAppBuilder)
     {
+        mauiAppBuilder.Services.AddSingleton<MainPage>();
         return mauiAppBuilder;
     }
 }

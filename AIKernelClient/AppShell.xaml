@@ -8,7 +8,7 @@
     Title="AIKernelClient">
 
     <ShellContent
-        Title="Home"
+        Title="Lights Controller"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 

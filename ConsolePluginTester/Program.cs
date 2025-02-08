@@ -54,11 +54,11 @@ try
     string[] userPrompts =
     [
         "Turn on the living room lights.",
-        "Switch on the lights in the Kitchen as well as the office, to a medium intensity.",
+        "Switch all the lights in the Kitchen on as well as the office, to a medium intensity.",
         "Switch the kitchen lights to a very warm color (e.g. like a 2000K bulb)",
         "Are the lights in the office on or off?",
         "Turn off all the lights.",
-        "When I tell you 'I'm home' you will switch the front living room lights, then the wall lights as well as the stais lights, all with medium brightness",
+        "When I tell you 'I'm home' you will switch the front living room lights, then the wall lights as well as the stairs lights, all with medium brightness",
         "I'm home",
         "when I tell you 'I'm leaving' you will turn all the lights off",
         "I'm leaving",
@@ -77,13 +77,16 @@ try
         // Display the final output which includes the plugin's data enriched by the chat model.
         Console.WriteLine("Final Result:\n" + result);
     }
+
     Console.WriteLine("All prompts completed.");
     foreach (var message in history)
     {
         Console.WriteLine(message.Role);
-        Console.WriteLine(message.Items);
+        foreach (var item in message.Items)
+        {
+            Console.WriteLine(item.InnerContent);
+        }
     }
-
 
 }
 catch (Exception ex)
