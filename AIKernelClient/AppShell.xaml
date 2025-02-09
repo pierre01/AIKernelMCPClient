@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="AIKernelClient.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:AIKernelClient"
-    Shell.FlyoutBehavior="Flyout"
-    Title="AIKernelClient">
+	x:Class="AIKernelClient.AppShell"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:AIKernelClient"
+	Title="AIKernelClient"
+	Shell.FlyoutBehavior="Flyout">
 
-    <ShellContent
-        Title="Lights Controller"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+	<ShellContent
+		Title="Lights Controller"
+		ContentTemplate="{DataTemplate local:MainPage}"
+		Route="MainPage" />
 
 </Shell>

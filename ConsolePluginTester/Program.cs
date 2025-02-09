@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using LightsAPICommon;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -51,19 +52,8 @@ try
     //    FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
     //};
 
-    string[] userPrompts =
-    [
-        "Turn on the living room lights.",
-        "Switch all the lights in the Kitchen on as well as the office, to a medium intensity.",
-        "Switch the kitchen lights to a very warm color (e.g. like a 2000K bulb)",
-        "Are the lights in the office on or off?",
-        "Turn off all the lights.",
-        "When I tell you 'I'm home' you will switch the front living room lights, then the wall lights as well as the stairs lights, all with medium brightness",
-        "I'm home",
-        "when I tell you 'I'm leaving' you will turn all the lights off",
-        "I'm leaving",
-        "How many lights are currently on?"
-    ];
+    string[] userPrompts = House.CustomPrompts;
+
     // Compose a prompt that not only asks for information but instructs the system to call the plugin.
     for (int i = 0; i < userPrompts.Length; i++)
     {

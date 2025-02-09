@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.35.0-preview" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LightsAPICommon\LightsAPICommon.csproj" />
+  </ItemGroup>
+
 </Project>

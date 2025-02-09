@@ -22,20 +22,30 @@
 				VerticalOptions="Center" />
 			<ImageButton
 				Grid.Row="1"
+				Margin="8"
 				HeightRequest="40"
 				IsEnabled="True"
 				Source="microphone.png"
 				WidthRequest="40" />
+			<HorizontalStackLayout Grid.Row="1"
+					Grid.Column="2">
+				<ImageButton
+					
+					Margin="8"
+					Command="{Binding PreviousPromptCommand}"
+					HeightRequest="40"
+					HorizontalOptions="End"
+					Source="up_circle.png"
+					WidthRequest="40" />
+				<ImageButton
 
-			<ImageButton
-				Grid.Row="1"
-				Grid.Column="2"
-				Command="{Binding NextPromptCommand}"
-				HeightRequest="40"
-				HorizontalOptions="End"
-				Source="plus_box.png"
-				WidthRequest="40" />
-
+					Margin="8"
+					Command="{Binding NextPromptCommand}"
+					HeightRequest="40"
+					HorizontalOptions="End"
+					Source="down_circle.png"
+					WidthRequest="40" />
+			</HorizontalStackLayout>
 			<Editor
 				Grid.Row="2"
 				Grid.ColumnSpan="3"
@@ -49,6 +59,7 @@
 			<ImageButton
 				Grid.Row="3"
 				Grid.Column="0"
+				Margin="8"
 				Command="{Binding SendRequestCommand}"
 				HeightRequest="40"
 				HorizontalOptions="End"

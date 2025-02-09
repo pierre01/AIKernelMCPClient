@@ -8,8 +8,10 @@ namespace LightsAPICommon;
 
 public static class House
 {
-    public static Light[] Lights { get; set; } 
-    public static Room[] Rooms { get; set; } 
+    public static Light[] Lights { get; set; }
+    public static Room[] Rooms { get; set; }
+    public static string[] CustomPrompts { get; set; }
+
     static House()
     {
         var sampleLights = new Light[] {
@@ -62,5 +64,20 @@ public static class House
             };
         Lights = sampleLights;
         Rooms = SampleRooms;
+        CustomPrompts = [
+            "Turn on all the living room lights.",
+            "Switch all the lights in the Kitchen on, as well as the office lights, then change them to a medium intensity.",
+            "Switch the kitchen lights color to 2000K",
+            "Are the lights in the office on or off?",
+            "Turn off all the lights.",
+            "When I tell you 'I'm home' you will switch the front living room lights, then the wall lights as well as the stairs lights, all with medium brightness",
+            "I'm home",
+            "when I tell you 'I'm leaving' you will turn all the lights off",
+            "I'm leaving",
+            "How many lights are currently on?",
+            "Switch all the lights on",
+            "Change the colors of the lights to match a 70's party theme",
+            "How about a Christmas party theme?"
+        ];
     }
 }

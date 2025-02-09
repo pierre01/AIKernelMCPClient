@@ -9,11 +9,11 @@ namespace LightsAPICommon;
 public class Room(int id, string name)
 {
     [Key]
-    [Description("Room unique RoomId, related to the location of a light. It matches the Light parameter RoomId")]
+    [Description("RoomId: Room unique Id, related to the location of a light. It matches the Light property 'RoomId'")]
     public int RoomId { get; set; } = id;
 
     [Required]
-    [Description("The Room name where lights are located")]
+    [Description("Name: The Room or area name where lights are located")]
     public string Name { get; set; } = name;
 }
 

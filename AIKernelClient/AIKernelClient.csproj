@@ -56,6 +56,8 @@
 		<MauiImage Update="Resources\Images\microphone.svg" Resize="True" BaseSize="96,96" />
 		<MauiImage Update="Resources\Images\plus_box.svg" Resize="True" BaseSize="96,96" />
 		<MauiImage Update="Resources\Images\repeat_icon.svg" Resize="True" BaseSize="96,96" />
+		<MauiImage Update="Resources\Images\up_circle.svg" Resize="True" BaseSize="96,96" />
+		<MauiImage Update="Resources\Images\down_circle.svg" Resize="True" BaseSize="96,96" />
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
@@ -76,6 +78,10 @@
 	<ItemGroup>
 	  <Folder Include="Plugins\" />
 	  <Folder Include="Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LightsAPICommon\LightsAPICommon.csproj" />
 	</ItemGroup>
 
 </Project>
