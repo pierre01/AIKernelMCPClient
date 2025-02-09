@@ -18,8 +18,8 @@ namespace WpfHousePassiveClient.ViewModels;
 class MainWindowViewModel:ObservableObject
 {
         
-    //private const string apiUrl = "https://localhost:5042/lights";
-    private const string apiUrl = "https://rh8xzzh8-5042.usw3.devtunnels.ms/lights";
+    private const string apiUrl = "https://localhost:5042/lights";
+    //private const string apiUrl = "https://rh8xzzh8-5042.usw3.devtunnels.ms/lights";
     private static readonly HttpClient _httpClient = new HttpClient();
     private Dictionary<int, LightViewModel> _lightViewModels = new Dictionary<int, LightViewModel>();
 

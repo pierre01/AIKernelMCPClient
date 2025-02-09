@@ -65,7 +65,7 @@ public static class House
         Lights = sampleLights;
         Rooms = SampleRooms;
         CustomPrompts = [
-            "Turn on all the living room lights.",
+            "Turn all the living room lights on.",
             "Switch all the lights in the Kitchen on, as well as the office lights, then change them to a medium intensity.",
             "Switch the kitchen lights color to 2000K",
             "Are the lights in the office on or off?",
@@ -77,7 +77,9 @@ public static class House
             "How many lights are currently on?",
             "Switch all the lights on",
             "Change the colors of the lights to match a 70's party theme",
-            "How about a Christmas party theme?"
+            "How about a Christmas party theme?",
+            "Reset all the house lights colors to white",
+            "Switch the house lights off."
         ];
     }
 }
