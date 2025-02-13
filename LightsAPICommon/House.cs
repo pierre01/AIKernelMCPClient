@@ -16,36 +16,41 @@ public static class House
     {
         var sampleLights = new Light[] {
             // Living room
-            new(1, "Front Ceiling",1, isRgb:true,isDimable:true),
-            new(2, "Back Ceilling",1,isRgb:true,isDimable:true),
+            new(1, "Front Ceiling",1, canChangeColor:true,isDimable:true),
+            new(2, "Back Ceilling",1,canChangeColor:true,isDimable:true),
             new(3, "Wall",1,isDimable:true),
             // Kitchen
-            new(4, "Bar Light", 2,isRgb:true,isDimable:true),
-            new(5, "Main Ceiling Light",2,isRgb:true,isDimable:true),
+            new(4, "Bar Light", 2,canChangeColor:true,isDimable:true),
+            new(5, "Main Ceiling Light",2,canChangeColor:true,isDimable:true),
             new(6, "Cabinets Lights", 2,isDimable:true),
             // Downstairs Bathroom
             new(7, "Vanity Light", 8),            
             // Laundry room
             new(8, "Ceiling Light",12),            
             // Office
-            new(9, "Desk Light", 9,  isDimable : true, isRgb:true,brightness:70),
-            new(10, "Floor Lamp Light", 9,  isDimable : true, isRgb:true),            
+            new(9, "Desk Light", 9,  isDimable : true, canChangeColor:true,brightness:70),
+            new(10, "Floor Lamp Light", 9,  isDimable : true, canChangeColor:true),            
             // Stairs
             new(11, "Stairs Chandelier", 6,isDimable:true),
             // Master Bedroom
             new(12, "Left Nightstand Light", 5,isDimable:true),
             new(13, "Right Nightstand Light", 5,isDimable:true),
-            new(14, "Over Bed Light", 5),
+            new(14, "Wall Light", 5),
             // Master Bathroom
             new(15, "Main Light",4),
             new(16, "Mirror Light",4),
+
             // Guest Bathroom
             new(17, "Mirror Light",7),
             new(18, "Main Light",7),
             // Master Bedroom Closet
             new(19, "Closet",10),
             // Guest Bedroom Closet
-            new(20, "Closet",11),
+            new(20, "Closet",11),            
+            // Guest Bedroom
+            new(21, "Left Nightstand Light", 3,isDimable:true),
+            new(22, "Right Nightstand Light", 3,isDimable:true),
+            new(23, "Wall Light", 3),
        };
 
         var SampleRooms = new Room[] {
@@ -70,13 +75,14 @@ public static class House
             "Switch the kitchen lights color to 2000K",
             "Are the lights in the office on or off?",
             "Turn off all the lights.",
-            "When I tell you 'I'm home' you will switch the front living room lights, then the wall lights as well as the stairs lights, all with medium brightness",
+            "When I tell you 'I'm home' you will switch the front living room lights, then the wall lights as well as the stairs lights, all with medium brightness.",
             "I'm home",
-            "when I tell you 'I'm leaving' you will turn all the lights off",
+            "when I tell you 'I'm leaving' you will turn all the lights off.",
             "I'm leaving",
             "How many lights are currently on?",
             "Switch all the lights on",
-            "Change the colors of the lights to match a 70's party theme",
+            "Change the house lights to match a 70's party theme.",
+            "Use different colors for each light.",
             "How about a Christmas party theme?",
             "Reset all the house lights colors to white",
             "Switch the house lights off."

@@ -16,218 +16,482 @@
 	Topmost="True"
 	mc:Ignorable="d">
 	<Viewbox>
-		<Grid Width="1310" Height="984">
-			<Grid
-				Width="1278"
-				Height="950"
-				Margin="16,16,16,16"
-				VerticalAlignment="Top">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<Grid x:Name="FirstFloor" d:IsHidden="True">
+				<Grid
+					Width="1278"
+					Height="950"
+					Margin="16,16,16,16"
+					VerticalAlignment="Top">
 
-				<Views:LivingRoomView
-					HorizontalAlignment="Left"
-					VerticalAlignment="top"
-					DataContext="{Binding LivingRoom}" />
-				<Views:OfficeView
-					Margin="0,466,0,0"
-					HorizontalAlignment="Left"
-					VerticalAlignment="Top"
-					DataContext="{Binding Office}" />
-				<Views:KitchenView
-					HorizontalAlignment="Right"
-					VerticalAlignment="Top"
-					DataContext="{Binding Kitchen}" />
-				<Views:StairsView
-					Margin="650,0,0,137"
+					<Views:LivingRoomView
+						HorizontalAlignment="Left"
+						VerticalAlignment="top"
+						DataContext="{Binding LivingRoom}" />
+					<Views:OfficeView
+						Margin="0,466,0,0"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						DataContext="{Binding Office}" />
+					<Views:KitchenView
+						HorizontalAlignment="Right"
+						VerticalAlignment="Top"
+						DataContext="{Binding Kitchen}" />
+					<Views:StairsView
+						Margin="650,0,0,137"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Bottom"
+						DataContext="{Binding Stairs}" />
+					<Views:DownstairsBathroomView
+						Width="171"
+						Height="151"
+						Margin="316,462,0,0"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						DataContext="{Binding DownstairsBathroom}" />
+					<Views:LaundryRoomView
+						Margin="0,630,671,0"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Top"
+						DataContext="{Binding LaundryRoom}" />
+				</Grid>
+				<Rectangle
+					Width="16"
+					Height="380"
+					Margin="0,0,0,187"
 					HorizontalAlignment="Left"
 					VerticalAlignment="Bottom"
-					DataContext="{Binding Stairs}" />
-				<Views:DownstairsBathroomView
-					Width="171"
-					Height="151"
-					Margin="316,462,0,0"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="300"
 					HorizontalAlignment="Left"
 					VerticalAlignment="Top"
-					DataContext="{Binding DownstairsBathroom}" />
-				<Views:LaundryRoomView
-					Margin="0,630,671,0"
-					HorizontalAlignment="Right"
+					Fill="white" />
+				<Rectangle
+					Width="100"
+					Height="16"
+					Margin="0,0,0,503"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="339"
+					Height="16"
+					Margin="240,0,0,503"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="332"
+					Height="16"
+					Margin="0,0,0,183"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="503"
+					Margin="316,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="165"
+					Height="16"
+					Margin="0,0,0,503"
+					HorizontalAlignment="Left"
 					VerticalAlignment="Top"
-					DataContext="{Binding LaundryRoom}" />
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="120"
+					Margin="817,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="71"
+					Margin="816,287,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="165"
+					Height="16"
+					Margin="380,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="241"
+					Height="16"
+					Margin="700,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="168"
+					Margin="816,118,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="{DynamicResource RoomLightBrush}" />
+				<Rectangle
+					Width="35"
+					Height="168"
+					Margin="807,118,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="{DynamicResource FurnitureTopBrush}" />
+				<Rectangle
+					Width="16"
+					Height="530"
+					Margin="816,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="182"
+					Margin="652,0,0,337"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="75"
+					Margin="484,0,0,428"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="45"
+					Margin="484,0,0,337"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="201"
+					Height="16"
+					Margin="332,0,0,337"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="58"
+					Height="16"
+					Margin="594,0,0,337"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="45"
+					Height="182"
+					Margin="623,0,0,155"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="163"
+					Height="16"
+					Margin="1140,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="819"
+					Margin="1286,0,0,161"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="477"
+					Height="16"
+					Margin="825,823,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="204"
+					Margin="623,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="311"
+					Height="16"
+					Margin="328,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
 			</Grid>
-			<Rectangle
-				Width="16"
-				Height="380"
-				Margin="0,0,0,187"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="300"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="100"
-				Height="16"
-				Margin="0,0,0,503"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="339"
-				Height="16"
-				Margin="240,0,0,503"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="332"
-				Height="16"
-				Margin="0,0,0,183"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="503"
-				Margin="316,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="165"
-				Height="16"
-				Margin="0,0,0,503"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="120"
-				Margin="817,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="71"
-				Margin="816,287,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="165"
-				Height="16"
-				Margin="380,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="241"
-				Height="16"
-				Margin="700,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="168"
-				Margin="816,118,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="{DynamicResource RoomLightBrush}" />
-			<Rectangle
-				Width="35"
-				Height="168"
-				Margin="807,118,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="{DynamicResource FurnitureTopBrush}" />
-			<Rectangle
-				Width="16"
-				Height="530"
-				Margin="816,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="182"
-				Margin="652,0,0,337"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="75"
-				Margin="484,0,0,428"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="45"
-				Margin="484,0,0,337"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="201"
-				Height="16"
-				Margin="332,0,0,337"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="58"
-				Height="16"
-				Margin="594,0,0,337"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="45"
-				Height="182"
-				Margin="623,0,0,155"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="163"
-				Height="16"
-				Margin="1140,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="819"
-				Margin="1286,0,0,161"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="477"
-				Height="16"
-				Margin="825,823,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Top"
-				Fill="white" />
-			<Rectangle
-				Width="16"
-				Height="204"
-				Margin="623,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
-			<Rectangle
-				Width="311"
-				Height="16"
-				Margin="328,0,0,0"
-				HorizontalAlignment="Left"
-				VerticalAlignment="Bottom"
-				Fill="white" />
+			<Grid
+				x:Name="SecondFloor"
+				Grid.Row="1"
+				Margin="0,32,0,0">
+				<Grid
+					Width="1278"
+					Height="950"
+					Margin="16,16,16,16"
+					VerticalAlignment="Top">
+					<Views:MasterBerdroomView
+						Height="506"
+						Margin="0,0,729,0"
+						VerticalAlignment="Top"
+						DataContext="{Binding MasterBedroom}" />
+					<Views:StairsView
+						Margin="650,0,0,137"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Bottom"
+						DataContext="{Binding Stairs}" />
+					<Views:GuestBathroomView
+						Height="270"
+						Margin="1034,0,0,144"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Bottom"
+						DataContext="{Binding GuestBathroom}" />
+					<Views:MasterBathroomView
+						Width="464"
+						Height="240"
+						Margin="1,0,0,183"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Bottom"
+						DataContext="{Binding GuestBathroom}" />
+					<Views:MasterClosetView
+						Width="154"
+						Height="240"
+						Margin="485,0,0,183"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Bottom"
+						DataContext="{Binding MasterCloset}" />
+					<Views:GuestClosetView
+						Width="201"
+						Height="270"
+						Margin="816,0,0,144"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Bottom"
+						DataContext="{Binding GuestCloset}" />
+					<Views:GuestBedroomView
+						Width="362"
+						Height="515"
+						Margin="906,0,0,0"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						DataContext="{Binding GuestBedroom}" />
+				</Grid>
+				<Rectangle
+					Width="16"
+					Height="268"
+					Margin="0,0,0,187"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="535"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="115"
+					Height="16"
+					Margin="0,0,0,439"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="465"
+					Height="16"
+					Margin="187,0,0,439"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="332"
+					Height="16"
+					Margin="0,0,0,183"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="199"
+					Margin="316,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="165"
+					Height="16"
+					Margin="0,0,0,503"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="274"
+					Margin="905,2,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="157"
+					Margin="905,378,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="243"
+					Height="16"
+					Margin="380,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="241"
+					Height="16"
+					Margin="700,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="530"
+					Margin="816,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="320"
+					Margin="652,0,0,199"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="75"
+					Margin="363,0,0,364"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="118"
+					Margin="484,0,0,321"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="291"
+					Height="16"
+					Margin="332,0,0,183"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="45"
+					Height="44"
+					Margin="623,0,0,155"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="163"
+					Height="16"
+					Margin="1140,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="819"
+					Margin="1286,0,0,161"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="477"
+					Height="16"
+					Margin="825,823,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="191"
+					Margin="623,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="311"
+					Height="16"
+					Margin="328,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="293"
+					Margin="569,2,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="116"
+					Height="16"
+					Margin="825,535,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="105"
+					Margin="569,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="78"
+					Margin="484,0,0,187"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Fill="white" />
+				<Rectangle
+					Width="160"
+					Height="16"
+					Margin="998,535,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="16"
+					Height="282"
+					Margin="1033,545,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+				<Rectangle
+					Width="60"
+					Height="16"
+					Margin="1226,535,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Top"
+					Fill="white" />
+			</Grid>
+
 		</Grid>
 	</Viewbox>
 </Window>

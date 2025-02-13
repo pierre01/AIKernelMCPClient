@@ -114,7 +114,7 @@ lightsApi.MapPut("/{id}/switch/{ison}", ([Description("Unique Identifier for the
 
 
 // Change the Light Color
-lightsApi.MapPut("/{id}/setColor/{color}", ([Description("Unique Identifier for the light")] int id,[Description("updated color of the light 'HexColor' in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal).")] string color) =>
+lightsApi.MapPut("/{id}/setColor/{color}", ([Description("Unique Identifier for the light")] int id,[Description("updated color of the light 'Color' in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal).")] string color) =>
 {
     var existingLight = sampleLights.FirstOrDefault(a => a.Id == id);
     if (existingLight is null)
@@ -122,7 +122,7 @@ lightsApi.MapPut("/{id}/setColor/{color}", ([Description("Unique Identifier for 
         return Results.NotFound();
     }
 
-    if (!existingLight.IsRgb)
+    if (!existingLight.CanChangeColor)
     {
         return Results.BadRequest("This light can't change color");
     }
@@ -133,14 +133,14 @@ lightsApi.MapPut("/{id}/setColor/{color}", ([Description("Unique Identifier for 
         return Results.BadRequest("Invalid color format. Must be in the format 'RRGGBB'");
     }
 
-    existingLight.HexColor = color;
+    existingLight.Color = color;
     return Results.Ok(value: existingLight);
 })  .Produces<Light>(StatusCodes.Status200OK)
     .Produces(StatusCodes.Status400BadRequest)
     .Produces(StatusCodes.Status404NotFound)
     .WithName("change_light_color")
-    .WithSummary("Updates an individual light color. Only call if this light supports color changes ('IsRgb' = true)")
-    .WithDescription(@"Changes the color of a light identified by its 'id' to a value in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal). Only call if this light 'IsRgb' is set to true.");
+    .WithSummary("Updates an individual light color. Only call if this light supports color changes ('CanChangeColor' = true)")
+    .WithDescription(@"Changes the color of a light identified by its 'id' to a value in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal). Only call if this light 'CanChangeColor' is set to true.");
 
 
 lightsApi.MapPut("/{id}/dimTo/{brightness}",([Description("Unique Identifier for the light")] int id, [Description("Brightness intensity of the light from 0 to 100")] int brightness) =>

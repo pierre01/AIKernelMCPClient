@@ -4,9 +4,125 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+        
+	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
+	d:DataContext="{d:DesignInstance vm:MasterBathroomViewModel,
+	                                 IsDesignTimeCreatable=True}"
+	
+	Width="468"
+	Height="240"
+	MaxWidth="468"
+	MaxHeight="240"
+	d:DesignHeight="240"
+	d:DesignWidth="468"
+	mc:Ignorable="d">
+	<Grid ClipToBounds="True">
+		<Rectangle x:Name="RoomDark" Fill="{StaticResource RoomDarkBrush}" />
+		<TextBlock
+			x:Name="Legend_Copy"
+			Margin="29,26,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			FontSize="32"
+			Foreground="White"
+			Text="Master Bathroom"
+			TextWrapping="Wrap" Width="292" />
+		<Rectangle
+			x:Name="RoomLight"
+			d:IsHidden="True"
+			d:IsLocked="True"
+			Fill="{StaticResource RoomLightBrush}"
+			Visibility="{Binding IsRoomLighten}" />
+		<Rectangle
+			x:Name="Sink"
+			Width="314"
+			Height="58"
+			Margin="0,182,0,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Style="{StaticResource Furniture}" d:IsLocked="True" />
+		<Ellipse
+			x:Name="WallLightGlow"
+			Width="377"
+			Height="260"
+			Margin="120,74,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Offset="0.4" Color="{Binding VanityLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding VanityLights.EndPointColor}" />
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse
+			x:Name="TopLightGlow1"
+			Width="240"
+			Height="246"
+			Margin="-76,2,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Offset="0.4" Color="{Binding TopLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding TopLights.EndPointColor}" />
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse
+			x:Name="TopLightGlow2"
+			Width="314"
+			Height="284"
+			Margin="154,-87,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Offset="0.4" Color="{Binding TopLights.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding TopLights.EndPointColor}" />
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse
+			x:Name="VanityLight1"
+			Width="35"
+			Height="34"
+			Margin="227,194,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding VanityLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="VanityLight2"
+			Width="35"
+			Height="35"
+			Margin="0,193,77,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding VanityLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="TopLight1"
+			Width="35"
+			Height="34"
+			Margin="0,26,132,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding TopLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="TopLight2"
+			Width="35"
+			Height="34"
+			Margin="0,108,407,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding TopLights.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+
+	</Grid>
 </UserControl>

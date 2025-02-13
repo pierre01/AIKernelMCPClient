@@ -4,9 +4,150 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+			 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
+
+	d:DataContext="{d:DesignInstance vm:GuestBedroomViewModel,
+	                                 IsDesignTimeCreatable=True}"
+	Width="362"
+	Height="515"
+	MaxWidth="362"
+	MaxHeight="515"
+	d:DesignHeight="515"
+	d:DesignWidth="362"
+	mc:Ignorable="d">
+	<Grid ClipToBounds="True">
+		<Rectangle
+			x:Name="RoomDark"
+			d:IsLocked="True"
+			Fill="{StaticResource RoomDarkBrush}" />
+		<TextBlock
+			x:Name="Legend"
+			Margin="0,10,100,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			FontSize="48"
+			Foreground="White"
+			Text="Guest Bedroom"
+			TextWrapping="Wrap" />
+		<Rectangle
+			x:Name="RoomLight"
+			d:IsHidden="True"
+			Fill="{StaticResource RoomLightBrush}"
+			Visibility="{Binding IsRoomLighten}" />
+		<Rectangle
+			x:Name="Desk"
+			Width="45"
+			Height="51"
+			Margin="0,431,304,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Style="{StaticResource Furniture}" RenderTransformOrigin="0.5,0.5" >
+			<Rectangle.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform Angle="-39.68"/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</Rectangle.RenderTransform>
+		</Rectangle>
+		<Rectangle
+	  x:Name="NightStandRight"
+	  Width="67"
+	  Height="71"
+	  Margin="0,49,10,0"
+	  HorizontalAlignment="Right"
+	  VerticalAlignment="Top"
+	  Style="{StaticResource Furniture}" />
+		<Rectangle
+	  x:Name="NightStandLeft"
+	  Width="67"
+	  Height="72"
+	  Margin="0,348,10,0"
+	  HorizontalAlignment="Right"
+	  VerticalAlignment="Top"
+	  Style="{StaticResource Furniture}" />
+		<Rectangle
+	  x:Name="Bed"
+	  Width="287"
+	  Height="181"
+	  Margin="0,145,0,0"
+	  HorizontalAlignment="Right"
+	  VerticalAlignment="Top"
+	  Style="{StaticResource Furniture}" />
+		<Ellipse
+			x:Name="NightStandRightGlow"
+			Width="361"
+			Height="337"
+			Margin="0,215,-137,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Offset="0.4" Color="{Binding RightNightstandLight.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding RightNightstandLight.EndPointColor}" />
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse
+	  x:Name="NightStandLeftGlow"
+	  Width="361"
+	  Height="337"
+	  Margin="0,-84,-137,0"
+	  HorizontalAlignment="Right"
+	  VerticalAlignment="Top">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Offset="0.4" Color="{Binding LeftNightstandLight.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding LeftNightstandLight.EndPointColor}" />
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse
+			x:Name="WallLightGlow"
+			Width="552"
+			Height="515"
+			Margin="22,0,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Center">
+			<Ellipse.Fill>
+				<RadialGradientBrush>
+					<GradientStop Offset="0.2" Color="{Binding WallLight.OriginPointColor}" />
+					<GradientStop Offset="1" Color="{Binding WallLight.EndPointColor}" />
+				</RadialGradientBrush>
+			</Ellipse.Fill>
+		</Ellipse>
+		<Ellipse
+			x:Name="NightStandLightLeft"
+			Width="35"
+			Height="36"
+			Margin="0,67,26,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding LeftNightstandLight.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+			x:Name="WallLight"
+			Width="50"
+			Height="50"
+			Margin="0,203,-23,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Fill="{Binding WallLight.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
+		<Ellipse
+	  x:Name="NightStandLightRight"
+	  Width="35"
+	  Height="36"
+	  Margin="0,366,26,0"
+	  HorizontalAlignment="Right"
+	  VerticalAlignment="Top"
+	  Fill="{Binding RightNightstandLight.LightColor}"
+	  Stroke="#7FFFFFFF"
+	  StrokeThickness="5" />
+
+
+	</Grid>
 </UserControl>

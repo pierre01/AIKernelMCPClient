@@ -49,6 +49,13 @@ class MainWindowViewModel:ObservableObject
         Kitchen = new KitchenViewModel(_lightViewModels[4], _lightViewModels[5], _lightViewModels[6]);
         LaundryRoom = new LaundryRoomViewModel(_lightViewModels[8]);
         DownstairsBathroom = new DownstairsBathroomViewModel(_lightViewModels[7]);
+        MasterBedroom = new MasterBedroomViewModel(_lightViewModels[12], _lightViewModels[13], _lightViewModels[14]);
+        MasterBathroom = new MasterBathroomViewModel(_lightViewModels[15], _lightViewModels[16]);
+        GuestBedroom = new GuestBedroomViewModel(_lightViewModels[21], _lightViewModels[22], _lightViewModels[23]);
+        GuestBathroom = new GuestBathroomViewModel(_lightViewModels[17], _lightViewModels[18]);
+        MasterCloset = new MasterClosetViewModel(_lightViewModels[19]);
+        GuestCloset = new GuestClosetViewModel(_lightViewModels[20]);
+
         Start().ConfigureAwait(false);
     }
 

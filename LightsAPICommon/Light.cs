@@ -6,7 +6,7 @@ namespace LightsAPICommon;
 
 [JsonSerializable(typeof(Light))]
 [Description("A Light inside a Room or space can optionaly support brightness and color control")]
-public class Light(int id, string name, int roomId, bool isOn = false, bool isRgb = false, string hexColor = "FFFFFF", bool isDimable = false, int brightness = 100)
+public class Light(int id, string name, int roomId, bool isOn = false, bool canChangeColor = false, string color = "FFFFFF", bool isDimable = false, int brightness = 100)
 {
     [Description("Id: Unique Identifier for this light.")]
     public int Id { get; set; } = id;
@@ -25,12 +25,12 @@ public class Light(int id, string name, int roomId, bool isOn = false, bool isRg
 
 
     [DefaultValue(false)]
-    [Description("IsRgb: Specifies whether this light supports color changes. If true, the 'HexColor' value can be modified. If false, the 'HexColor' should not be changed.")]
-    public bool IsRgb { get; set; } = isRgb;
+    [Description("CanChangeColor: Specifies whether this light supports color changes. If true, the 'Color' value can be modified. If false, the 'Color' should not be changed.")]
+    public bool CanChangeColor { get; set; } = canChangeColor;
 
     [DefaultValue("FFFFFF")]
-    [Description("HexColor: Specifies the color of this light in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal). This property is only modifiable if 'IsRgb' is set to true.")]
-    public string HexColor { get; set; } = hexColor;
+    [Description("Color: Specifies the color of this light in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal). If 'CanChangeColor' is false, the 'Color' can not be changed.")]
+    public string Color { get; set; } = color;
 
     [DefaultValue(false)]
     [Description("IsDimable: Indicates whether this light's brightness can be adjusted. If true, the 'Brightness' value can be modified. If false, the brightness remains fixed at 100.")]

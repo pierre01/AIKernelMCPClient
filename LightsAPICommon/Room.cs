@@ -6,11 +6,11 @@ namespace LightsAPICommon;
 
 [JsonSerializable(typeof(Room))]
 [Description("A Room where one or more lights are located")]
-public class Room(int id, string name)
+public class Room(int roomId, string name)
 {
     [Key]
     [Description("RoomId: Room unique Id, related to the location of a light. It matches the Light property 'RoomId'")]
-    public int RoomId { get; set; } = id;
+    public int RoomId { get; set; } = roomId;
 
     [Required]
     [Description("Name: The Room or area name where lights are located")]

@@ -22,12 +22,12 @@ public partial class LightViewModel : ObservableObject
 
         var hexBright = (int)Math.Round(light.Brightness * 2.55);
         var hexOriginPoint = (int)Math.Round(hexBright * 0.75);
-        //string hexBrightStr = $"#{hexBright:X2}{light.HexColor}";
-        LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString($"#{hexBright:X2}{light.HexColor}"));
-        OriginPointColor = (Color)ColorConverter.ConvertFromString($"#{hexOriginPoint:X2}{light.HexColor}");
-         EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.HexColor}");
+        //string hexBrightStr = $"#{hexBright:X2}{light.Color}";
+        LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString($"#{hexBright:X2}{light.Color}"));
+        OriginPointColor = (Color)ColorConverter.ConvertFromString($"#{hexOriginPoint:X2}{light.Color}");
+         EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.Color}");
        Brightness = light.Brightness;
-        HexColor = light.HexColor;
+        HexColor = light.Color;
         SwitchLightOnOrOff(light);
 
     }
@@ -37,16 +37,16 @@ public partial class LightViewModel : ObservableObject
         if (_light.Id != light.Id)
             return;
 
-        if (IsOn == light.IsOn && HexColor == light.HexColor && Brightness == light.Brightness)
+        if (IsOn == light.IsOn && HexColor == light.Color && Brightness == light.Brightness)
             return;
 
         bool colorModified = false;
         // If the color or brightness has changed, update the color
-        if (HexColor != light.HexColor || Brightness != light.Brightness)
+        if (HexColor != light.Color || Brightness != light.Brightness)
         {
             UpdateLightAndHalo(light);
             Brightness = light.Brightness;
-            HexColor = light.HexColor;
+            HexColor = light.Color;
             colorModified = true;
         }
 
@@ -82,9 +82,9 @@ public partial class LightViewModel : ObservableObject
         // Make Brightness a number between 0 and 255
         var hexBright = (int)Math.Round(light.Brightness * 2.55);
         var hexOriginPoint = (int)Math.Round(hexBright * 0.75);
-        LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString($"#{hexBright:X2}{light.HexColor}"));
-        OriginPointColor = (Color)ColorConverter.ConvertFromString($"#{hexOriginPoint:X2}{light.HexColor}");
-        EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.HexColor}");
+        LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString($"#{hexBright:X2}{light.Color}"));
+        OriginPointColor = (Color)ColorConverter.ConvertFromString($"#{hexOriginPoint:X2}{light.Color}");
+        EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.Color}");
     }
 
     public int Id => _light.Id;
@@ -97,10 +97,10 @@ public partial class LightViewModel : ObservableObject
 
     public string HexColor
     {
-        get => _light.HexColor;
+        get => _light.Color;
         set
         {
-            SetProperty(_light.HexColor, value, _light, (light, v) => light.HexColor = v);
+            SetProperty(_light.Color, value, _light, (light, v) => light.Color = v);
             OnPropertyChanged(nameof(LightColor));
             OnPropertyChanged(nameof(OriginPointColor));
             OnPropertyChanged(nameof(EndPointColor));
