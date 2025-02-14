@@ -56,15 +56,15 @@ public static class House
         var SampleRooms = new Room[] {
             new(1, "Living Room"),
             new(2, "Kitchen"),
-            new(3, "Guest Bedroom"),
-            new(4, "Master Bathroom"),
-            new(5, "Master Bedroom"),
+            new(3, "Guest Bedroom",2),
+            new(4, "Master Bathroom",2),
+            new(5, "Master Bedroom",2),
             new(6, "Stairs"),
-            new(7, "Guest Bathroom"),
+            new(7, "Guest Bathroom",2),
             new(8, "Downstairs Bathroom"),
             new(9, "Office"),
-            new(10, "Master Bedroom Closet"),
-            new(11, "Guest Bedroom Closet"),
+            new(10, "Master Bedroom Closet",2),
+            new(11, "Guest Bedroom Closet",2),
             new(12, "Laundry Room"),
             };
         Lights = sampleLights;
