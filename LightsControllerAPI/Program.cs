@@ -45,7 +45,7 @@ internal partial class Program
             return allRooms;
         })
           .WithName("get_all_rooms")
-          .WithSummary("Retreive all the rooms Names and unique IDs in the house, used by the lights property RoomId")
+          .WithSummary("Retreive all the rooms Names, floor, and unique IDs in the house, used by the lights property RoomId")
           .WithDescription("if light id=1 and roomID=3 the room mame for this light will be the Room which RoomId=3");
 
         // Get a specific room
@@ -54,7 +54,7 @@ internal partial class Program
                 ? Results.Ok(room)
                 : Results.NotFound())
           .WithName("get_room_by_id")
-          .WithSummary("Retreive the room Name and unique RoomId (used by the lights property RoomId)")
+          .WithSummary("Retreive the room Name, the floor where it's located, and unique RoomId (used by the lights property RoomId)")
           .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. if a command is adressing the room without specifying the light name then all the lights in the room should be receiving the command ");
 
 
