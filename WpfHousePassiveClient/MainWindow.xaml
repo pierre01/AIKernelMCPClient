@@ -21,7 +21,7 @@
 				<RowDefinition Height="*" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			<Grid x:Name="FirstFloor">
+			<Grid x:Name="FirstFloor" Margin="0,16,0,0">
 				<Grid
 					Width="1278"
 					Height="950"
