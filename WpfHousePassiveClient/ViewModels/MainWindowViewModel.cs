@@ -42,6 +42,8 @@ class MainWindowViewModel:ObservableObject
             var lightViewModel = new LightViewModel(light);
             _lightViewModels.Add(light.Id, lightViewModel);
         }
+        // set hhtpclient user agent
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "API SoftClient");
 
         LivingRoom = new LivingRoomViewModel(_lightViewModels[1],_lightViewModels[2],_lightViewModels[3]);
         Office = new OfficeViewModel(_lightViewModels[9],_lightViewModels[10]);

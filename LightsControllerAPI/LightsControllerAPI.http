@@ -24,6 +24,11 @@ PUT {{LightsAPIHost}}/lights/1/setColor/FF0000
 ###
 PUT {{LightsAPIHost}}/lights/2/setColor/00ff00
 ###
+# reset the color of the lights
+PUT {{LightsAPIHost}}/lights/1/setColor/ffffff
+###
+PUT {{LightsAPIHost}}/lights/2/setColor/ffffff
+###
 # Adjust the brightness of the lights
 PUT {{LightsAPIHost}}/lights/1/dimto/60
 ###
@@ -31,6 +36,14 @@ PUT {{LightsAPIHost}}/lights/2/dimto/60
 ###
 PUT {{LightsAPIHost}}/lights/3/dimto/60
 ###
+# Adjust back the brightness of the lights
+PUT {{LightsAPIHost}}/lights/1/dimto/100
+###
+PUT {{LightsAPIHost}}/lights/2/dimto/100
+###
+PUT {{LightsAPIHost}}/lights/3/dimto/100
+###
+
 # Switch off the lights
 PUT {{LightsAPIHost}}/lights/1/switch/false
 ###

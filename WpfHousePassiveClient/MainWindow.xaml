@@ -8,8 +8,8 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
 	Title="MainWindow"
-	Width="1320"
-	Height="1020"
+	Width="700"
+	Height="1040"
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel,
 	                                 IsDesignTimeCreatable=False}"
 	Background="{StaticResource RoomDarkBrush}"
@@ -21,7 +21,7 @@
 				<RowDefinition Height="*" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			<Grid x:Name="FirstFloor" d:IsHidden="True">
+			<Grid x:Name="FirstFloor">
 				<Grid
 					Width="1278"
 					Height="950"
@@ -234,10 +234,10 @@
 					VerticalAlignment="Bottom"
 					Fill="white" />
 			</Grid>
-			<Grid
+			<Grid 
 				x:Name="SecondFloor"
 				Grid.Row="1"
-				Margin="0,32,0,0">
+				Margin="0,48,0,0">
 				<Grid
 					Width="1278"
 					Height="950"

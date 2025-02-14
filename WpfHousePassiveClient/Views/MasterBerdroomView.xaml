@@ -6,13 +6,12 @@
 	xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
-
-	d:DataContext="{d:DesignInstance vm:MasterBedroomViewModel,
-	                                 IsDesignTimeCreatable=True}"
 	Width="549"
 	Height="506"
 	MaxWidth="549"
 	MaxHeight="506"
+	d:DataContext="{d:DesignInstance vm:MasterBedroomViewModel,
+	                                 IsDesignTimeCreatable=True}"
 	d:DesignHeight="506"
 	d:DesignWidth="549"
 	mc:Ignorable="d">
@@ -43,31 +42,35 @@
 			Margin="0,111,0,0"
 			HorizontalAlignment="Right"
 			VerticalAlignment="Top"
-			Style="{StaticResource Furniture}" d:IsLocked="True" />
+			d:IsLocked="True"
+			Style="{StaticResource Furniture}" />
 		<Rectangle
-	  x:Name="NightStandRight"
-	  Width="67"
-	  Height="71"
-	  Margin="0,18,482,0"
-	  HorizontalAlignment="Right"
-	  VerticalAlignment="Top"
-	  Style="{StaticResource Furniture}" d:IsLocked="True" />
+			x:Name="NightStandRight"
+			Width="67"
+			Height="71"
+			Margin="0,18,482,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			d:IsLocked="True"
+			Style="{StaticResource Furniture}" />
 		<Rectangle
-	  x:Name="NightStandLeft"
-	  Width="67"
-	  Height="71"
-	  Margin="0,349,482,0"
-	  HorizontalAlignment="Right"
-	  VerticalAlignment="Top"
-	  Style="{StaticResource Furniture}" d:IsLocked="True" />
+			x:Name="NightStandLeft"
+			Width="67"
+			Height="71"
+			Margin="0,349,482,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			d:IsLocked="True"
+			Style="{StaticResource Furniture}" />
 		<Rectangle
-	  x:Name="Bed"
-	  Width="299"
-	  Height="198"
-	  Margin="0,125,250,0"
-	  HorizontalAlignment="Right"
-	  VerticalAlignment="Top"
-	  Style="{StaticResource Furniture}" d:IsLocked="True" />
+			x:Name="Bed"
+			Width="299"
+			Height="198"
+			Margin="0,125,250,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			d:IsLocked="True"
+			Style="{StaticResource Furniture}" />
 		<Ellipse
 			x:Name="NightStandRightGlow"
 			Width="361"
@@ -83,12 +86,12 @@
 			</Ellipse.Fill>
 		</Ellipse>
 		<Ellipse
-	  x:Name="NightStandLeftGlow"
-	  Width="361"
-	  Height="337"
-	  Margin="-147,216,0,0"
-	  HorizontalAlignment="Left"
-	  VerticalAlignment="Top">
+			x:Name="NightStandLeftGlow"
+			Width="361"
+			Height="337"
+			Margin="-147,216,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
 			<Ellipse.Fill>
 				<RadialGradientBrush>
 					<GradientStop Offset="0.4" Color="{Binding LeftNightstandLight.OriginPointColor}" />
@@ -131,15 +134,15 @@
 			Stroke="#7FFFFFFF"
 			StrokeThickness="5" />
 		<Ellipse
-	  x:Name="NightStandLightRight"
-	  Width="35"
-	  Height="36"
-	  Margin="16,36,0,0"
-	  HorizontalAlignment="Left"
-	  VerticalAlignment="Top"
-	  Fill="{Binding RightNightstandLight.LightColor}"
-	  Stroke="#7FFFFFFF"
-	  StrokeThickness="5" />
+			x:Name="NightStandLightRight"
+			Width="35"
+			Height="36"
+			Margin="16,36,0,0"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Fill="{Binding RightNightstandLight.LightColor}"
+			Stroke="#7FFFFFFF"
+			StrokeThickness="5" />
 
 
 	</Grid>

@@ -6,12 +6,12 @@
 	xmlns:local="clr-namespace:WpfHousePassiveClient.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:WpfHousePassiveClient.ViewModels"
-	d:DataContext="{d:DesignInstance vm:GuestBathroomViewModel,
-	                                 IsDesignTimeCreatable=True}"
 	Width="235"
 	Height="270"
 	MaxWidth="235"
 	MaxHeight="270"
+	d:DataContext="{d:DesignInstance vm:GuestBathroomViewModel,
+	                                 IsDesignTimeCreatable=True}"
 	d:DesignHeight="270"
 	d:DesignWidth="235"
 	mc:Ignorable="d">
