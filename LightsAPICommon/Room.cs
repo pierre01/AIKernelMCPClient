@@ -5,19 +5,24 @@ using System.Text.Json.Serialization;
 namespace LightsAPICommon;
 
 [JsonSerializable(typeof(Room))]
-[Description("A Room where one or more lights are located")]
-public class Room(int roomId, string name, int floor =1)
+[Description("A Room where one or more lights are located, The house contains all the rooms and lights in the system")]
+/// <summary>
+/// Represents a room in the building with a unique identifier and floor location.
+/// </summary>
+public class Room(int id, string name, int floor = 1)
 {
-    [Key]
-    [Description("RoomId: Room unique Id, related to the location of a light. It matches the Light property 'RoomId'")]
-    public int RoomId { get; set; } = roomId;
+    [Required]
+    [Range(1, int.MaxValue)]
+    [Display(Name = "Room ID", Description = "Unique room identifier")]
+    public int Id { get; set; } = id;
 
     [Required]
-    [Description("Name: The Room or area name where lights are located")]
+    [StringLength(100)]
+    [Display(Name = "Room Name", Description = "Room name")]
     public string Name { get; set; } = name;
 
-    [DefaultValue(1)]
-    [Description("Floor: The floor where the room is located")]
+    [Range(-5, 500)]
+    [Display(Name = "Floor", Description = "Floor number where the room is located")]
     public int Floor { get; set; } = floor;
 }
 

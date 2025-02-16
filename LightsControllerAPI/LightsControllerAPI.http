@@ -13,43 +13,55 @@ GET {{LightsControllerAPI_HostAddress}}/rooms
 
 # Living Room Lights ------------------------------------------------
 # Switch on the lights
-PUT {{LightsAPIHost}}/lights/1/switch/true
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+Content-Type: application/json
+{
+  "LightIds": [1, 2, 3],
+  "State": "On"
+}
 ###
-PUT {{LightsAPIHost}}/lights/2/switch/true
-###
-PUT {{LightsAPIHost}}/lights/3/switch/true
-###
+
 # Adjust the color of the lights
-PUT {{LightsAPIHost}}/lights/1/setColor/FF0000
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+Content-Type: application/json
+{
+  "LightIds": [1, 2],
+  "Color": "FF0000"
+}
 ###
-PUT {{LightsAPIHost}}/lights/2/setColor/00ff00
-###
+
 # reset the color of the lights
-PUT {{LightsAPIHost}}/lights/1/setColor/ffffff
-###
-PUT {{LightsAPIHost}}/lights/2/setColor/ffffff
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+Content-Type: application/json
+{
+  "LightIds": [1, 2],
+  "Color": "FFFFFF"
+}
 ###
 # Adjust the brightness of the lights
-PUT {{LightsAPIHost}}/lights/1/dimto/60
-###
-PUT {{LightsAPIHost}}/lights/2/dimto/60
-###
-PUT {{LightsAPIHost}}/lights/3/dimto/60
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+Content-Type: application/json
+{
+  "LightIds": [1, 2, 3],
+  "Brightness": 50
+}
 ###
 # Adjust back the brightness of the lights
-PUT {{LightsAPIHost}}/lights/1/dimto/100
-###
-PUT {{LightsAPIHost}}/lights/2/dimto/100
-###
-PUT {{LightsAPIHost}}/lights/3/dimto/100
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+Content-Type: application/json
+{
+  "LightIds": [1, 2, 3],
+  "Brightness": 100
+}
 ###
 
 # Switch off the lights
-PUT {{LightsAPIHost}}/lights/1/switch/false
-###
-PUT {{LightsAPIHost}}/lights/2/switch/false
-###
-PUT {{LightsAPIHost}}/lights/3/switch/false
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+Content-Type: application/json
+{
+  "LightIds": [1, 2, 3],
+  "State": "Off"
+}
 ###
 
 # Office Lights -----------------------------------------------------
@@ -109,3 +121,21 @@ PUT {{LightsAPIHost}}/lights/11/switch/false
 ###
 
 
+
+PUT {{LightsControllerAPI_HostAddress}}/lights/{id}/toggle
+
+###
+
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+
+###
+
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+Content-Type: application/json
+{
+  "LightIds": [1, 2, 4],
+  "State": "Off",
+  "Color": "FF0000",
+  "Brightness": 50
+}
+###

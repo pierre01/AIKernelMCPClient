@@ -20,13 +20,13 @@ class MainWindowViewModel:ObservableObject
         
     private const string apiUrl = "https://localhost:5042/lights";
     //private const string apiUrl = "https://rh8xzzh8-5042.usw3.devtunnels.ms/lights";
-    private static readonly HttpClient _httpClient = new HttpClient();
-    private Dictionary<int, LightViewModel> _lightViewModels = new Dictionary<int, LightViewModel>();
+    private static readonly HttpClient _httpClient = new();
+    private readonly Dictionary<int, LightViewModel> _lightViewModels = [];
 
     private bool _isPaused;
     private PeriodicTimer _fetchLightsTimer;
 
-    JsonSerializerOptions _serializerOptions = new()
+    private readonly JsonSerializerOptions _serializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         PropertyNameCaseInsensitive = true,

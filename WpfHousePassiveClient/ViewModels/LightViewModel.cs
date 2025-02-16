@@ -13,7 +13,7 @@ namespace WpfHousePassiveClient.ViewModels;
 public partial class LightViewModel : ObservableObject
 {
     private readonly Light _light;
-    private static readonly ColorConverter _colorConverter = new ColorConverter();
+    private static readonly ColorConverter _colorConverter = new();
     public event EventHandler<bool> LightSwitched;
 
     public LightViewModel(Light light)
@@ -36,8 +36,8 @@ public partial class LightViewModel : ObservableObject
     {
         if (_light.Id != light.Id)
             return;
-
-        if (IsOn == light.IsOn && HexColor == light.Color && Brightness == light.Brightness)
+        var isOn = light.State == LightState.On;
+        if (IsOn == isOn  && HexColor == light.Color && Brightness == light.Brightness)
             return;
 
         bool colorModified = false;
@@ -50,15 +50,16 @@ public partial class LightViewModel : ObservableObject
             colorModified = true;
         }
 
-        if (IsOn == light.IsOn && !colorModified)
+        if (IsOn == isOn && !colorModified)
             return;
-        IsOn = light.IsOn;
+        IsOn =isOn;
         SwitchLightOnOrOff(light);
     }
 
     private void SwitchLightOnOrOff(Light light)
     {
-        if (light.IsOn == false)
+        var isOn = light.State == LightState.On;
+        if (isOn == false)
         {
             LightColor = new SolidColorBrush(Colors.Transparent);
             OriginPointColor = Colors.Transparent;
@@ -107,10 +108,18 @@ public partial class LightViewModel : ObservableObject
         }
     }
 
+    private bool _isOn;
     public bool IsOn
     {
-        get => _light.IsOn;
-        set => SetProperty(_light.IsOn, value, _light, (light, v) => light.IsOn = v);
+        get => _isOn;
+        set
+        {
+            SetProperty(_isOn, value, _light, (light, v) =>
+            {
+                _isOn = v;
+                light.State = v ? LightState.On : LightState.Off;
+            });
+        }
     }
 
     public int Brightness

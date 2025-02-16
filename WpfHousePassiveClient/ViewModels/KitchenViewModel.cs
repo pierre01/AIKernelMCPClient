@@ -17,9 +17,9 @@ public partial class KitchenViewModel : ObservableObject
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
 
-            BarLights = new LightViewModel(new Light(9, "BarLights", 3, true, true, "FFFFFF", true, 100));
-            MainLights = new LightViewModel(new Light(2, "MainLights", 3, true, true, "FFFFFF", true, 100));
-            CabinetLights = new LightViewModel(new Light(10, "CabinetLights", 3, true, true, "FFFFFF", true, 100));
+            BarLights = new LightViewModel(new Light(9, "BarLights", 3,  LightState.On, new( true, true), "FFFFFF",  100));
+            MainLights = new LightViewModel(new Light(2, "MainLights", 3,  LightState.On, new( true, true), "FFFFFF",  100));
+            CabinetLights = new LightViewModel(new Light(10, "CabinetLights", 3,  LightState.On, new( true, true), "FFFFFF",  100));
 
         }
     }

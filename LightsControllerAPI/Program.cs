@@ -1,11 +1,13 @@
 using LightsAPICommon;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 internal partial class Program
-{    
+{
     [GeneratedRegex("^(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$")]
     private static partial Regex ColorRegex();
 
@@ -41,135 +43,168 @@ internal partial class Program
         // Get all the rooms
         roomsApi.MapGet("/", () =>
         {
-            Debug.WriteLine(">> Get all rooms -> get_all_rooms");
+            Debug.WriteLine(">> Get all rooms -> GetRooms");
             return allRooms;
         })
-          .WithName("get_all_rooms")
+          .WithName("GetRooms")
           .WithSummary("Retreive all the rooms Names, floor, and unique IDs in the house, used by the lights property RoomId")
-          .WithDescription("if light id=1 and roomID=3 the room mame for this light will be the Room which RoomId=3");
+          .WithDescription("Get every room in the house and the floor they are located. Each light is associated to one room only and the floor of the room, remember all the rooms in the house and the lights for each room");
 
         // Get a specific room
         roomsApi.MapGet("/{roomId}", ([Description("Unique identifier for the room")] int roomId) =>
-            allRooms.FirstOrDefault(a => a.RoomId == roomId) is { } room
+            allRooms.FirstOrDefault(a => a.Id == roomId) is { } room
                 ? Results.Ok(room)
                 : Results.NotFound())
-          .WithName("get_room_by_id")
+          .WithName("GetRoom")
           .WithSummary("Retreive the room Name, the floor where it's located, and unique RoomId (used by the lights property RoomId)")
-          .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. if a command is adressing the room without specifying the light name then all the lights in the room should be receiving the command ");
+          .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. All the light located in a room are also onlocated on the same floor as the room.  if a command is adressing the room without specifying the light name then all the lights in the room and floor should be receiving the command. Remember all the rooms for future use");
 
 
         var lightsApi = app.MapGroup("/lights");
-        lightsApi.WithTags(["Rooms","Lights"]);
+        lightsApi.WithTags(["Rooms", "Lights"]);
 
         // Get all the lights
         lightsApi.MapGet("/", (HttpRequest request) =>
         {
             // Check user agent to remove the soft client calls and only show the Kernel calls
-            if (!request.Headers["User-Agent"].ToString().Contains("API SoftClient"))
+            if (!request.Headers.UserAgent.ToString().Contains("API SoftClient"))
             {
-                Debug.WriteLine(">> Get all lights -> get_all_lights");
+                Debug.WriteLine(">> Get all lights -> GetLights");
             }
-            return allLights;
-        })
-          .WithName("get_all_lights")
-          .WithSummary("Retreive all the lights location, capabilities, and state inside the house")
-          .WithDescription("Returns the list of the lights including their capabilities and current state.");
+            return Results.Ok(allLights);
+
+        }).Produces<List<Light>>(200)
+            .WithName("GetLights")
+            .WithSummary("Retrieve all the lights in the house")
+            .WithDescription("Returns a list of all available lights in the house with their states and capabilities. Remember all the lights for future use as well are the rooms and floor they are located in");
 
         // Get a specific light
-        lightsApi.MapGet("/{id}", ([Description("Unique Identifier for the light")] int id) =>
-            allLights.FirstOrDefault(a => a.Id == id) is { } light
-                ? Results.Ok(light)
-                : Results.NotFound())
-            .Produces<Light>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .WithName("get_light_by_id")
-            .WithSummary("Retreive the information for one light in the house")
-            .WithDescription("Returns the capabilities and current state of a light");
-        //.ExcludeFromDescription();
 
-
-        // Switch a light on or off
-        lightsApi.MapPut("/{id}/switch/{ison}", ([Description("Unique Identifier for the light")] int id, [Description("Turns the light on if true, or off if false")] bool ison) =>
+        app.MapGet("/lights/{id}", (int id) =>
         {
-            Debug.WriteLine($">> Switch light {id} to {ison} -> switch_light");
-            var existingLight = allLights.FirstOrDefault(a => a.Id == id);
-            if (existingLight is null)
-            {
-                return Results.NotFound();
-            }
-            existingLight.IsOn = ison;
+            var light = allLights.FirstOrDefault(l => l.Id == id);
+            return light != null ? Results.Ok(light) : Results.NotFound($"Light {id} not found.");
+        })
+        .Produces<Light>(200)
+        .Produces(404)
+        .WithName("GetLight")
+        .WithSummary("Retrieve a single light")
+        .WithDescription("Returns details of a specific light by its ID.");//.ExcludeFromDescription();
 
-            return Results.Ok(value: existingLight);
-        }).Produces<Light>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .WithName("switch_light")
-            .WithSummary("Switch a light on or off (true for on, or false for off)")
-            .WithDescription("Turn the light on or off and returns the light state with its new values")
-            .WithTags("Lights");
-
-        // Change the Light Color
-        lightsApi.MapPut("/{id}/setColor/{color}", ([Description("Unique Identifier for the light")] int id, [Description("updated color of the light 'Color' in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal).")] string color) =>
+        /// <summary> Batch update multiple lights. </summary>
+        /// <remarks>
+        /// Example request:
+        /// { "LightIds": [1,2], "State": "On", "Color": "FF0000" }
+        /// </remarks>
+        app.MapPatch("/lights", ([FromBody] BatchLightUpdateRequest request) =>
         {
+            /* This batch update request applies only to lights that match the requested capabilities.
+               - If brightness is specified, only dimmable lights (IsDimmable = true) will be updated.
+               - If color is specified, only lights that support color change (CanChangeColor = true) will be updated.
+               - If state change is requested, all selected lights will be updated regardless of capabilities. */
 
-            var existingLight = allLights.FirstOrDefault(a => a.Id == id);
-            if (existingLight is null)
+            if (request.LightIds == null || request.LightIds.Count == 0)
             {
-                return Results.NotFound();
-            }
-
-            Debug.WriteLine($">> Change light {id} color  from {existingLight.Color} to {color} -> change_light_color");
-
-            if (!existingLight.CanChangeColor)
-            {
-                return Results.NoContent(); // REturn this instead of a Bad Request, so it does not trigger an exception
+                return Results.BadRequest("No lights specified.");
             }
 
 
-            if (!ColorRegex().IsMatch(color))
+            bool hasColor=false;
+            bool hasBrightness = false;
+            bool hasState = false;
+            LightState newState = LightState.Off;
+
+            if (!string.IsNullOrEmpty(request.Color))
             {
-                return Results.BadRequest("Invalid color format. Must be in the format 'RRGGBB'");
+                if (!ColorRegex().IsMatch(request.Color))
+                {
+                    return Results.BadRequest($"Request Color invalid format. Must be in the format 'RRGGBB'.");
+                }
+                hasColor = true; // it has color and it's valid
             }
 
-            existingLight.Color = color;
-            return Results.Ok(value: existingLight);
-        }).Produces<Light>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status204NoContent)
-            .WithName("change_light_color")
-            .WithSummary("Updates an individual light color. Only call if this light supports color changes ('CanChangeColor' = true)")
-            .WithDescription(@"Changes the color of a light identified by its 'id' to a value in hexadecimal format 'RRGGBB'. 'RR' is the red component, 'GG' is the green component, and 'BB' is the blue component. Each component ranges from '00' to 'FF' (0 to 255 in decimal). Only call if this light 'CanChangeColor' is set to true.");
-
-
-        lightsApi.MapPut("/{id}/dimTo/{brightness}", ([Description("Unique Identifier for the light")] int id, [Description("Brightness intensity of the light from 0 to 100")] int brightness) =>
-        {
-            var existingLight = allLights.FirstOrDefault(a => a.Id == id);
-            if (existingLight is null)
+            if (request.Brightness.HasValue)
             {
-                return Results.NotFound();
+                if (request.Brightness.Value < 0 || request.Brightness.Value > 100)
+                {
+                    return Results.BadRequest("Request Brightness value must be between 0 and 100");
+                }
+                hasBrightness = true; // it has brightness and it's valid
             }
-            Debug.WriteLine($">> Change light {id} brightness  from {existingLight.Brightness} to {brightness} -> change_light_brightness");
-
-            if (!existingLight.IsDimable)
+            if (!string.IsNullOrEmpty(request.State))
             {
-                 return Results.NoContent();
-            }
-            // Validate brightness
-            if (brightness < 0 || brightness > 100)
-            {
-                return Results.BadRequest("Brightness value must be between 0 and 100");
+                if (!Enum.TryParse<LightState>(request.State, true, out newState))
+                    return Results.BadRequest("Request Invalid State. Use 'On' or 'Off'");
+                hasState = true; // it has state and it's valid
             }
 
-            existingLight.Brightness = brightness;
+            // Filter lights based on (if (hasBrightness == true && == l.Capabilities.IsDimmable) and hasColor light  capability and hasColor and requested light IDs
+            var filteredLights = new List<Light>();
+            foreach (var lightId in request.LightIds)
+            {
+                var found = allLights.FirstOrDefault(l => l.Id == lightId);
+                if (found == null)
+                {
+                    return Results.NotFound($"Light {lightId} not found.");
+                }
+                if(hasBrightness && !found.Capabilities.IsDimmable)
+                {
+                    continue;
+                    //return Results.BadRequest($"Light {lightId} does not support brightness control.");
+                }
+                if (hasColor && !found.Capabilities.CanChangeColor)
+                {
+                    continue;
+                    //return Results.BadRequest($"Light {lightId} does not support color control.");
+                }
+                filteredLights.Add(found);
+            }
 
-            return Results.Ok(value: existingLight);
-        }).Produces<Light>(StatusCodes.Status200OK)
-           .Produces(StatusCodes.Status400BadRequest)
-           .Produces(StatusCodes.Status404NotFound)
-           .Produces(StatusCodes.Status204NoContent)
-           .WithName("change_light_brightness")
-           .WithSummary("Changes a light 'brightness', the light's brightness level is a value ranging from 0 to 100. This value can only be adjusted if this light property 'IsDimable' is true.")
-           .WithDescription(@"Adjusts the light Brightness intensity between the values 0 to 100, ( this light is identified by the parameter 'Id')  Only call this function if this light supports dimming : 'IsDimable' = true.");
+
+            if (filteredLights.Count == 0)
+                return Results.NotFound("No matching lights with the requested capabilities were found");
+
+            foreach (var light in filteredLights)
+            {
+                if (hasBrightness) light.Brightness = request.Brightness.Value;
+                if (hasColor) light.Color = request.Color; 
+                if (hasState) light.State = newState;
+            }
+            if(filteredLights.Count != request.LightIds.Count)
+            {
+                return  Results.Json(filteredLights, statusCode: StatusCodes.Status207MultiStatus);
+            }
+            return Results.Ok(filteredLights);
+        })
+        .Produces<List<Light>>(StatusCodes.Status200OK)
+        .Produces<List<Light>>(StatusCodes.Status207MultiStatus)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
+        .WithName("UpdateLights")
+        .WithSummary("Batch update multiple lights")
+        .WithDescription("Updates multiple lights with new state (On or Off), color, or brightness. Make sure that the lights are the same capabilities. Returns the list of lights affected by the operation");
+
+
+        //// Switch a light on or off
+        //// PUT /lights/{id}/toggle (Toggle light state)
+        //app.MapPut("/lights/{id}/toggle", (int id, [FromQuery] string state) =>
+        //{
+        //    var light = allLights.FirstOrDefault(l => l.Id == id);
+        //    if (light == null) return Results.NotFound( $"Light {id} not found." );
+
+        //    if (!Enum.TryParse<LightState>(state, true, out var newState))
+        //        return Results.BadRequest( "\"Invalid state. Use 'On' or 'Off'" );
+
+        //    light.State = newState;            
+
+        //    return Results.Ok( $"Light {id} turned {newState}." );
+        //})
+        //.Produces(200)
+        //.Produces(StatusCodes.Status404NotFound)
+        //.Produces(StatusCodes.Status400BadRequest)
+        //.WithName("ToggleLight")
+        //.WithSummary("Toggle a light state")
+        //.WithDescription("Turns a light on or off based on the provided state.");
 
 
         app.Run();
@@ -179,8 +214,11 @@ internal partial class Program
 }
 
 
+[JsonSerializable(typeof(List<Light>))]
 [JsonSerializable(typeof(Light[]))]
 [JsonSerializable(typeof(Room[]))]
+[JsonSerializable(typeof(BatchLightUpdateRequest))]
+[JsonSerializable(typeof(Light))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 

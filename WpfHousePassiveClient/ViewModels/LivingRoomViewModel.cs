@@ -15,11 +15,11 @@ public partial class LivingRoomViewModel : ObservableObject
     {
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
-            LightViewModel front = new LightViewModel(new Light(1, "Front", 1, true, true, "FFFFFF", true, 30));
+            LightViewModel front = new(new Light(1, "Front", 1,  LightState.On, new( true, true), "FFFFFF",  100));
            
-            LightViewModel back = new LightViewModel(new Light(19, "Back", 1, true, true, "FF0000", true, 100));
+            LightViewModel back = new(new Light(19, "Back", 1,  LightState.On, new( true, true), "FF0000",  100));
          
-            LightViewModel wall = new LightViewModel(new Light(18, "Wall", 1, true, false, "FFFFFF", true, 100));
+            LightViewModel wall = new(new Light(18, "Wall", 1,  LightState.On, new( true, true), "FFFFFF",  100));
 
 
             FrontLights = front;

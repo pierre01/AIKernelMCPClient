@@ -15,9 +15,9 @@ public partial class GuestBathroomViewModel : ObservableObject
     {
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
-            LightViewModel top = new LightViewModel(new Light(1, "Front", 1, true, true, "FFFFFF", true, 30));
+            LightViewModel top = new(new Light(1, "Front", 1, LightState.On, new(true, true), "FFFFFF", 100));
            
-            LightViewModel vanity = new LightViewModel(new Light(19, "Back", 1, true, true, "FF0000", true, 100));
+            LightViewModel vanity = new(new Light(19, "Back", 1,  LightState.On, new( true, true), "FF0000",  100));
          
 
             TopLights = top;

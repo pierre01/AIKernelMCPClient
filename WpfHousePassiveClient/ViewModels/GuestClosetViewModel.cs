@@ -16,7 +16,7 @@ namespace WpfHousePassiveClient.ViewModels;
             if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
            
-                CeilingLight = new LightViewModel(new Light(3, "ceiling", 3, true, true, "FFFFFF", true, 100));
+                CeilingLight = new LightViewModel(new Light(3, "ceiling", 3,  LightState.On, new( true, true), "FFFFFF",  100));
 
             }
         }

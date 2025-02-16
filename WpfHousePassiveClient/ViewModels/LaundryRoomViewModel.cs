@@ -16,7 +16,7 @@ public partial class LaundryRoomViewModel:ObservableObject
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
            
-            CeilingLight = new LightViewModel(new Light(3, "ceiling", 3, false, true, "FFFFFF", true, 100));
+            CeilingLight = new LightViewModel(new Light(3, "ceiling", 3,  LightState.On, new( true, true), "FFFFFF",  100));
 
         }
     }
