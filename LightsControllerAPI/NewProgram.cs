@@ -41,7 +41,7 @@
 //// GET /lights/{id} (Retrieve a single light)
 //app.MapGet("/lights/{id}", (int id) =>
 //{
-//    var light = lights.FirstOrDefault(l => l.Id == id);
+//    var light = lights.FirstOrDefault(l => l.RoomId == id);
 //    return light != null ? Results.Ok(light) : Results.NotFound(new { status = "error", message = $"Light {id} not found." });
 //})
 //.Produces<Light>(200)
@@ -60,7 +60,7 @@
 //// GET /rooms/{id} (Retrieve a single room)
 //app.MapGet("/rooms/{id}", (int id) =>
 //{
-//    var room = rooms.FirstOrDefault(r => r.Id == id);
+//    var room = rooms.FirstOrDefault(r => r.RoomId == id);
 //    return room != null ? Results.Ok(room) : Results.NotFound(new { status = "error", message = $"Room {id} not found." });
 //})
 //.Produces<Room>(200)
@@ -80,7 +80,7 @@
 //    var updatedLights = new List<Light>();
 //    foreach (var id in request.LightIds)
 //    {
-//        var light = lights.FirstOrDefault(l => l.Id == id);
+//        var light = lights.FirstOrDefault(l => l.RoomId == id);
 //        if (light == null)
 //        {
 //            return Results.NotFound(new { status = "error", message = $"Light {id} not found." });
@@ -123,7 +123,7 @@
 //// PUT /lights/{id}/toggle (Toggle light state)
 //app.MapPut("/lights/{id}/toggle", (int id, LightState state) =>
 //{
-//    var light = lights.FirstOrDefault(l => l.Id == id);
+//    var light = lights.FirstOrDefault(l => l.RoomId == id);
 //    if (light == null) return Results.NotFound(new { status = "error", message = $"Light {id} not found." });
 
 //    light.State = state;

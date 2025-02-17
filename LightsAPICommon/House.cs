@@ -16,56 +16,56 @@ public static class House
     {
         var sampleLights = new Light[] {
             // Living room
-            new(1, "Front Ceiling",1, capabilities:new( canChangeColor:true,isDimmable:true)),
-            new(2, "Back Ceilling",1,capabilities:new(canChangeColor:true,isDimmable:true)),
-            new(3, "Wall",1,capabilities:new(isDimmable:true)),
+            new(0, "Front Ceiling",0, capabilities:new( canChangeColor:true,isDimmable:true)),
+            new(1, "Back Ceilling",0,capabilities:new(canChangeColor:true,isDimmable:true)),
+            new(2, "Living Wall",0,capabilities:new(isDimmable:true)),
             // Kitchen
-            new(4, "Bar Light", 2,capabilities:new(canChangeColor:true,isDimmable:true)),
-            new(5, "Ceiling",2,capabilities:new(canChangeColor:true,isDimmable:true)),
-            new(6, "Cabinet", 2,capabilities:new(isDimmable:true)),
+            new(3, "Bar Light", 1,capabilities:new(canChangeColor:true,isDimmable:true)),
+            new(4, "Kitchen Ceiling",1,capabilities:new(canChangeColor:true,isDimmable:true)),
+            new(5, "Cabinet lights", 1,capabilities:new(isDimmable:true)),
             // Downstairs Bathroom
-            new(7, "Vanity Light", 8),            
+            new(6, "Vanity Light", 7),            
             // Laundry room
-            new(8, "Ceiling",12),            
+            new(7, "Laudry Ceiling",11),            
             // Office
-            new(9, "Desk", 9,  capabilities:new(isDimmable : true, canChangeColor:true)),
-            new(10, "Floor Lamp", 9,  capabilities:new(isDimmable : true, canChangeColor:true)),            
+            new(8, "Desk light", 8,  capabilities:new(isDimmable : true, canChangeColor:true)),
+            new(9, "Floor lamp", 8,  capabilities:new(isDimmable : true, canChangeColor:true)),            
             // Stairs
-            new(11, "Stairs Chandelier", 6,capabilities:new(isDimmable:true)),
+            new(10, "Stairs Chandelier", 5,capabilities:new(isDimmable:true)),
             // Master Bedroom
-            new(12, "Left Nightstand", 5,capabilities:new(isDimmable:true)),
-            new(13, "Right Nightstand", 5,capabilities:new(isDimmable:true)),
-            new(14, "Wall", 5, capabilities:new(canChangeColor:true)),
+            new(11, "Left Nightstand light", 4,capabilities:new(isDimmable:true)),
+            new(12, "Right Nightstand light", 4,capabilities:new(isDimmable:true)),
+            new(13, "Master Wall light", 4, capabilities:new(canChangeColor:true)),
             // Master Bathroom
-            new(15, "Main",4),
-            new(16, "Mirror",4),
+            new(14, "Main light",3),
+            new(15, "Mirror light",3),
 
             // Guest Bathroom
-            new(17, "Mirror",7),
-            new(18, "Main",7),
+            new(16, "Mirror light",6),
+            new(17, "Main light",6),
             // Master Bedroom Closet
-            new(19, "Closet",10),
+            new(18, "Closet light",9),
             // Guest Bedroom Closet
-            new(20, "Closet",11),            
+            new(19, "Closet light",10),            
             // Guest Bedroom
-            new(21, "Left Nightstand", 3,capabilities:new(isDimmable:true)),
-            new(22, "Right Nightstand", 3,capabilities:new(isDimmable:true)),
-            new(23, "Wall", 3, capabilities:new(canChangeColor:true))
+            new(20, "Left Nightstand", 2,capabilities:new(isDimmable:true)),
+            new(21, "Right Nightstand", 2,capabilities:new(isDimmable:true)),
+            new(22, "Guest Wall light", 2, capabilities:new(canChangeColor:true))
        };
 
         var SampleRooms = new Room[] {
-            new(1, "Living Room"),
-            new(2, "Kitchen"),
-            new(3, "Guest Bedroom",2),
-            new(4, "Master Bathroom",2),
-            new(5, "Master Bedroom",2),
-            new(6, "Stairs"),
-            new(7, "Guest Bathroom",2),
-            new(8, "Downstairs Bathroom"),
-            new(9, "Office"),
-            new(10, "Master Bedroom Closet",2),
-            new(11, "Guest Bedroom Closet",2),
-            new(12, "Laundry Room"),
+            new(0, "Living Room",1),
+            new(1, "Kitchen",1),
+            new(2, "Guest Bedroom",2),
+            new(3, "Master Bathroom",2),
+            new(4, "Master Bedroom",2),
+            new(5, "Stairs", 1),
+            new(6, "Guest Bathroom",2),
+            new(7, "Downstairs Bathroom", 1),
+            new(8, "Office", 1),
+            new(9, "Master Bedroom Closet",2),
+            new(10, "Guest Bedroom Closet",2),
+            new(11, "Laundry Room", 1),
             };
         Lights = sampleLights;
         Rooms = SampleRooms;

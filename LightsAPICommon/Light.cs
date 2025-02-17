@@ -10,18 +10,18 @@ namespace LightsAPICommon;
 public class Light(int id, string name, int roomId, LightState state = LightState.Off, Capabilities capabilities = null, string color = "FFFFFF", int brightness = 100)
 {
     [Required]
-    [Range(1, int.MaxValue)]
+    [Range(0, int.MaxValue)]
     [Display(Name = "Light ID", Description = "Unique light identifier")]
     public int Id { get; set; } = id;
 
     [Required]
     [StringLength(100)]
-    [Display(Name = "Light Name", Description = "Light name")]
+    [Display(Name = "Light Name", Description = "Light name, uniquely identified by its name plus the name of the room it is located in")]
     public string Name { get; set; } = name;
 
     [Required]
-    [Range(1, int.MaxValue)]
-    [Display(Name = "Room ID", Description = "Associated room ID")]
+    [Range(0, int.MaxValue)]
+    [Display(Name = "Room ID", Description = "Associated room Id, links a light to a unique Room where the light is located, including its floor location")]
     public int RoomId { get; set; } = roomId;
 
     [Required]

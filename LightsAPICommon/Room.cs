@@ -9,12 +9,12 @@ namespace LightsAPICommon;
 /// <summary>
 /// Represents a room in the building with a unique identifier and floor location.
 /// </summary>
-public class Room(int id, string name, int floor = 1)
+public class Room(int roomId, string name, int floor = 1)
 {
     [Required]
-    [Range(1, int.MaxValue)]
+    [Range(0, int.MaxValue)]
     [Display(Name = "Room ID", Description = "Unique room identifier")]
-    public int Id { get; set; } = id;
+    public int RoomId { get; set; } = roomId;
 
     [Required]
     [StringLength(100)]
