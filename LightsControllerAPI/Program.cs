@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 internal partial class Program
 {
-    [GeneratedRegex("^(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$")]
+    [GeneratedRegex("^[0-9A-Fa-f]{6}$")]
     private static partial Regex ColorRegex();
 
     private static void Main(string[] args)

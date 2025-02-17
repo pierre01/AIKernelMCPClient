@@ -28,7 +28,7 @@ public class Light(int id, string name, int roomId, LightState state = LightStat
     [Display(Name = "State", Description = "State of the light: on or off")]
     public LightState State { get; set; } = state;
 
-    [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Color must be a valid hex code.")]
+    [RegularExpression("^[0-9A-Fa-f]{6}$", ErrorMessage = "Color must be a valid hex code.")]
     [Display(Name = "Color", Description = "Light color in hex format")]
     public string Color { get; set; } = color;
 
