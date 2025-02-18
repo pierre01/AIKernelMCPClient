@@ -140,7 +140,6 @@ internal partial class Program
             }
             var idsNotFound = new List<int>();
             var filteredLights = new List<Light>();
-            // Filter lights based on (if (hasBrightness == true && == l.Capabilities.IsDimmable) and hasColor light  capability and hasColor and requested light IDs
             foreach (var lightId in request.LightIds)
             {
                 var found = allLights.FirstOrDefault(l => l.Id == lightId);
@@ -173,11 +172,11 @@ internal partial class Program
         })
         .Produces<List<Light>>(StatusCodes.Status200OK)
         .Produces<List<Light>>(StatusCodes.Status207MultiStatus)
-        .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status400BadRequest)
         .WithName("UpdateLights")
         .WithSummary("Batch update multiple lights")
-        .WithDescription("Updates multiple lights with new state (On or Off), Color, or Brightness. Make sure that the lights are the same capabilities. Returns the list of lights affected by the operation, their rooms and floors remain unchanged");
+        .WithDescription("Updates multiple lights with new State (On or Off), Color, or Brightness. Returns the list of lights affected by the operation with their new values");
 
 
         app.Run();

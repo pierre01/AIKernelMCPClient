@@ -11,32 +11,32 @@ public class Light(int id, string name, int roomId, LightState state = LightStat
 {
     [Required]
     [Range(0, int.MaxValue)]
-    [Display(Name = "Light ID", Description = "Unique light identifier")]
+    [Description("Unique identifier for the light")]
     public int Id { get; set; } = id;
 
     [Required]
     [StringLength(100)]
-    [Display(Name = "Light Name", Description = "Light name, uniquely identified by its name plus the name of the room it is located in")]
+    [Description("Name of the light")]
     public string Name { get; set; } = name;
 
     [Required]
     [Range(0, int.MaxValue)]
-    [Display(Name = "Room ID", Description = "Associated room Id, links a light to a unique Room where the light is located, including its floor location")]
+    [Description("Room ID where the light is located")]
     public int RoomId { get; set; } = roomId;
 
     [Required]
-    [Display(Name = "State", Description = "State of the light: on or off")]
+    [Description("State of the light: On or Off")]
     public LightState State { get; set; } = state;
 
     [RegularExpression("^[0-9A-Fa-f]{6}$", ErrorMessage = "Color must be a valid hex code.")]
-    [Display(Name = "Color", Description = "Light color in hex format")]
+    [Description("Color of the light in hex format.")]
     public string Color { get; set; } = color;
 
     [Range(0, 100)]
-    [Display(Name = "Brightness", Description = "Light brightness (0-100)")]
+    [Description("Brightness of the light (0-100)")]
     public int Brightness { get; set; } = brightness;
 
-    [Display(Name = "Capabilities", Description = "Light capabilities such as dimming and color-changing support")]
+    [Description("Light capabilities such as dimming and color-changing support")]
     public Capabilities Capabilities { get; set; } = capabilities ?? new Capabilities(false, false);
 }
 
@@ -44,13 +44,11 @@ public class Light(int id, string name, int roomId, LightState state = LightStat
 [JsonConverter(typeof(JsonStringEnumConverter))] 
 public enum LightState
 {
-    [Description("Light is turned off.")]
-    [Display(Name = "Off", Description = "The light is currently off.")]
-    [EnumMember(Value = "off")]
+    [Description("Light is turned Off")]
+    [EnumMember(Value = "Off")]
     Off = 0,
-    [Description("Light is turned on.")]
-    [Display(Name = "On", Description = "The light is currently on.")]
-    [EnumMember(Value = "on")]
+    [Description("Light is turned On.")]
+    [EnumMember(Value = "On")]
     On = 1
 }
 

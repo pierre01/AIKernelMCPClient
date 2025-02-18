@@ -13,16 +13,16 @@ public class Room(int roomId, string name, int floor = 1)
 {
     [Required]
     [Range(0, int.MaxValue)]
-    [Display(Name = "Room ID", Description = "Unique room identifier")]
+    [Description("Unique identifier for the room")]
     public int RoomId { get; set; } = roomId;
 
     [Required]
     [StringLength(100)]
-    [Display(Name = "Room Name", Description = "Room name")]
+    [Description("Room Name")]
     public string Name { get; set; } = name;
 
     [Range(-5, 500)]
-    [Display(Name = "Floor", Description = "Floor number where the room is located")]
+    [Description("Floor number where the Room is located")]
     public int Floor { get; set; } = floor;
 }
 

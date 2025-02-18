@@ -61,7 +61,7 @@ public static class House
             new(4, "Master Bedroom",2),
             new(5, "Stairs", 1),
             new(6, "Guest Bathroom",2),
-            new(7, "Downstairs Bathroom", 1),
+            new(7, "Toilets", 1),
             new(8, "Office", 1),
             new(9, "Master Bedroom Closet",2),
             new(10, "Guest Bedroom Closet",2),

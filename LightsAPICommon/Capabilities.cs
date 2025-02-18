@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace LightsAPICommon;
@@ -10,10 +11,10 @@ namespace LightsAPICommon;
 public class Capabilities(bool isDimmable=false, bool canChangeColor = false)
 {
 
-    [Display(Name = "Can Change Color", Description = "Indicates if the light supports color changes")]
+    [Description("Indicates whether the light supports color changes. If True, Color can be adjusted. If False, Color remains fixed and cannot be altered.")]
     public bool CanChangeColor { get; set; } = canChangeColor;
 
-    [Display(Name = "Is Dimmable", Description = "Indicates if the light supports brightness adjustment")]
+    [Description("Indicates whether the light supports adaptive brightness adjustment. If True, Brightness can be adjusted. If False, brightness remains fixed and cannot be altered.")]
     public bool IsDimmable { get; set; } = isDimmable;
 }
 
