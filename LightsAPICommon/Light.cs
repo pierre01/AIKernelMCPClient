@@ -5,8 +5,7 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 namespace LightsAPICommon;
 
-[JsonSerializable(typeof(Light))]
-[Description("A Light inside a Room or space can optionaly support brightness and color control")]
+[Description("A Light linked to a Room can optionally support brightness and color changes")]
 public class Light(int id, string name, int roomId, LightState state = LightState.Off, Capabilities capabilities = null, string color = "FFFFFF", int brightness = 100)
 {
     [Required]
@@ -28,8 +27,8 @@ public class Light(int id, string name, int roomId, LightState state = LightStat
     [Description("State of the light: On or Off")]
     public LightState State { get; set; } = state;
 
-    [RegularExpression("^[0-9A-Fa-f]{6}$", ErrorMessage = "Color must be a valid hex code.")]
-    [Description("Color of the light in hex format.")]
+    [RegularExpression("^[0-9A-Fa-f]{6}$", ErrorMessage = "Color must be a valid hex code")]
+    [Description("Color of the light in hex format")]
     public string Color { get; set; } = color;
 
     [Range(0, 100)]
@@ -41,13 +40,13 @@ public class Light(int id, string name, int roomId, LightState state = LightStat
 }
 
 
-[JsonConverter(typeof(JsonStringEnumConverter))] 
+[JsonConverter(typeof(JsonStringEnumConverter<LightState>))] 
 public enum LightState
 {
     [Description("Light is turned Off")]
     [EnumMember(Value = "Off")]
     Off = 0,
-    [Description("Light is turned On.")]
+    [Description("Light is turned On")]
     [EnumMember(Value = "On")]
     On = 1
 }

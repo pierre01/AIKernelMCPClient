@@ -1,19 +1,19 @@
-@LightsControllerAPI_HostAddress = https://localhost:5042
+#@LightsAPIHost = https://localhost:5042
 @LightsAPIHost = https://localhost:5042
 
 # OpenAPI Description
 GET {{LightsAPIHost}}/openapi/v1/openapi.json
 ###
 # Get All the lights
-GET {{LightsControllerAPI_HostAddress}}/lights
+GET {{LightsAPIHost}}/lights
 ###
 # Get All the rooms
-GET {{LightsControllerAPI_HostAddress}}/rooms
+GET {{LightsAPIHost}}/rooms
 ###
 
 # Living Room Lights ------------------------------------------------
 # Switch on the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [0, 1, 2],
@@ -22,7 +22,7 @@ Content-Type: application/json
 ###
 
 # Adjust the color of the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [0, 1],
@@ -31,7 +31,7 @@ Content-Type: application/json
 ###
 
 # reset the color of the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [0, 1],
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 ###
 # Adjust the brightness of the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [0, 1, 2],
@@ -47,7 +47,7 @@ Content-Type: application/json
 }
 ###
 # Adjust back the brightness of the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [0, 1, 2],
@@ -56,7 +56,7 @@ Content-Type: application/json
 ###
 
 # Switch off the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [0, 1, 2],
@@ -66,7 +66,7 @@ Content-Type: application/json
 
 # Office Lights -----------------------------------------------------
 # Switch on the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [8, 9],
@@ -74,7 +74,7 @@ Content-Type: application/json
 }
 ###
 #Dim the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [8, 9],
@@ -84,7 +84,7 @@ Content-Type: application/json
 
 ###
 # Switch off the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [8, 9],
@@ -93,7 +93,7 @@ Content-Type: application/json
 ###
 # Kitchen Lights -----------------------------------------------------
 # Switch on the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [3, 4, 5],
@@ -101,7 +101,7 @@ Content-Type: application/json
 }
 ###
 # Switch off the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [3, 4, 5],
@@ -110,14 +110,14 @@ Content-Type: application/json
 ###
 # Downstairs Bathroom -----------------------------------------------------
 # Switch on the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [6],
   "State": "On"
 }
 ###
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [6],
@@ -126,14 +126,14 @@ Content-Type: application/json
 ###
 # Laundry room -----------------------------------------------------
 # Switch on the lights
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [7],
   "State": "On"
 }
 ###
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [7],
@@ -149,7 +149,7 @@ Content-Type: application/json
   "State": "On"
 }
 ###
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [10],
@@ -158,7 +158,7 @@ Content-Type: application/json
 ###
 # Master Bedroom -----------------------------------------------------
 # Switch on the light
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [11,12,13],
@@ -167,7 +167,7 @@ Content-Type: application/json
 }
 ###
 
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [11,12,13],
@@ -175,13 +175,13 @@ Content-Type: application/json
 }
 ###
 
-
-PATCH {{LightsControllerAPI_HostAddress}}/lights
+# Turns living room ON, then half Brightness, then Blue
+PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
   "LightIds": [0, 1, 2],
   "State": "On",
-  "Color": "FFFFFF",
+  "Color": "0000FF",
   "Brightness": 50
 }
 ###

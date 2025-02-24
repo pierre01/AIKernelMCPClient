@@ -1,8 +1,10 @@
 using LightsAPICommon;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
+using Microsoft.OpenApi.Interfaces;
+using Microsoft.OpenApi.Models;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -48,7 +50,7 @@ internal partial class Program
         })
           .WithName("GetRooms")
           .WithSummary("Retrieve all rooms with their floor information")
-          .WithDescription("Returns a list of all Rooms in the system along with their name and Floor number. You should store this information as it remains unchanged during the session to optimize future queries.");
+          .WithDescription("Returns a list of all Rooms in the system along with their name and Floor number. You should store this information as it remains unchanged during the session to optimize future queries");
 
         // Get a specific room
         roomsApi.MapGet("/{roomId}", ([Description("Unique identifier for the room")] int roomId) =>
@@ -75,11 +77,10 @@ internal partial class Program
 
         }).Produces<List<Light>>(200)
             .WithName("GetLights")
-            .WithSummary("Retrieve all lights with room and floor information")
-            .WithDescription("Returns a list of all available lights including their states, capabilities, and the room. You should member the Room Name and Floor number associated to the lamp to avoid redundant queries.");
+            .WithSummary("Retrieve all lights with RoomId that referrences the room where it resides Name and Floor")
+            .WithDescription("Returns a list of all available lights including their states, capabilities, and RoomId that referrences the room where it resides Name and Floor");
 
         // Get a specific light
-
         app.MapGet("/lights/{id}", (int id) =>
         {
             var light = allLights.FirstOrDefault(l => l.Id == id);
@@ -96,7 +97,7 @@ internal partial class Program
         /// Example request:
         /// { "LightIds": [1,2], "State": "On", "Color": "FF0000" }
         /// </remarks>
-        app.MapPatch("/lights", ([FromBody] BatchLightUpdateRequest request) =>
+        app.MapPatch("/lights", ([Description("Request contains the list of light Ids to be updated, the new State, or new Color, or new brightness, to be applied to those lights")][FromBody] BatchLightUpdateRequest request) =>
         {
             /* This batch update request applies only to lights that match the requested capabilities.
                - If brightness is specified, only dimmable lights (IsDimmable = true) will be updated.
@@ -161,6 +162,11 @@ internal partial class Program
                 {
                    found.Color = request.Color; 
                 }
+
+                if(hasBrightness && found.Capabilities.IsDimmable)
+                {
+                    found.Brightness = request.Brightness.Value;
+                }            
             }
 
             if(filteredLights.Count != request.LightIds.Count)
@@ -176,7 +182,7 @@ internal partial class Program
         .Produces(StatusCodes.Status400BadRequest)
         .WithName("UpdateLights")
         .WithSummary("Batch update multiple lights")
-        .WithDescription("Updates multiple lights with new State (On or Off), Color, or Brightness. Returns the list of lights affected by the operation with their new values");
+        .WithDescription("Updates multiple lights with new State, Color, or Brightness. Returns the list of lights affected by the operation with their new values");
 
 
         app.Run();
@@ -191,6 +197,7 @@ internal partial class Program
 [JsonSerializable(typeof(Room[]))]
 [JsonSerializable(typeof(BatchLightUpdateRequest))]
 [JsonSerializable(typeof(Light))]
+[JsonSerializable(typeof(Capabilities))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 
