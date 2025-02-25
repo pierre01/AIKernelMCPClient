@@ -16,7 +16,7 @@ public partial class DownstairsBathroomViewModel:ObservableObject
         if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject()))
         {
            
-            VanityLight = new LightViewModel(new Light(3, "Vanity", 3, true, true, "FFFFFF", true, 100));
+            VanityLight = new LightViewModel(new Light(3, "Vanity", 3, LightState.On, new( true, true), "FFFFFF",  100));
 
         }
     }

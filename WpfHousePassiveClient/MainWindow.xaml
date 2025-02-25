@@ -265,7 +265,7 @@
 						Margin="1,0,0,183"
 						HorizontalAlignment="Left"
 						VerticalAlignment="Bottom"
-						DataContext="{Binding GuestBathroom}" />
+						DataContext="{Binding MasterBathroom}" />
 					<Views:MasterClosetView
 						Width="154"
 						Height="240"

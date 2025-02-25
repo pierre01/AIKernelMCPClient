@@ -27,7 +27,7 @@
 			VerticalAlignment="Top"
 			FontSize="32"
 			Foreground="White"
-			Text="Bathroom"
+			Text="Toilets"
 			TextWrapping="Wrap" />
 		<Rectangle
 			x:Name="RoomLight"

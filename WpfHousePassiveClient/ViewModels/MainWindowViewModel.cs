@@ -20,13 +20,13 @@ class MainWindowViewModel:ObservableObject
         
     private const string apiUrl = "https://localhost:5042/lights";
     //private const string apiUrl = "https://rh8xzzh8-5042.usw3.devtunnels.ms/lights";
-    private static readonly HttpClient _httpClient = new HttpClient();
-    private Dictionary<int, LightViewModel> _lightViewModels = new Dictionary<int, LightViewModel>();
+    private static readonly HttpClient _httpClient = new();
+    private readonly Dictionary<int, LightViewModel> _lightViewModels = [];
 
     private bool _isPaused;
     private PeriodicTimer _fetchLightsTimer;
 
-    JsonSerializerOptions _serializerOptions = new()
+    private readonly JsonSerializerOptions _serializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         PropertyNameCaseInsensitive = true,
@@ -37,7 +37,7 @@ class MainWindowViewModel:ObservableObject
     public MainWindowViewModel()
     {
         // Create a new LightViewModel for each light
-        foreach (var light in House.Lights)
+        foreach (var light in House.Instance.Lights)
         {
             var lightViewModel = new LightViewModel(light);
             _lightViewModels.Add(light.Id, lightViewModel);
@@ -45,18 +45,18 @@ class MainWindowViewModel:ObservableObject
         // set hhtpclient user agent
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "API SoftClient");
 
-        LivingRoom = new LivingRoomViewModel(_lightViewModels[1],_lightViewModels[2],_lightViewModels[3]);
-        Office = new OfficeViewModel(_lightViewModels[9],_lightViewModels[10]);
-        Stairs = new StairsViewModel(_lightViewModels[11]);
-        Kitchen = new KitchenViewModel(_lightViewModels[4], _lightViewModels[5], _lightViewModels[6]);
-        LaundryRoom = new LaundryRoomViewModel(_lightViewModels[8]);
-        DownstairsBathroom = new DownstairsBathroomViewModel(_lightViewModels[7]);
-        MasterBedroom = new MasterBedroomViewModel(_lightViewModels[12], _lightViewModels[13], _lightViewModels[14]);
-        MasterBathroom = new MasterBathroomViewModel(_lightViewModels[15], _lightViewModels[16]);
-        GuestBedroom = new GuestBedroomViewModel(_lightViewModels[21], _lightViewModels[22], _lightViewModels[23]);
-        GuestBathroom = new GuestBathroomViewModel(_lightViewModels[17], _lightViewModels[18]);
-        MasterCloset = new MasterClosetViewModel(_lightViewModels[19]);
-        GuestCloset = new GuestClosetViewModel(_lightViewModels[20]);
+        LivingRoom = new LivingRoomViewModel(_lightViewModels[0],_lightViewModels[1],_lightViewModels[2]);
+        Office = new OfficeViewModel(_lightViewModels[8],_lightViewModels[9]);
+        Stairs = new StairsViewModel(_lightViewModels[10]);
+        Kitchen = new KitchenViewModel(_lightViewModels[3], _lightViewModels[4], _lightViewModels[5]);
+        LaundryRoom = new LaundryRoomViewModel(_lightViewModels[7]);
+        DownstairsBathroom = new DownstairsBathroomViewModel(_lightViewModels[6]);
+        MasterBedroom = new MasterBedroomViewModel(_lightViewModels[11], _lightViewModels[12], _lightViewModels[13]);
+        MasterBathroom = new MasterBathroomViewModel(_lightViewModels[14], _lightViewModels[15]);
+        GuestBedroom = new GuestBedroomViewModel(_lightViewModels[20], _lightViewModels[21], _lightViewModels[22]);
+        GuestBathroom = new GuestBathroomViewModel(_lightViewModels[16], _lightViewModels[17]);
+        MasterCloset = new MasterClosetViewModel(_lightViewModels[18]);
+        GuestCloset = new GuestClosetViewModel(_lightViewModels[19]);
 
         Start().ConfigureAwait(false);
     }
