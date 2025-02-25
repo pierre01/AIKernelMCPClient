@@ -1,3 +1,4 @@
+@LightsControllerAPI_HostAddress = https://localhost:5042
 #@LightsAPIHost = https://localhost:5042
 @LightsAPIHost = https://localhost:5042
 
@@ -10,14 +11,28 @@ GET {{LightsAPIHost}}/lights
 # Get All the rooms
 GET {{LightsAPIHost}}/rooms
 ###
+# Get the House
+GET {{LightsAPIHost}}/house
+###
 
 # Living Room Lights ------------------------------------------------
 # Switch on the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [0, 1, 2],
-  "State": "On"
+  "lightUpdates": 
+  [{
+    "Id": 0,
+    "State": "On"
+  },
+  {
+    "Id": 1,
+    "State": "On"
+  },
+  {
+    "Id": 2,
+    "State": "On"
+  }]
 }
 ###
 
@@ -25,8 +40,15 @@ Content-Type: application/json
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [0, 1],
-  "Color": "FF0000"
+  "lightUpdates": 
+    [{
+      "Id": 0,
+       "Color": "FF0000"
+    },
+    {
+      "Id": 1,
+       "Color": "FF0000"
+    }]
 }
 ###
 
@@ -34,33 +56,71 @@ Content-Type: application/json
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [0, 1],
-  "Color": "FFFFFF"
-}
+  "lightUpdates": [{
+  "Id": 0,
+   "Color": "FFffff"
+},
+{
+  "Id": 1,
+   "Color": "ffffff"
+}]}
 ###
 # Adjust the brightness of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [0, 1, 2],
-  "Brightness": 50
-}
+  "lightUpdates": [
+    {
+      "Id": 0,
+      "Brightness": "50"
+    },
+    {
+      "Id": 1,
+      "Brightness": "50"
+    },
+    {
+      "Id": 2,
+      "Brightness": "50"
+    }
+  ]}
 ###
 # Adjust back the brightness of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [0, 1, 2],
-  "Brightness": 100
-}
+  "lightUpdates": [
+    {
+      "Id": 0,
+      "Brightness": "100"
+    },
+    {
+      "Id": 1,
+      "Brightness": "100"
+    },
+    {
+      "Id": 2,
+      "Brightness": "100"
+    }
+  ]}
 ###
 
 # Switch off the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [0, 1, 2],
-  "State": "Off"
+  "lightUpdates": 
+  [{
+    "Id": 0,
+    "State": "Off"
+  },
+  {
+    "Id": 1,
+    "State": "Off"
+  },
+  {
+    "Id": 2,
+    "State": "Off"
+  }]
 }
 ###
 
@@ -69,16 +129,30 @@ Content-Type: application/json
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [8, 9],
-  "State": "On"
+  "lightUpdates": 
+  [{
+    "Id": 8,
+    "State": "On"
+  },
+  {
+    "Id": 9,
+    "State": "On"
+  }]
 }
 ###
 #Dim the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [8, 9],
-  "Brightness": 5
+  "lightUpdates": 
+  [{
+    "Id": 8,
+    "Brightness": 50
+  },
+  {
+    "Id": 9,
+    "Brightness": 50
+  }]
 }
 ###
 
@@ -87,8 +161,15 @@ Content-Type: application/json
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [8, 9],
-  "State": "Off"
+  "lightUpdates": 
+  [{
+    "Id": 8,
+    "State": "Off"
+  },
+  {
+    "Id": 9,
+    "State": "Off"
+  }]
 }
 ###
 # Kitchen Lights -----------------------------------------------------
@@ -96,16 +177,38 @@ Content-Type: application/json
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [3, 4, 5],
-  "State": "On"
+  "lightUpdates": 
+  [{
+    "Id": 3,
+    "State": "On"
+  },
+  {
+    "Id": 4,
+    "State": "On"
+  },
+  {
+    "Id": 5,
+    "State": "On"
+  }]
 }
 ###
 # Switch off the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [3, 4, 5],
-  "State": "Off"
+  "lightUpdates": 
+  [{
+    "Id": 3,
+    "State": "Off"
+  },
+  {
+    "Id": 4,
+    "State": "Off"
+  },
+  {
+    "Id": 5,
+    "State": "Off"
+  }]
 }
 ###
 # Downstairs Bathroom -----------------------------------------------------
@@ -113,15 +216,21 @@ Content-Type: application/json
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [6],
-  "State": "On"
+  "lightUpdates": 
+  [{
+    "Id": 6,
+    "State": "On"
+  }]
 }
 ###
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [6],
-  "State": "Off"
+  "lightUpdates": 
+  [{
+    "Id": 6,
+    "State": "Off"
+  }]
 }
 ###
 # Laundry room -----------------------------------------------------
@@ -129,15 +238,21 @@ Content-Type: application/json
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [7],
-  "State": "On"
+  "lightUpdates": 
+  [{
+    "Id": 7,
+    "State": "On"
+  }]
 }
 ###
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [7],
-  "State": "Off"
+  "lightUpdates": 
+  [{
+    "Id": 7,
+    "State": "Off"
+  }]
 }
 ###
 # Stairs -----------------------------------------------------
@@ -145,15 +260,21 @@ Content-Type: application/json
 PATCH {{LightsControllerAPI_HostAddress}}/lights
 Content-Type: application/json
 {
-  "LightIds": [10],
-  "State": "On"
+  "lightUpdates": 
+  [{
+    "Id": 10,
+    "State": "On"
+  }]
 }
 ###
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
 {
-  "LightIds": [10],
-  "State": "Off"
+  "lightUpdates": 
+  [{
+    "Id": 10,
+    "State": "Off"
+  }]
 }
 ###
 # Master Bedroom -----------------------------------------------------
@@ -184,4 +305,9 @@ Content-Type: application/json
   "Color": "0000FF",
   "Brightness": 50
 }
+###
+
+
+PATCH {{LightsControllerAPI_HostAddress}}/lights
+
 ###

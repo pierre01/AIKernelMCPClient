@@ -1,8 +1,5 @@
-using LightsAPICommon;
+﻿using LightsAPICommon;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Interfaces;
-using Microsoft.OpenApi.Models;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
@@ -36,8 +33,22 @@ internal partial class Program
         var app = builder.Build();
         app.MapOpenApi("/openapi/{documentName}/openapi.json");
 
-        var allLights = House.Lights;
-        var allRooms = House.Rooms;
+        var allLights = House.Instance.Lights;
+        var allRooms = House.Instance.Rooms;
+
+        //var houseApi = app.MapGroup("/house");
+        //houseApi.WithTags(["Rooms", "Lights", "House", "Floors"]);
+
+        //// GET /house (Retrieve the entire house structure)
+        //houseApi.MapGet("/", () =>
+        //{
+        //    Debug.WriteLine(">> Get House -> GetHouse");
+        //    return Results.Ok(House.Instance);
+        //})
+        //.Produces<House>(200)
+        //.WithName("GetHouse")
+        //.WithSummary("Retrieve the entire house structure including Lights, the Rooms they are in, and The Floor floors, and lights")
+        //.WithDescription("Returns all the lights and for each Light the Room it is located in as well as its floor in the house. Remember this information as it remains unchanged during the session to optimize future queries");
 
         var roomsApi = app.MapGroup("/rooms");
         roomsApi.WithTags("Rooms");
@@ -46,8 +57,9 @@ internal partial class Program
         roomsApi.MapGet("/", () =>
         {
             Debug.WriteLine(">> Get all rooms -> GetRooms");
-            return allRooms;
+            return Results.Ok(allRooms);
         })
+          .Produces<List<Room>>(200)
           .WithName("GetRooms")
           .WithSummary("Retrieve all rooms with their floor information")
           .WithDescription("Returns a list of all Rooms in the system along with their name and Floor number. You should store this information as it remains unchanged during the session to optimize future queries");
@@ -81,7 +93,7 @@ internal partial class Program
             .WithDescription("Returns a list of all available lights including their states, capabilities, and RoomId that referrences the room where it resides Name and Floor");
 
         // Get a specific light
-        app.MapGet("/lights/{id}", (int id) =>
+        lightsApi.MapGet("/{id}", (int id) =>
         {
             var light = allLights.FirstOrDefault(l => l.Id == id);
             return light != null ? Results.Ok(light) : Results.NotFound($"Light {id} not found.");
@@ -92,96 +104,144 @@ internal partial class Program
         .WithSummary("Retrieve a single light")
         .WithDescription("Returns details of a specific light by its ID. The room and floor remain unchanged");//.ExcludeFromDescription();
 
-        /// <summary> Batch update multiple lights. </summary>
-        /// <remarks>
-        /// Example request:
-        /// { "LightIds": [1,2], "State": "On", "Color": "FF0000" }
-        /// </remarks>
-        app.MapPatch("/lights", ([Description("Request contains the list of light Ids to be updated, the new State, or new Color, or new brightness, to be applied to those lights")][FromBody] BatchLightUpdateRequest request) =>
+        // Get all the lights on a specific floor
+        lightsApi.MapGet("/floor/{floor}", (int floor) =>
         {
-            /* This batch update request applies only to lights that match the requested capabilities.
-               - If brightness is specified, only dimmable lights (IsDimmable = true) will be updated.
-               - If color is specified, only lights that support color change (CanChangeColor = true) will be updated.
-               - If state change is requested, all selected lights will be updated regardless of capabilities. */
+            Debug.WriteLine($">> Get all lights for floor#{floor} -> GetLightsOnFloor");
+            // Get all the rooms on the floor
+            var roomsOnFloor = allRooms.Where(r => r.Floor == floor).Select(r => r.RoomId).ToList();
+            if(roomsOnFloor==null || roomsOnFloor.Count == 0)
+            {
+                return Results.NotFound($"No rooms found on floor#{floor}");
+            }
+            // Get all the lights in the rooms on the floor
+            var lightsOnFloor = allLights.Where(l => roomsOnFloor.Contains(l.RoomId)).ToList();
+            if(lightsOnFloor==null || lightsOnFloor.Count == 0)
+            {
+                return Results.NotFound($"No lights found on floor#{floor}");
+            }
+            return Results.Ok(lightsOnFloor);
 
-            if (request.LightIds == null || request.LightIds.Count == 0)
+        }).Produces<List<Light>>(200)
+            .Produces(404)
+            .WithName("GetLightsOnFloor")
+            .WithSummary("Retrieve all lights located on a specific Floor")
+            .WithDescription("Returns a list of all available lights including their states, capabilities, located on a specific Floor");
+
+
+
+        /// <summary> Batch lightUpdate multiple lights. </summary>
+        /// <example>
+        /// {
+        ///   "lightUpdates": [{
+        ///   "Id": 0,
+        ///   "Brightness": "50"
+        /// },
+        /// {
+        ///   "Id": 1,
+        ///   "Brightness": "50"
+        /// },
+        /// {
+        ///   "Id": 2,
+        ///   "Brightness": "50"
+        /// }]}
+        /// </example>
+        lightsApi.MapPatch("/", ([FromBody] PatchRequest pRequest) =>
+        {
+            Debug.WriteLine($">> Patch {pRequest?.LightUpdates.Count} lights -> UpdateLights");
+            var request = pRequest?.LightUpdates.ToArray();
+            if (request == null || request.Length == 0)
             {
                 return Results.BadRequest("No lights specified.");
             }
 
-
-            bool hasColor=false;
-            bool hasBrightness = false;
-            bool hasState = false;
-            LightState newState = LightState.Off;
-
-            if (!string.IsNullOrEmpty(request.Color))
+            var results = new List<UpdateLightResponse>();
+            foreach (var lightUpdate in request)
             {
-                if (!ColorRegex().IsMatch(request.Color))
+                var light = allLights.FirstOrDefault(l => l.Id == lightUpdate.Id);
+                if (light == null)
                 {
-                    return Results.BadRequest($"Request Color invalid format. Must be in the format 'RRGGBB'.");
-                }
-                hasColor = true; // it has color and it's valid
-            }
-
-            if (request.Brightness.HasValue)
-            {
-                if (request.Brightness.Value < 0 || request.Brightness.Value > 100)
-                {
-                    return Results.BadRequest("Request Brightness value must be between 0 and 100");
-                }
-                hasBrightness = true; // it has brightness and it's valid
-            }
-
-            if (!string.IsNullOrEmpty(request.State))
-            {
-                if (!Enum.TryParse<LightState>(request.State, true, out newState))
-                    return Results.BadRequest("Request Invalid State. Use 'On' or 'Off'");
-                hasState = true; // it has state and it's valid
-            }
-            var idsNotFound = new List<int>();
-            var filteredLights = new List<Light>();
-            foreach (var lightId in request.LightIds)
-            {
-                var found = allLights.FirstOrDefault(l => l.Id == lightId);
-                if (found == null)
-                {
-                    idsNotFound.Add(lightId);
+                    results.Add(new UpdateLightResponse(lightUpdate.Id, "failed", "Light not found"));
                     continue;
                 }
-                filteredLights.Add(found);
+                bool hasPartialFailure = false;
+                List<string> errors = [];
 
-                if (hasState) found.State = newState;
-                
-                if(hasBrightness && found.Capabilities.IsDimmable)
+                //Validate and apply brightness lightUpdate
+                if (lightUpdate.Brightness.HasValue)
                 {
-                    found.Brightness = request.Brightness.Value;
+                    if (light.Capabilities.IsDimmable)
+                    {
+                        if (lightUpdate.Brightness.Value < 0 || lightUpdate.Brightness.Value > 100)
+                        {
+                            errors.Add("Brightness value must be between 0 and 100");
+                            hasPartialFailure = true;
+                        }
+                        else
+                        {
+                            light.Brightness = lightUpdate.Brightness.Value;
+                        }
+                    }
+                    else
+                    {
+                        errors.Add("Brightness cannot be changed (not dimmable)");
+                        hasPartialFailure = true;
+                    }
+                }
+                // Validate and apply color lightUpdate
+                if (!string.IsNullOrEmpty(lightUpdate.Color))
+                {
+                    if (light.Capabilities.CanChangeColor)
+                    {
+                        if (!ColorRegex().IsMatch(lightUpdate.Color))
+                        {
+                            errors.Add($"Request Color invalid format:({lightUpdate.Color}). Must be in the format 'RRGGBB'");
+                            hasPartialFailure = true;
+                        }
+                        else
+                        {
+                            light.Color = lightUpdate.Color;
+                        }
+                    }
+                    else
+                    {
+                        errors.Add("Color cannot be changed");
+                        hasPartialFailure = true;
+                    }
                 }
 
-                if (hasColor && found.Capabilities.CanChangeColor)
+                //Apply on/off state
+                if (!string.IsNullOrEmpty(lightUpdate.State))
                 {
-                   found.Color = request.Color; 
+                    if (!Enum.TryParse<LightState>(lightUpdate.State, true, out LightState newState))
+                    {
+                        errors.Add($"{lightUpdate.State} is an invalid State. Use 'On' or 'Off'");
+                        hasPartialFailure = true;
+                    }
+                    else
+                    {
+                        light.State = newState;
+                    }
                 }
 
-                if(hasBrightness && found.Capabilities.IsDimmable)
-                {
-                    found.Brightness = request.Brightness.Value;
-                }            
+                var status = hasPartialFailure ? "partial" : "success";
+                var errorMessage = hasPartialFailure ? string.Join("; ", errors) : null;
+
+                results.Add(new UpdateLightResponse(lightUpdate.Id, status, errorMessage));
             }
 
-            if(filteredLights.Count != request.LightIds.Count)
-            {
-                return  Results.Json(filteredLights, statusCode: StatusCodes.Status207MultiStatus);
-            }
+            PatchResponse response = new(results.ToArray());
 
-            return Results.Ok(filteredLights);
+            return response.FailureCount > 0
+                ? Results.Json(response, statusCode: StatusCodes.Status207MultiStatus)
+                : Results.Ok(response);
+
         })
-        .Produces<List<Light>>(StatusCodes.Status200OK)
-        .Produces<List<Light>>(StatusCodes.Status207MultiStatus)
-        .Produces(StatusCodes.Status404NotFound)
+        .Produces<PatchResponse>(StatusCodes.Status200OK)
+        .Produces<PatchResponse>(StatusCodes.Status207MultiStatus)
         .Produces(StatusCodes.Status400BadRequest)
         .WithName("UpdateLights")
-        .WithSummary("Batch update multiple lights")
+        .WithSummary("Batch Update of multiple lights")
         .WithDescription("Updates multiple lights with new State, Color, or Brightness. Returns the list of lights affected by the operation with their new values");
 
 
@@ -193,11 +253,20 @@ internal partial class Program
 
 
 [JsonSerializable(typeof(List<Light>))]
+[JsonSerializable(typeof(List<Room>))]
 [JsonSerializable(typeof(Light[]))]
 [JsonSerializable(typeof(Room[]))]
-[JsonSerializable(typeof(BatchLightUpdateRequest))]
 [JsonSerializable(typeof(Light))]
 [JsonSerializable(typeof(Capabilities))]
+[JsonSerializable(typeof(List<LightUpdateRequest>))]
+[JsonSerializable(typeof(List<UpdateLightResponse>))]
+[JsonSerializable(typeof(LightUpdateRequest[]))]
+[JsonSerializable(typeof(UpdateLightResponse[]))]
+[JsonSerializable(typeof(UpdateLightResponse))]
+[JsonSerializable(typeof(LightUpdateRequest))]
+[JsonSerializable(typeof(PatchResponse))]
+[JsonSerializable(typeof(PatchRequest))]
+[JsonSerializable(typeof(House))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 
