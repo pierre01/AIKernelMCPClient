@@ -40,16 +40,16 @@ internal partial class Program
         var allLights = House.Instance.Lights;
         var allRooms = House.Instance.Rooms;
 
-        //var houseApi = app.MapGroup("/house");
-        //houseApi.WithTags(["Rooms", "Lights", "House"]);
+        var houseApi = app.MapGroup("/house");
+        houseApi.WithTags(["Rooms", "Lights", "House"]);
 
-        //// GET /house (Retrieve the entire house structure)
-        //houseApi.MapGet("/", () => Results.Ok(House.Instance))
-        //.Produces<House>(200)
-        //.WithName("GetHouse")
-        //.WithSummary("Retrieve the entire house structure including rooms, their floors, and lights")
-        //.WithDescription("Returns all rooms, floors, and lights associated with the house. AI should store this information as it remains unchanged during the session to optimize future queries.");
-        
+        // GET /house (Retrieve the entire house structure)
+        houseApi.MapGet("/", () => Results.Ok(House.Instance))
+        .Produces<House>(200)
+        .WithName("GetHouse")
+        .WithSummary("Retrieve the entire house structure including rooms, their floors, and lights")
+        .WithDescription("Returns all rooms, floors, and lights associated with the house. AI should store this information as it remains unchanged during the session to optimize future queries.");
+
         var roomsApi = app.MapGroup("/rooms");
         roomsApi.WithTags("Rooms");
 
@@ -92,7 +92,7 @@ internal partial class Program
             .WithDescription("Returns a list of all available lights including their states, capabilities, and RoomId that referrences the room where it resides Name and Floor");
 
         // Get a specific light
-        app.MapGet("/lights/{id}", (int id) =>
+        lightsApi.MapGet("/{id}", (int id) =>
         {
             var light = allLights.FirstOrDefault(l => l.Id == id);
             return light != null ? Results.Ok(light) : Results.NotFound($"Light {id} not found.");
@@ -108,10 +108,10 @@ internal partial class Program
         /// Example request:
         /// { "LightIds": [1,2], "State": "On", "Color": "FF0000" }
         /// </remarks>
-        app.MapPatch("/lights", ([Description("list of UpdateLightRequest each contain the id of the light to be updated, the new State, or new Color, or new Brightness, to be applied to each light in the list")][FromBody] List<UpdateLightRequest> request) =>
+        lightsApi.MapPatch("/", ([FromBody] PatchRequest pRequest) =>
         {
-
-            if (request == null || request.Count == 0)
+            var request = pRequest?.UpdateLightRequests.ToArray();
+            if (request == null || request.Length == 0)
             {
                 return Results.BadRequest("No lights specified.");
             }
@@ -192,76 +192,12 @@ internal partial class Program
                 results.Add(new UpdateLightResponse(lightUpdate.LightId, status, errorMessage));
             }
 
-            PatchResponse response = new(results);
+            PatchResponse response = new(results.ToArray());
 
             return response.FailureCount > 0
                 ? Results.Json(response, statusCode: StatusCodes.Status207MultiStatus)
                 : Results.Ok(response);
 
-            //bool hasColor = false;
-            //bool hasBrightness = false;
-            //bool hasState = false;
-
-            //if (!string.IsNullOrEmpty(request.Color))
-            //{
-            //    if (!ColorRegex().IsMatch(request.Color))
-            //    {
-            //        return Results.BadRequest($"Request Color invalid format. Must be in the format 'RRGGBB'.");
-            //    }
-            //    hasColor = true; // it has color and it's valid
-            //}
-
-            //if (request.Brightness.HasValue)
-            //{
-            //    if (request.Brightness.Value < 0 || request.Brightness.Value > 100)
-            //    {
-            //        return Results.BadRequest("Request Brightness value must be between 0 and 100");
-            //    }
-            //    hasBrightness = true; // it has brightness and it's valid
-            //}
-
-            //if (!string.IsNullOrEmpty(request.State))
-            //{
-            //    if (!Enum.TryParse<LightState>(request.State, true, out newState))
-            //        return Results.BadRequest("Request Invalid State. Use 'On' or 'Off'");
-            //    hasState = true; // it has state and it's valid
-            //}
-            //var idsNotFound = new List<int>();
-            //var filteredLights = new List<Light>();
-            //foreach (var lightId in request.LightIds)
-            //{
-            //    var found = allLights.FirstOrDefault(l => l.Id == lightId);
-            //    if (found == null)
-            //    {
-            //        idsNotFound.Add(lightId);
-            //        continue;
-            //    }
-            //    filteredLights.Add(found);
-
-            //    if (hasState) found.State = newState;
-
-            //    if (hasBrightness && found.Capabilities.IsDimmable)
-            //    {
-            //        found.Brightness = request.Brightness.Value;
-            //    }
-
-            //    if (hasColor && found.Capabilities.CanChangeColor)
-            //    {
-            //        found.Color = request.Color;
-            //    }
-
-            //    if (hasBrightness && found.Capabilities.IsDimmable)
-            //    {
-            //        found.Brightness = request.Brightness.Value;
-            //    }
-            //}
-
-            //if (filteredLights.Count != request.LightIds.Count)
-            //{
-            //    return Results.Json(filteredLights, statusCode: StatusCodes.Status207MultiStatus);
-            //}
-
-            //return Results.Ok(filteredLights);
         })
         .Produces<PatchResponse>(StatusCodes.Status200OK)
         .Produces<PatchResponse>(StatusCodes.Status207MultiStatus)
@@ -281,14 +217,16 @@ internal partial class Program
 [JsonSerializable(typeof(List<Light>))]
 [JsonSerializable(typeof(Light[]))]
 [JsonSerializable(typeof(Room[]))]
-[JsonSerializable(typeof(BatchLightUpdateRequest))]
 [JsonSerializable(typeof(Light))]
 [JsonSerializable(typeof(Capabilities))]
 [JsonSerializable(typeof(List<UpdateLightRequest>))]
 [JsonSerializable(typeof(List<UpdateLightResponse>))]
+[JsonSerializable(typeof(UpdateLightRequest[]))]
+[JsonSerializable(typeof(UpdateLightResponse[]))]
 [JsonSerializable(typeof(UpdateLightResponse))]
 [JsonSerializable(typeof(UpdateLightRequest))]
 [JsonSerializable(typeof(PatchResponse))]
+[JsonSerializable(typeof(PatchRequest))]
 [JsonSerializable(typeof(House))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {

@@ -11,6 +11,9 @@ GET {{LightsAPIHost}}/lights
 # Get All the rooms
 GET {{LightsAPIHost}}/rooms
 ###
+# Get the House
+GET {{LightsAPIHost}}/house
+###
 
 # Living Room Lights ------------------------------------------------
 # Switch on the lights
@@ -58,55 +61,91 @@ Content-Type: application/json
 # Adjust the brightness of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
+[{
+  "LightId": 0,
+  "Brightness": "50"
+},
 {
-  "LightIds": [0, 1, 2],
-  "Brightness": 50
-}
+  "LightId": 1,
+   "Brightness": "50"
+},
+{
+  "LightId": 2,
+  "Brightness": "50"
+}]
 ###
 # Adjust back the brightness of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
+[{
+  "LightId": 0,
+  "Brightness": "100"
+},
 {
-  "LightIds": [0, 1, 2],
-  "Brightness": 100
-}
+  "LightId": 1,
+   "Brightness": "100"
+},
+{
+  "LightId": 2,
+  "Brightness": "100"
+}]
 ###
 
 # Switch off the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-{
-  "LightIds": [0, 1, 2],
+[{
+  "LightId": 0,
   "State": "Off"
-}
+},
+{
+  "LightId": 1,
+  "State": "Off"
+},
+{
+  "LightId": 2,
+  "State": "Off"
+}]
 ###
 
 # Office Lights -----------------------------------------------------
 # Switch on the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-{
-  "LightIds": [8, 9],
+[{
+  "LightId": 8,
   "State": "On"
-}
+},
+{
+  "LightId": 9,
+  "State": "On"
+}]
 ###
 #Dim the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
+[{
+  "LightId": 8,
+  "Brightness": 50
+},
 {
-  "LightIds": [8, 9],
-  "Brightness": 5
-}
+  "LightId": 8,
+  "Brightness": 50
+}]
 ###
 
 ###
 # Switch off the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-{
-  "LightIds": [8, 9],
+[{
+  "LightId": 8,
   "State": "Off"
-}
+},
+{
+  "LightId": 9,
+  "State": "Off"
+}]
 ###
 # Kitchen Lights -----------------------------------------------------
 # Switch on the lights
