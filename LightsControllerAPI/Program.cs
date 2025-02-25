@@ -285,6 +285,8 @@ internal partial class Program
 [JsonSerializable(typeof(Light))]
 [JsonSerializable(typeof(Capabilities))]
 [JsonSerializable(typeof(List<UpdateLightRequest>))]
+[JsonSerializable(typeof(List<UpdateLightResponse>))]
+[JsonSerializable(typeof(UpdateLightResponse))]
 [JsonSerializable(typeof(UpdateLightRequest))]
 [JsonSerializable(typeof(PatchResponse))]
 [JsonSerializable(typeof(House))]
