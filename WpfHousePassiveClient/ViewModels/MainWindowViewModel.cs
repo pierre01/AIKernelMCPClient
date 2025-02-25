@@ -37,7 +37,7 @@ class MainWindowViewModel:ObservableObject
     public MainWindowViewModel()
     {
         // Create a new LightViewModel for each light
-        foreach (var light in House.Lights)
+        foreach (var light in House.Instance.Lights)
         {
             var lightViewModel = new LightViewModel(light);
             _lightViewModels.Add(light.Id, lightViewModel);

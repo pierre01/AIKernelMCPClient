@@ -1,3 +1,4 @@
+@LightsControllerAPI_HostAddress = https://localhost:5042
 #@LightsAPIHost = https://localhost:5042
 @LightsAPIHost = https://localhost:5042
 
@@ -15,28 +16,44 @@ GET {{LightsAPIHost}}/rooms
 # Switch on the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-{
-  "LightIds": [0, 1, 2],
+[{
+  "LightId": 0,
   "State": "On"
-}
+},
+{
+  "LightId": 1,
+  "State": "On"
+},
+{
+  "LightId": 2,
+  "State": "On"
+}]
 ###
 
 # Adjust the color of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-{
-  "LightIds": [0, 1],
+[{
+  "LightId": 0,
   "Color": "FF0000"
-}
+},
+{
+  "LightId": 1,
+  "Color": "FF0000"
+}]
 ###
 
 # reset the color of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
+[{
+  "LightId": 0,
+  "Color": "ffffff"
+},
 {
-  "LightIds": [0, 1],
-  "Color": "FFFFFF"
-}
+  "LightId": 1,
+  "Color": "ffffff"
+}]
 ###
 # Adjust the brightness of the lights
 PATCH {{LightsAPIHost}}/lights
@@ -184,4 +201,8 @@ Content-Type: application/json
   "Color": "0000FF",
   "Brightness": 50
 }
+###
+
+GET {{LightsControllerAPI_HostAddress}}/house
+
 ###
