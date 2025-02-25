@@ -13,10 +13,10 @@ public class House
 
     public static House Instance => _instance.Value;
 
-    [Description("All lights installed in the house, each associated with a specific room and floor")]
+    [Description("All lights installed in the house, each associated with a unique room and unique floor where the room is located")]
     public Light[] Lights { get; private set; }
 
-    [Description("All rooms within the house, each belonging to a specific floor")]
+    [Description("All rooms within the house, each associated to a unique floor. Each light is located in a unique room and each room in a hunique floor floor")]
     public Room[] Rooms { get; private set; }
 
     public static string[] CustomPrompts { get; private set; } =

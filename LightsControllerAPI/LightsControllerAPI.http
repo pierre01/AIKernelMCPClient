@@ -19,60 +19,64 @@ GET {{LightsAPIHost}}/house
 # Switch on the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-[{
-  "LightId": 0,
+{
+  "lightUpdates": [{
+  "Id": 0,
   "State": "On"
 },
 {
-  "LightId": 1,
+  "Id": 1,
   "State": "On"
 },
 {
-  "LightId": 2,
+  "Id": 2,
   "State": "On"
-}]
+}]}
 ###
 
 # Adjust the color of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-[{
-  "LightId": 0,
-  "Color": "FF0000"
+{
+  "lightUpdates": [{
+  "Id": 0,
+   "Color": "FF0000"
 },
 {
-  "LightId": 1,
-  "Color": "FF0000"
-}]
+  "Id": 1,
+   "Color": "FF0000"
+}]}
 ###
 
 # reset the color of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-[{
-  "LightId": 0,
-  "Color": "ffffff"
+{
+  "lightUpdates": [{
+  "Id": 0,
+   "Color": "FFffff"
 },
 {
-  "LightId": 1,
-  "Color": "ffffff"
-}]
+  "Id": 1,
+   "Color": "ffffff"
+}]}
 ###
 # Adjust the brightness of the lights
 PATCH {{LightsAPIHost}}/lights
 Content-Type: application/json
-[{
-  "LightId": 0,
+{
+  "lightUpdates": [{
+  "Id": 0,
   "Brightness": "50"
 },
 {
-  "LightId": 1,
-   "Brightness": "50"
+  "Id": 1,
+  "Brightness": "50"
 },
 {
-  "LightId": 2,
+  "Id": 2,
   "Brightness": "50"
-}]
+}]}
 ###
 # Adjust back the brightness of the lights
 PATCH {{LightsAPIHost}}/lights

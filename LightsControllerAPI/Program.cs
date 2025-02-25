@@ -40,15 +40,19 @@ internal partial class Program
         var allLights = House.Instance.Lights;
         var allRooms = House.Instance.Rooms;
 
-        var houseApi = app.MapGroup("/house");
-        houseApi.WithTags(["Rooms", "Lights", "House"]);
+        //var houseApi = app.MapGroup("/house");
+        //houseApi.WithTags(["Rooms", "Lights", "House", "Floors"]);
 
-        // GET /house (Retrieve the entire house structure)
-        houseApi.MapGet("/", () => Results.Ok(House.Instance))
-        .Produces<House>(200)
-        .WithName("GetHouse")
-        .WithSummary("Retrieve the entire house structure including rooms, their floors, and lights")
-        .WithDescription("Returns all rooms, floors, and lights associated with the house. AI should store this information as it remains unchanged during the session to optimize future queries.");
+        //// GET /house (Retrieve the entire house structure)
+        //houseApi.MapGet("/", () =>
+        //{
+        //    Debug.WriteLine(">> Get House -> GetHouse");
+        //    return Results.Ok(House.Instance);
+        //})
+        //.Produces<House>(200)
+        //.WithName("GetHouse")
+        //.WithSummary("Retrieve the entire house structure including Lights, the Rooms they are in, and The Floor floors, and lights")
+        //.WithDescription("Returns all the lights and for each Light the Room it is located in as well as its floor in the house. Remember this information as it remains unchanged during the session to optimize future queries");
 
         var roomsApi = app.MapGroup("/rooms");
         roomsApi.WithTags("Rooms");
@@ -57,8 +61,9 @@ internal partial class Program
         roomsApi.MapGet("/", () =>
         {
             Debug.WriteLine(">> Get all rooms -> GetRooms");
-            return allRooms;
+            return Results.Ok(allRooms);
         })
+          .Produces<List<Room>>(200)
           .WithName("GetRooms")
           .WithSummary("Retrieve all rooms with their floor information")
           .WithDescription("Returns a list of all Rooms in the system along with their name and Floor number. You should store this information as it remains unchanged during the session to optimize future queries");
@@ -110,7 +115,7 @@ internal partial class Program
         /// </remarks>
         lightsApi.MapPatch("/", ([FromBody] PatchRequest pRequest) =>
         {
-            var request = pRequest?.UpdateLightRequests.ToArray();
+            var request = pRequest?.LightUpdates.ToArray();
             if (request == null || request.Length == 0)
             {
                 return Results.BadRequest("No lights specified.");
@@ -119,10 +124,10 @@ internal partial class Program
             var results = new List<UpdateLightResponse>();
             foreach (var lightUpdate in request)
             {
-                var light = allLights.FirstOrDefault(l => l.Id == lightUpdate.LightId);
+                var light = allLights.FirstOrDefault(l => l.Id == lightUpdate.Id);
                 if (light == null)
                 {
-                    results.Add(new UpdateLightResponse(lightUpdate.LightId, "failed", "Light not found"));
+                    results.Add(new UpdateLightResponse(lightUpdate.Id, "failed", "Light not found"));
                     continue;
                 }
                 bool hasPartialFailure = false;
@@ -189,7 +194,7 @@ internal partial class Program
                 var status = hasPartialFailure ? "partial" : "success";
                 var errorMessage = hasPartialFailure ? string.Join("; ", errors) : null;
 
-                results.Add(new UpdateLightResponse(lightUpdate.LightId, status, errorMessage));
+                results.Add(new UpdateLightResponse(lightUpdate.Id, status, errorMessage));
             }
 
             PatchResponse response = new(results.ToArray());
@@ -215,16 +220,17 @@ internal partial class Program
 
 
 [JsonSerializable(typeof(List<Light>))]
+[JsonSerializable(typeof(List<Room>))]
 [JsonSerializable(typeof(Light[]))]
 [JsonSerializable(typeof(Room[]))]
 [JsonSerializable(typeof(Light))]
 [JsonSerializable(typeof(Capabilities))]
-[JsonSerializable(typeof(List<UpdateLightRequest>))]
+[JsonSerializable(typeof(List<LightUpdateRequest>))]
 [JsonSerializable(typeof(List<UpdateLightResponse>))]
-[JsonSerializable(typeof(UpdateLightRequest[]))]
+[JsonSerializable(typeof(LightUpdateRequest[]))]
 [JsonSerializable(typeof(UpdateLightResponse[]))]
 [JsonSerializable(typeof(UpdateLightResponse))]
-[JsonSerializable(typeof(UpdateLightRequest))]
+[JsonSerializable(typeof(LightUpdateRequest))]
 [JsonSerializable(typeof(PatchResponse))]
 [JsonSerializable(typeof(PatchRequest))]
 [JsonSerializable(typeof(House))]
