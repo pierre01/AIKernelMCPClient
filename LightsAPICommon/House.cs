@@ -41,10 +41,10 @@ public class House
                 "How about a Christmas party theme?",
                 "Reset all the house lights colors to white",
                 "Switch the house lights off",
-                "Switch all the first floor lights on",
-                "Switch all the second floor lights on",
-                "Switch all the first floor lights off",
-                "Switch all the second floor lights off",
+                "Turn on all the first's floor lights",
+                "Turn on all the second's floor lights",
+                "Turn off all the first's floor lights",
+                "Turn off all the second's floor lights",
 
                // "Call GetLights and GetRooms, remember the Lighs names, Ids, and capabilities, as well as their location such as room name, and floor number, for future use"
         ];
@@ -100,8 +100,8 @@ public class House
                 new(6, "Guest Bathroom",2),
                 new(7, "Toilets", 1),
                 new(8, "Office", 1),
-                new(9, "Master Bedroom Closet",2),
-                new(10, "Guest Bedroom Closet",2),
+                new(9, "Master Closet",2),
+                new(10, "Guest Closet",2),
                 new(11, "Laundry Room", 1),
             };
 
