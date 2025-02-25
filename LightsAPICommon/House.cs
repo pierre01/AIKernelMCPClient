@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace LightsAPICommon;
 
+/// <summary>
+/// Made the class a singleton to ensure only one instance of the house is created
+/// And to allow it in the API
+/// </summary>
 public class House
 {
     private static readonly Lazy<House> _instance = new Lazy<House>(() => new House());
@@ -38,7 +42,11 @@ public class House
                 "Reset all the house lights colors to white",
                 "Switch the house lights off",
                 "Switch all the first floor lights on",
-                "Call GetLights and GetRooms, remember the Lighs names, Ids, and capabilities, as well as their location such as room name, and floor number, for future use"
+                "Switch all the second floor lights on",
+                "Switch all the first floor lights off",
+                "Switch all the second floor lights off",
+
+               // "Call GetLights and GetRooms, remember the Lighs names, Ids, and capabilities, as well as their location such as room name, and floor number, for future use"
         ];
 
     private House()

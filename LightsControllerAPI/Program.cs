@@ -1,11 +1,7 @@
 ﻿using LightsAPICommon;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Interfaces;
-using Microsoft.OpenApi.Models;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -108,13 +104,51 @@ internal partial class Program
         .WithSummary("Retrieve a single light")
         .WithDescription("Returns details of a specific light by its ID. The room and floor remain unchanged");//.ExcludeFromDescription();
 
+        // Get all the lights on a specific floor
+        lightsApi.MapGet("/floor/{floor}", (int floor) =>
+        {
+            Debug.WriteLine($">> Get all lights for floor#{floor} -> GetLightsOnFloor");
+            // Get all the rooms on the floor
+            var roomsOnFloor = allRooms.Where(r => r.Floor == floor).Select(r => r.RoomId).ToList();
+            if(roomsOnFloor==null || roomsOnFloor.Count == 0)
+            {
+                return Results.NotFound($"No rooms found on floor#{floor}");
+            }
+            // Get all the lights in the rooms on the floor
+            var lightsOnFloor = allLights.Where(l => roomsOnFloor.Contains(l.RoomId)).ToList();
+            if(lightsOnFloor==null || lightsOnFloor.Count == 0)
+            {
+                return Results.NotFound($"No lights found on floor#{floor}");
+            }
+            return Results.Ok(lightsOnFloor);
+
+        }).Produces<List<Light>>(200)
+            .Produces(404)
+            .WithName("GetLightsOnFloor")
+            .WithSummary("Retrieve all lights located on a specific Floor")
+            .WithDescription("Returns a list of all available lights including their states, capabilities, located on a specific Floor");
+
+
+
         /// <summary> Batch lightUpdate multiple lights. </summary>
-        /// <remarks>
-        /// Example request:
-        /// { "LightIds": [1,2], "State": "On", "Color": "FF0000" }
-        /// </remarks>
+        /// <example>
+        /// {
+        ///   "lightUpdates": [{
+        ///   "Id": 0,
+        ///   "Brightness": "50"
+        /// },
+        /// {
+        ///   "Id": 1,
+        ///   "Brightness": "50"
+        /// },
+        /// {
+        ///   "Id": 2,
+        ///   "Brightness": "50"
+        /// }]}
+        /// </example>
         lightsApi.MapPatch("/", ([FromBody] PatchRequest pRequest) =>
         {
+            Debug.WriteLine($">> Patch {pRequest?.LightUpdates.Count} lights -> UpdateLights");
             var request = pRequest?.LightUpdates.ToArray();
             if (request == null || request.Length == 0)
             {
@@ -179,8 +213,7 @@ internal partial class Program
                 //Apply on/off state
                 if (!string.IsNullOrEmpty(lightUpdate.State))
                 {
-                    LightState newState = LightState.Off;
-                    if (!Enum.TryParse<LightState>(lightUpdate.State, true, out newState))
+                    if (!Enum.TryParse<LightState>(lightUpdate.State, true, out LightState newState))
                     {
                         errors.Add($"{lightUpdate.State} is an invalid State. Use 'On' or 'Off'");
                         hasPartialFailure = true;
@@ -208,7 +241,7 @@ internal partial class Program
         .Produces<PatchResponse>(StatusCodes.Status207MultiStatus)
         .Produces(StatusCodes.Status400BadRequest)
         .WithName("UpdateLights")
-        .WithSummary("Batch lightUpdate multiple lights")
+        .WithSummary("Batch Update of multiple lights")
         .WithDescription("Updates multiple lights with new State, Color, or Brightness. Returns the list of lights affected by the operation with their new values");
 
 
