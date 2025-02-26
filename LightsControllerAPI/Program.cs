@@ -62,7 +62,7 @@ internal partial class Program
           .Produces<List<Room>>(200)
           .WithName("GetRooms")
           .WithSummary("Retrieve all rooms with their floor information")
-          .WithDescription("Returns a list of all Rooms in the system along with their name and Floor number. You should store this information as it remains unchanged during the session to optimize future queries");
+          .WithDescription("Returns all rooms, including their names and floor numbers. This data can be cached for efficiency");
 
         // Get a specific room
         roomsApi.MapGet("/{roomId}", ([Description("Unique identifier for the room")] int roomId) =>
@@ -70,7 +70,7 @@ internal partial class Program
                 ? Results.Ok(room)
                 : Results.NotFound())
           .WithName("GetRoom")
-          .WithSummary("Retrieve the room Name, the floor where it's located, and unique RoomId (used by the lights property RoomId)")
+          .WithSummary("Retrieve a room’s name, floor, and unique ID")
           .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. Each room has a unique Name and Floor number associated with the lights with the same RoomId.  if a command is addressing the room without specifying the light name then all the lights located in the room should be receiving the command. Remember all the rooms for future use");
 
 
@@ -89,7 +89,7 @@ internal partial class Program
 
         }).Produces<List<Light>>(200)
             .WithName("GetLights")
-            .WithSummary("Retrieve all lights with RoomId that referrences the room where it resides Name and Floor")
+            .WithSummary("Returns all lights with their states, capabilities, and room details")
             .WithDescription("Returns a list of all available lights including their states, capabilities, and RoomId that referrences the room where it resides Name and Floor");
 
         // Get a specific light
@@ -102,7 +102,7 @@ internal partial class Program
         .Produces(404)
         .WithName("GetLight")
         .WithSummary("Retrieve a single light")
-        .WithDescription("Returns details of a specific light by its ID. The room and floor remain unchanged");//.ExcludeFromDescription();
+        .WithDescription("Returns details of a specific light by its Id");//.ExcludeFromDescription();
 
         // Get all the lights on a specific floor
         lightsApi.MapGet("/floor/{floor}", (int floor) =>
@@ -242,7 +242,7 @@ internal partial class Program
         .Produces(StatusCodes.Status400BadRequest)
         .WithName("UpdateLights")
         .WithSummary("Batch Update of multiple lights")
-        .WithDescription("Updates multiple lights with new State, Color, or Brightness. Returns the list of lights affected by the operation with their new values");
+        .WithDescription("Updates multiple lights’ state, color, or brightness. Returns the updated light details");
 
 
         app.Run();
