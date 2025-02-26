@@ -87,6 +87,19 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty]
     public partial string CallTextResult { get; set; }
 
+    [ObservableProperty]
+    public partial int TotalTokens { get; set; }
+
+    [ObservableProperty]
+    public partial int RequestTokens { get; set; }
+
+    [ObservableProperty]
+    public partial int InputTokens { get; set; }
+
+    [ObservableProperty]
+    public partial int OutputTokens { get; set; }
+
+
     [RelayCommand]
     private async Task SendRequest()
     {
@@ -125,6 +138,20 @@ public partial class MainPageViewModel : ObservableObject
             executionSettings: _openAIPromptExecutionSettings,
             kernel: _kernel);
             CallTextResult = result.ToString();
+            // Check if result.Metadata contains the key "Usage" and get the total token totalTokens.
+            if (result.Metadata.ContainsKey("Usage"))
+            {
+                var usage = (OpenAI.Chat.ChatTokenUsage)result.Metadata["Usage"];
+                var totalTokens = usage.TotalTokenCount;
+                var inputTokens =usage.InputTokenCount;
+                var outputTokens =usage.OutputTokenCount;
+                //var totalTokens = usage.TotalTokenCount;
+                InputTokens = inputTokens;
+                OutputTokens = outputTokens;
+                TotalTokens += totalTokens;
+                RequestTokens = totalTokens;
+            }
+
         }
         catch (Exception ex)
         {
