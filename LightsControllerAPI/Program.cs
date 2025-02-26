@@ -70,8 +70,8 @@ internal partial class Program
                 ? Results.Ok(room)
                 : Results.NotFound())
           .WithName("GetRoom")
-          .WithSummary("Retreive the room Name, the floor where it's located, and unique RoomId (used by the lights property RoomId)")
-          .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. Each room has a unique Name and Floor number associated with the lights with the same RoomId.  if a command is adressing the room without specifying the light name then all the lights located in the room should be receiving the command. Remember all the rooms for future use");
+          .WithSummary("Retrieve the room Name, the floor where it's located, and unique RoomId (used by the lights property RoomId)")
+          .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. Each room has a unique Name and Floor number associated with the lights with the same RoomId.  if a command is addressing the room without specifying the light name then all the lights located in the room should be receiving the command. Remember all the rooms for future use");
 
 
         var lightsApi = app.MapGroup("/lights");
@@ -184,7 +184,7 @@ internal partial class Program
                     }
                     else
                     {
-                        errors.Add("Brightness cannot be changed (not dimmable)");
+                        errors.Add("This light does not support Brightness changes (IsDimmable = false)");
                         hasPartialFailure = true;
                     }
                 }
