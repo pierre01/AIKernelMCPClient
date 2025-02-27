@@ -62,7 +62,7 @@ internal partial class Program
           .Produces<List<Room>>(200)
           .WithName("GetRooms")
           .WithSummary("Retrieve all rooms with their floor information")
-          .WithDescription("Returns a list of all Rooms in the system along with their name and Floor number. You should store this information as it remains unchanged during the session to optimize future queries");
+          .WithDescription("Returns all rooms, including their names and floor numbers. This data can be cached for efficiency");
 
         // Get a specific room
         roomsApi.MapGet("/{roomId}", ([Description("Unique identifier for the room")] int roomId) =>
@@ -70,8 +70,8 @@ internal partial class Program
                 ? Results.Ok(room)
                 : Results.NotFound())
           .WithName("GetRoom")
-          .WithSummary("Retreive the room Name, the floor where it's located, and unique RoomId (used by the lights property RoomId)")
-          .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. Each room has a unique Name and Floor number associated with the lights with the same RoomId.  if a command is adressing the room without specifying the light name then all the lights located in the room should be receiving the command. Remember all the rooms for future use");
+          .WithSummary("Retrieve a room’s name, floor, and unique ID")
+          .WithDescription("A room is representing a group of lights where the 'RoomId' is the same. Each room has a unique Name and Floor number associated with the lights with the same RoomId.  if a command is addressing the room without specifying the light name then all the lights located in the room should be receiving the command. Remember all the rooms for future use");
 
 
         var lightsApi = app.MapGroup("/lights");
@@ -89,20 +89,20 @@ internal partial class Program
 
         }).Produces<List<Light>>(200)
             .WithName("GetLights")
-            .WithSummary("Retrieve all lights with RoomId that referrences the room where it resides Name and Floor")
+            .WithSummary("Returns all lights with their states, capabilities, and room details")
             .WithDescription("Returns a list of all available lights including their states, capabilities, and RoomId that referrences the room where it resides Name and Floor");
 
         // Get a specific light
         lightsApi.MapGet("/{id}", (int id) =>
         {
-            var light = allLights.FirstOrDefault(l => l.Id == id);
+            var light = allLights.FirstOrDefault(l => l.LightId == id);
             return light != null ? Results.Ok(light) : Results.NotFound($"Light {id} not found.");
         })
         .Produces<Light>(200)
         .Produces(404)
         .WithName("GetLight")
         .WithSummary("Retrieve a single light")
-        .WithDescription("Returns details of a specific light by its ID. The room and floor remain unchanged");//.ExcludeFromDescription();
+        .WithDescription("Returns details of a specific light by its ID: LightId");//.ExcludeFromDescription();
 
         // Get all the lights on a specific floor
         lightsApi.MapGet("/floor/{floor}", (int floor) =>
@@ -124,9 +124,9 @@ internal partial class Program
 
         }).Produces<List<Light>>(200)
             .Produces(404)
-            .WithName("GetLightsOnFloor")
-            .WithSummary("Retrieve all lights located on a specific Floor")
-            .WithDescription("Returns a list of all available lights including their states, capabilities, located on a specific Floor");
+            .WithName("GetLightsByFloor")
+            .WithSummary("Fetch lights by floor, including states and capabilities")
+            .WithDescription("Fetches all lights on a specified floor, detailing their IDs: LightId, current states and capabilities");
 
 
 
@@ -134,15 +134,15 @@ internal partial class Program
         /// <example>
         /// {
         ///   "lightUpdates": [{
-        ///   "Id": 0,
+        ///   "LightId": 0,
         ///   "Brightness": "50"
         /// },
         /// {
-        ///   "Id": 1,
+        ///   "LightId": 1,
         ///   "Brightness": "50"
         /// },
         /// {
-        ///   "Id": 2,
+        ///   "LightId": 2,
         ///   "Brightness": "50"
         /// }]}
         /// </example>
@@ -158,10 +158,10 @@ internal partial class Program
             var results = new List<UpdateLightResponse>();
             foreach (var lightUpdate in request)
             {
-                var light = allLights.FirstOrDefault(l => l.Id == lightUpdate.Id);
+                var light = allLights.FirstOrDefault(l => l.LightId == lightUpdate.LightId);
                 if (light == null)
                 {
-                    results.Add(new UpdateLightResponse(lightUpdate.Id, "failed", "Light not found"));
+                    results.Add(new UpdateLightResponse(lightUpdate.LightId, "failed", "Light not found"));
                     continue;
                 }
                 bool hasPartialFailure = false;
@@ -184,7 +184,7 @@ internal partial class Program
                     }
                     else
                     {
-                        errors.Add("Brightness cannot be changed (not dimmable)");
+                        errors.Add("This light does not support Brightness changes (IsDimmable = false)");
                         hasPartialFailure = true;
                     }
                 }
@@ -227,7 +227,7 @@ internal partial class Program
                 var status = hasPartialFailure ? "partial" : "success";
                 var errorMessage = hasPartialFailure ? string.Join("; ", errors) : null;
 
-                results.Add(new UpdateLightResponse(lightUpdate.Id, status, errorMessage));
+                results.Add(new UpdateLightResponse(lightUpdate.LightId, status, errorMessage));
             }
 
             PatchResponse response = new(results.ToArray());
@@ -241,8 +241,8 @@ internal partial class Program
         .Produces<PatchResponse>(StatusCodes.Status207MultiStatus)
         .Produces(StatusCodes.Status400BadRequest)
         .WithName("UpdateLights")
-        .WithSummary("Batch Update of multiple lights")
-        .WithDescription("Updates multiple lights with new State, Color, or Brightness. Returns the list of lights affected by the operation with their new values");
+        .WithSummary("Batch update multiple lights with new states, colors, or brightness")
+        .WithDescription("Allows batch updates for multiple lights, adjusting their states, colors, or brightness levels as specified. Returns a list of lights affected by the operation along with their updated values");
 
 
         app.Run();

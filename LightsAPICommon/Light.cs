@@ -6,12 +6,12 @@ using System.Text.Json.Serialization;
 namespace LightsAPICommon;
 
 [Description("A Light linked to a Room can optionally support brightness and color changes")]
-public class Light(int id, string name, int roomId, LightState state = LightState.Off, Capabilities capabilities = null, string color = "FFFFFF", int brightness = 100)
+public class Light(int lightId, string name, int roomId, LightState state = LightState.Off, Capabilities capabilities = null, string color = "FFFFFF", int brightness = 100)
 {
     [Required]
     [Range(0, int.MaxValue)]
     [Description("Unique identifier for the light")]
-    public int Id { get; set; } = id;
+    public int LightId { get; set; } = lightId;
 
     [Required]
     [StringLength(100)]

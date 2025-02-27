@@ -12,7 +12,7 @@ public class Room(int roomId, string name, int floor = 1)
 {
     [Required]
     [Range(0, int.MaxValue)]
-    [Description("Unique identifier for the room")]
+    [Description("RoomId: Unique identifier for the room")]
     public int RoomId { get; set; } = roomId;
 
     [Required]

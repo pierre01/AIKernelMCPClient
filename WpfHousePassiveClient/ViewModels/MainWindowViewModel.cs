@@ -40,7 +40,7 @@ class MainWindowViewModel:ObservableObject
         foreach (var light in House.Instance.Lights)
         {
             var lightViewModel = new LightViewModel(light);
-            _lightViewModels.Add(light.Id, lightViewModel);
+            _lightViewModels.Add(light.LightId, lightViewModel);
         }
         // set hhtpclient user agent
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "API SoftClient");
@@ -93,7 +93,7 @@ class MainWindowViewModel:ObservableObject
                 foreach(var light in lights)
                 {
                     // Display a property or the entire JSON
-                    _lightViewModels[light.Id].Update(light);
+                    _lightViewModels[light.LightId].Update(light);
                 }
             }
 
