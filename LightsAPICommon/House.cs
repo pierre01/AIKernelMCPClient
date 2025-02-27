@@ -41,10 +41,10 @@ public class House
                 "How about a Christmas party theme?",
                 "Reset all the house lights colors to white",
                 "Switch the house lights off",
-                "Turn on all the first's floor lights",
-                "Turn on all the second's floor lights",
-                "Turn off all the first's floor lights",
-                "Turn off all the second's floor lights",
+                "Turn all the lights located on the first floor on",
+                "Turn all the lights located on the second floor on",
+                "Turn all the lights located on the first floor off",
+                "Turn all the lights located on the second floor off",
 
                // "Call GetLights and GetRooms, remember the Lighs names, Ids, and capabilities, as well as their location such as room name, and floor number, for future use"
         ];
@@ -61,9 +61,9 @@ public class House
                 new(4, "Kitchen Ceiling",1,capabilities:new(canChangeColor:true,isDimmable:true)),
                 new(5, "Cabinet lights", 1,capabilities:new(isDimmable:true)),
                 // Downstairs Bathroom
-                new(6, "Vanity Light", 7),            
+                new(6, "first floor toilets lights", 7),            
                 // Laundry room
-                new(7, "Laudry Ceiling",11),            
+                new(7, "Ceiling",11),            
                 // Office
                 new(8, "Desk light", 8,  capabilities:new(isDimmable : true, canChangeColor:true)),
                 new(9, "Floor lamp", 8,  capabilities:new(isDimmable : true, canChangeColor:true)),            
