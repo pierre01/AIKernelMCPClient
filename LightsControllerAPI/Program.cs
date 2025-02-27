@@ -95,14 +95,14 @@ internal partial class Program
         // Get a specific light
         lightsApi.MapGet("/{id}", (int id) =>
         {
-            var light = allLights.FirstOrDefault(l => l.Id == id);
+            var light = allLights.FirstOrDefault(l => l.LightId == id);
             return light != null ? Results.Ok(light) : Results.NotFound($"Light {id} not found.");
         })
         .Produces<Light>(200)
         .Produces(404)
         .WithName("GetLight")
         .WithSummary("Retrieve a single light")
-        .WithDescription("Returns details of a specific light by its Id");//.ExcludeFromDescription();
+        .WithDescription("Returns details of a specific light by its ID: LightId");//.ExcludeFromDescription();
 
         // Get all the lights on a specific floor
         lightsApi.MapGet("/floor/{floor}", (int floor) =>
@@ -124,9 +124,9 @@ internal partial class Program
 
         }).Produces<List<Light>>(200)
             .Produces(404)
-            .WithName("GetLightsOnFloor")
-            .WithSummary("Retrieve all lights located on a specific Floor")
-            .WithDescription("Returns a list of all available lights including their states, capabilities, located on a specific Floor");
+            .WithName("GetLightsByFloor")
+            .WithSummary("Fetch lights by floor, including states and capabilities")
+            .WithDescription("Fetches all lights on a specified floor, detailing their IDs: LightId, current states and capabilities");
 
 
 
@@ -134,15 +134,15 @@ internal partial class Program
         /// <example>
         /// {
         ///   "lightUpdates": [{
-        ///   "Id": 0,
+        ///   "LightId": 0,
         ///   "Brightness": "50"
         /// },
         /// {
-        ///   "Id": 1,
+        ///   "LightId": 1,
         ///   "Brightness": "50"
         /// },
         /// {
-        ///   "Id": 2,
+        ///   "LightId": 2,
         ///   "Brightness": "50"
         /// }]}
         /// </example>
@@ -158,10 +158,10 @@ internal partial class Program
             var results = new List<UpdateLightResponse>();
             foreach (var lightUpdate in request)
             {
-                var light = allLights.FirstOrDefault(l => l.Id == lightUpdate.Id);
+                var light = allLights.FirstOrDefault(l => l.LightId == lightUpdate.LightId);
                 if (light == null)
                 {
-                    results.Add(new UpdateLightResponse(lightUpdate.Id, "failed", "Light not found"));
+                    results.Add(new UpdateLightResponse(lightUpdate.LightId, "failed", "Light not found"));
                     continue;
                 }
                 bool hasPartialFailure = false;
@@ -227,7 +227,7 @@ internal partial class Program
                 var status = hasPartialFailure ? "partial" : "success";
                 var errorMessage = hasPartialFailure ? string.Join("; ", errors) : null;
 
-                results.Add(new UpdateLightResponse(lightUpdate.Id, status, errorMessage));
+                results.Add(new UpdateLightResponse(lightUpdate.LightId, status, errorMessage));
             }
 
             PatchResponse response = new(results.ToArray());
@@ -241,8 +241,8 @@ internal partial class Program
         .Produces<PatchResponse>(StatusCodes.Status207MultiStatus)
         .Produces(StatusCodes.Status400BadRequest)
         .WithName("UpdateLights")
-        .WithSummary("Batch Update of multiple lights")
-        .WithDescription("Updates multiple lights’ state, color, or brightness. Returns the updated light details");
+        .WithSummary("Batch update multiple lights with new states, colors, or brightness")
+        .WithDescription("Allows batch updates for multiple lights, adjusting their states, colors, or brightness levels as specified. Returns a list of lights affected by the operation along with their updated values");
 
 
         app.Run();

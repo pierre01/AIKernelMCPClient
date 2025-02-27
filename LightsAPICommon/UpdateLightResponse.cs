@@ -2,13 +2,13 @@
 
 namespace LightsAPICommon;
 
-public class UpdateLightResponse(int id, string status, string? error)
+public class UpdateLightResponse(int lightId, string status, string? error)
 {
     /// <summary>
     /// Unique ID of the light that was updated.
     /// </summary>
-    [Description("Unique ID of the light that was updated")]
-    public int Id { get; set; } = id;
+    [Description("Unique Id of the light that was updated")]
+    public int LightId { get; set; } = lightId;
 
     /// <summary>
     /// Indicates whether the update was successful ("success" or "failed").

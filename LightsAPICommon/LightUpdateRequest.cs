@@ -9,8 +9,8 @@ public class LightUpdateRequest
 {
     [Required]
     [MinLength(1)]
-    [Description("light Id to update")]
-    public int Id { get; set; }
+    [Description("light LightId to update")]
+    public int LightId { get; set; }
 
     [Description("Turns a light (\"On\" or \"Off\")")]
     public string? State { get; set; }

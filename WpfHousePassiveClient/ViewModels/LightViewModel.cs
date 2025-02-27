@@ -25,8 +25,8 @@ public partial class LightViewModel : ObservableObject
         //string hexBrightStr = $"#{hexBright:X2}{light.Color}";
         LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString($"#{hexBright:X2}{light.Color}"));
         OriginPointColor = (Color)ColorConverter.ConvertFromString($"#{hexOriginPoint:X2}{light.Color}");
-         EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.Color}");
-       Brightness = light.Brightness;
+        EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.Color}");
+        Brightness = light.Brightness;
         HexColor = light.Color;
         SwitchLightOnOrOff(light);
 
@@ -34,10 +34,10 @@ public partial class LightViewModel : ObservableObject
 
     public void Update(Light light)
     {
-        if (_light.Id != light.Id)
+        if (_light.LightId != light.LightId)
             return;
         var isOn = light.State == LightState.On;
-        if (IsOn == isOn  && HexColor == light.Color && Brightness == light.Brightness)
+        if (IsOn == isOn && HexColor == light.Color && Brightness == light.Brightness)
             return;
 
         bool colorModified = false;
@@ -52,7 +52,7 @@ public partial class LightViewModel : ObservableObject
 
         if (IsOn == isOn && !colorModified)
             return;
-        IsOn =isOn;
+        IsOn = isOn;
         SwitchLightOnOrOff(light);
     }
 
@@ -88,7 +88,7 @@ public partial class LightViewModel : ObservableObject
         EndPointColor = (Color)ColorConverter.ConvertFromString($"#00{light.Color}");
     }
 
-    public int Id => _light.Id;
+    public int Id => _light.LightId;
     public string Name => _light.Name;
     public int RoomId => _light.RoomId;
 
