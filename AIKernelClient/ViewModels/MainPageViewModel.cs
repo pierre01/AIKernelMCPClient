@@ -42,6 +42,11 @@ public partial class MainPageViewModel : ObservableObject
         try
         {   // Initialize the ChatHistory object.
             _history = [];
+            //TODO: Add Sytem prompts to keep the conversation context
+            // https://learn.microsoft.com/en-us/semantic-kernel/concepts/ai-services/chat-completion/chat-history?pivots=programming-language-csharp
+            //_history.AddSystemMessage("You are an home automation system controlling lights functions in the house, first get all the lights, then all the rooms and remeber where all the lights are located");
+
+
             _builder = Kernel.CreateBuilder();
             // Initialize the OpenAI Chat Connector.
             _builder.Services.AddOpenAIChatCompletion(
@@ -72,7 +77,11 @@ public partial class MainPageViewModel : ObservableObject
             // tell the openAI connector to invoke sevice if the prompt is unnderstood
             _openAIPromptExecutionSettings = new()
             {
-                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
+                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                Temperature = 0.4,  // Creativity level (0 = deterministic, 2 = highly random)
+                TopP = 0.4,         // Nucleus sampling for diversity
+                PresencePenalty = 0.0, // Penalize repeating topics
+                FrequencyPenalty = 0.0 // Penalize repeated words
             };
         }
         catch (Exception ex)
@@ -132,7 +141,14 @@ public partial class MainPageViewModel : ObservableObject
     {
         try
         {
+            if(string.IsNullOrWhiteSpace(prompt))
+            {
+                CallTextResult = "Please enter a prompt";
+                return;
+            }
+
             _history.AddUserMessage(prompt);
+            //var result2 = await _chatCompletionService.GetChatMessageContentsAsync(
             var result = await _chatCompletionService.GetChatMessageContentAsync(
             _history,
             executionSettings: _openAIPromptExecutionSettings,
