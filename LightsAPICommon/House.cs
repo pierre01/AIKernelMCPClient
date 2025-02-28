@@ -36,6 +36,7 @@ public class House
                 "I'm leaving",
                 "How many lights are currently on?",
                 "Switch all the house lights on", // talk about mispelling
+                "How many rooms are in the house?",
                 "Change the house lights to match a 70's party theme.",
                 "Use different colors for each light.",
                 "How about a Christmas party theme?",
@@ -61,7 +62,7 @@ public class House
                 new(4, "Kitchen Ceiling",1,capabilities:new(canChangeColor:true,isDimmable:true)),
                 new(5, "Cabinet lights", 1,capabilities:new(isDimmable:true)),
                 // Downstairs Bathroom
-                new(6, "first floor toilets lights", 7),            
+                new(6, "first floor toilets", 7),            
                 // Laundry room
                 new(7, "Ceiling",11),            
                 // Office
@@ -70,8 +71,8 @@ public class House
                 // Stairs
                 new(10, "Stairs Chandelier", 5,capabilities:new(isDimmable:true)),
                 // Master Bedroom
-                new(11, "Left Nightstand light", 4,capabilities:new(isDimmable:true)),
-                new(12, "Right Nightstand light", 4,capabilities:new(isDimmable:true)),
+                new(11, "Left Nightstand", 4,capabilities:new(isDimmable:true)),
+                new(12, "Right Nightstand", 4,capabilities:new(isDimmable:true)),
                 new(13, "Master Wall light", 4, capabilities:new(canChangeColor:true)),
                 // Master Bathroom
                 new(14, "Main light",3),
@@ -81,9 +82,9 @@ public class House
                 new(16, "Mirror light",6),
                 new(17, "Main light",6),
                 // Master Bedroom Closet
-                new(18, "Closet light",9),
+                new(18, "Closet",9),
                 // Guest Bedroom Closet
-                new(19, "Closet light",10),            
+                new(19, "Closet",10),            
                 // Guest Bedroom
                 new(20, "Left Nightstand", 2,capabilities:new(isDimmable:true)),
                 new(21, "Right Nightstand", 2,capabilities:new(isDimmable:true)),
