@@ -35,6 +35,7 @@ public class House
                 "when I tell you 'I'm leaving' you will turn off all the lights in the house",
                 "I'm leaving",
                 "How many lights are currently on?",
+                "Create a C#  function that execute the calls for \"I'm home\" ",
                 "Switch all the house lights on", // talk about mispelling
                 "How many rooms are in the house?",
                 "Change the house lights to match a 70's party theme.",

@@ -139,11 +139,12 @@ internal partial class Program
         /// },
         /// {
         ///   "LightId": 1,
-        ///   "Brightness": "50"
+        ///   "Brightness": "40"
+        ///   "Color": "FF0000"
         /// },
         /// {
         ///   "LightId": 2,
-        ///   "Brightness": "50"
+        ///   "Brightness": "70"
         /// }]}
         /// </example>
         lightsApi.MapPatch("/", ([FromBody] PatchRequest pRequest) =>
