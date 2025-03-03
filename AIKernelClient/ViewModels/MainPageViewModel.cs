@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LightsAPICommon;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Plugins.OpenApi;
 using System.Diagnostics;
-using LightsAPICommon;
 
 
 namespace AIKernelClient.ViewModels;
@@ -17,8 +17,8 @@ public partial class MainPageViewModel : ObservableObject
     private const string chatModel = "gpt-4o-mini"; // or gpt-4 (but it is expensive)
     private const string openApiOrgId = "org-RRBnXYYjTq5b4qr7TLaaHsLD";
 
-    //private const string devTunnel = "rh8xzzh8-5042.usw3.devtunnels.ms";
-    private const string devTunnel = "localhost:5042";
+    //private const string apiLocation = "rh8xzzh8-5042.usw3.devtunnels.ms";
+    private const string apiLocation = "localhost:5042";
 
     private ChatHistory _history;
     private IKernelBuilder _builder;
@@ -56,8 +56,8 @@ public partial class MainPageViewModel : ObservableObject
                 serviceId: "lights" // Optional; for targeting specific services within Semantic Kernel
             );
             _kernel = _builder.Build();
-            var uriOpenApi = new Uri($"https://{devTunnel}/openapi/v1/openapi.json");
-            var uriServer = new Uri($"https://{devTunnel}");
+            var uriOpenApi = new Uri($"https://{apiLocation}/openapi/v1/openapi.json");
+            var uriServer = new Uri($"https://{apiLocation}");
             // Import the OpenAPI plugin into the _kernel.
             var client = new HttpClient
             {
@@ -74,14 +74,19 @@ public partial class MainPageViewModel : ObservableObject
                }
             );
             _chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
+
             // tell the openAI connector to invoke sevice if the prompt is unnderstood
             _openAIPromptExecutionSettings = new()
             {
-                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
-                Temperature = 0.4,  // Creativity level (0 = deterministic, 2 = highly random)
-                TopP = 0.4,         // Nucleus sampling for diversity
-                PresencePenalty = 0.0, // Penalize repeating topics
-                FrequencyPenalty = 0.0 // Penalize repeated words
+                
+                //ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                //FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: false, options: new(){AllowParallelCalls = true,AllowConcurrentInvocation=true }),
+                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: true),
+                //ToolCallBehavior = ToolCallBehavior.EnableKernelFunctions,
+                Temperature = 0.4,      // Precise and deterministic -- Creativity level (0 = deterministic, 2 = highly random)
+                TopP = 0.4,             // Limits randomness
+                FrequencyPenalty = 0.0, // Allows repeated words like "Turning on..."
+                PresencePenalty = 0.0,  // Prevents forced resp,onse variations
             };
         }
         catch (Exception ex)
@@ -134,21 +139,20 @@ public partial class MainPageViewModel : ObservableObject
         {
             _promptIndex = _userPrompts.Length - 1;
         }
-          CallTextInput = _userPrompts[_promptIndex];
-  }
-
+        CallTextInput = _userPrompts[_promptIndex];
+    }
+    int _lastTotalTokens = 0;
     public async Task GetResponseAsync(string prompt)
     {
         try
         {
-            if(string.IsNullOrWhiteSpace(prompt))
+            if (string.IsNullOrWhiteSpace(prompt))
             {
                 CallTextResult = "Please enter a prompt";
                 return;
             }
 
             _history.AddUserMessage(prompt);
-            //var result2 = await _chatCompletionService.GetChatMessageContentsAsync(
             var result = await _chatCompletionService.GetChatMessageContentAsync(
             _history,
             executionSettings: _openAIPromptExecutionSettings,
@@ -159,14 +163,16 @@ public partial class MainPageViewModel : ObservableObject
             {
                 var usage = (OpenAI.Chat.ChatTokenUsage)result.Metadata["Usage"];
                 var totalTokens = usage.TotalTokenCount;
-                var inputTokens =usage.InputTokenCount;
-                var outputTokens =usage.OutputTokenCount;
-                //var totalTokens = usage.TotalTokenCount;
+                var inputTokens = usage.InputTokenCount - _lastTotalTokens;
+                _lastTotalTokens = usage.InputTokenCount;
+                var outputTokens = usage.OutputTokenCount;
                 InputTokens = inputTokens;
                 OutputTokens = outputTokens;
                 TotalTokens += totalTokens;
                 RequestTokens = totalTokens;
             }
+
+            _ = CheckForFunctionCallsAsync(result);
 
         }
         catch (Exception ex)
@@ -176,4 +182,39 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
+
+    /// <summary>
+    /// Check if the AI model has chosen any function for invocation.
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    private async Task CheckForFunctionCallsAsync(ChatMessageContent result)
+    {
+        // Check if the AI model has chosen any function for invocation.
+        IEnumerable<FunctionCallContent> functionCalls = FunctionCallContent.GetFunctionCalls(result);
+        if (!functionCalls.Any())
+        {
+            return;
+        }
+
+        // Sequentially iterating over each chosen function, invoke it, and add the result to the chat history.
+        foreach (FunctionCallContent functionCall in functionCalls)
+        {
+            try
+            {
+                // Invoking the function
+                FunctionResultContent resultContent = await functionCall.InvokeAsync(_kernel);
+
+                // Adding the function result to the chat history
+                //chatHistory.Add(resultContent.ToChatMessage());
+            }
+            catch (Exception ex)
+            {
+                // Adding function exception to the chat history.
+                //chatHistory.Add(new FunctionResultContent(functionCall, ex).ToChatMessage());
+                // or
+                //chatHistory.Add(new FunctionResultContent(functionCall, "Error details that the AI model can reason about.").ToChatMessage());
+            }
+        }
+    }
 }
