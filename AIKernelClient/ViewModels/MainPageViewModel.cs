@@ -78,11 +78,9 @@ public partial class MainPageViewModel : ObservableObject
             // tell the openAI connector to invoke sevice if the prompt is unnderstood
             _openAIPromptExecutionSettings = new()
             {
-                
-                //ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                //ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, // Prefer using FuctionChoiceBehavior.Auto(autoInvoke: true)
                 //FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: false, options: new(){AllowParallelCalls = true,AllowConcurrentInvocation=true }),
                 FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: true),
-                //ToolCallBehavior = ToolCallBehavior.EnableKernelFunctions,
                 Temperature = 0.4,      // Precise and deterministic -- Creativity level (0 = deterministic, 2 = highly random)
                 TopP = 0.4,             // Limits randomness
                 FrequencyPenalty = 0.0, // Allows repeated words like "Turning on..."

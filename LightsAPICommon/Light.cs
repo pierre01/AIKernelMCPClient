@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 namespace LightsAPICommon;
