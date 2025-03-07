@@ -10,9 +10,7 @@ GET {{LightsAPIHost}}/lights
 # Get All the rooms
 GET {{LightsAPIHost}}/rooms
 ###
-# Get the House
-GET {{LightsAPIHost}}/house
-###
+
 
 # Living Room Lights ------------------------------------------------
 # Switch on the lights

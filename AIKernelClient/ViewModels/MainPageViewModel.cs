@@ -28,6 +28,10 @@ public partial class MainPageViewModel : ObservableObject
 
     private int _promptIndex = -1;
 
+    #pragma warning disable SKEXP0001 // Suppress the warning for evaluation purposes
+    private IChatHistoryReducer _reducer;
+    #pragma warning restore SKEXP0001
+
     private readonly string[] _userPrompts = House.CustomPrompts;
 
 
@@ -44,10 +48,14 @@ public partial class MainPageViewModel : ObservableObject
             _history = [];
             //TODO: Add Sytem prompts to keep the conversation context
             // https://learn.microsoft.com/en-us/semantic-kernel/concepts/ai-services/chat-completion/chat-history?pivots=programming-language-csharp
-            //_history.AddSystemMessage("You are an home automation system controlling lights functions in the house, first get all the lights, then all the rooms and remeber where all the lights are located");
+            //_history.AddSystemMessage("You are controlling lights functions in the house, first get all the lights, then all the rooms and remeber where all the lights are located");
 
+            #pragma warning disable SKEXP0001 // Suppress the warning for evaluation purposes
+            _reducer = new ChatHistoryTruncationReducer(targetCount: 4, thresholdCount: 6); // Keep System messages and reduce User messages
+            #pragma warning restore SKEXP0001
 
             _builder = Kernel.CreateBuilder();
+
             // Initialize the OpenAI Chat Connector.
             _builder.Services.AddOpenAIChatCompletion(
                 modelId: chatModel,
@@ -56,14 +64,46 @@ public partial class MainPageViewModel : ObservableObject
                 serviceId: "lights" // Optional; for targeting specific services within Semantic Kernel
             );
             _kernel = _builder.Build();
+
+            // Add filter directly to the Kernel instance
+            _kernel.FunctionInvocationFilters.Add(new FunctionInvocationFilter());
+
+// this does not seem to help much 
+
+//            _history.AddSystemMessage(@"
+//You are an AI assistant responsible for controlling smart lights.
+//To handle light control requests efficiently, follow this process:
+
+//1. **Initial API Calls (if data is not cached)**:
+//   - Retrieve all **rooms** using ('GetRooms').
+//   - Retrieve all **lights** using ('Getlights').
+//   - Store this data for quick access.
+
+//2. **Handling User Requests**:
+//   - If the user asks about a specific room, check stored room data before making API calls.
+//   - If the user asks about a specific light, check stored light data before making API calls.
+//   - Only update lights 'UpdateLights' if the light exists in stored data.
+
+//3. **Expected Commands & Responses**:
+//   - 'Turn on the desk light' → Validate existence, then 'UpdateLights'.
+//   - 'List all rooms' → Retrieve from stored rooms.
+//   - 'Get all light statuses' → Retrieve from stored lights.
+
+//Always prioritize retrieving data first before performing updates.
+//");
+
+
             var uriOpenApi = new Uri($"https://{apiLocation}/openapi/v1/openapi.json");
             var uriServer = new Uri($"https://{apiLocation}");
+            
             // Import the OpenAPI plugin into the _kernel.
             var client = new HttpClient
             {
                 BaseAddress = uriServer
             };
             //client.DefaultRequestHeaders.Add("X-Tunnel-Authorization", "tunnel eyJhbGciOiJFUzI1NiIsImtpZCI6IkZCM0U2NTMwNjlDQ0I5MUFCQUUxRTNFQjk1RDc5NzdERDQxODM1QjYiLCJ0eXAiOiJKV1QifQ.eyJjbHVzdGVySWQiOiJ1c3czIiwidHVubmVsSWQiOiJmYW5jeS1yaXZlci0wY3JyNTUwIiwic2NwIjoiY29ubmVjdCIsImV4cCI6MTczOTA4NDAyMCwiaXNzIjoiaHR0cHM6Ly90dW5uZWxzLmFwaS52aXN1YWxzdHVkaW8uY29tLyIsIm5iZiI6MTczODk5NjcyMH0.J17Cw2wMJffdsp4_bFf2--PccruB7ikjNV92aWoK8G98vXuT-wQ_5oqZI33bOfpxP_LVGeI45jWBFMka_5dUOg");
+
+            // Creation of the plugin from the OpenAPI document Endpoint
             var plugin = await _kernel.ImportPluginFromOpenApiAsync(
                pluginName: "lights",
                uri: uriOpenApi,
@@ -73,13 +113,12 @@ public partial class MainPageViewModel : ObservableObject
                    ServerUrlOverride = uriServer
                }
             );
+
             _chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
 
             // tell the openAI connector to invoke sevice if the prompt is unnderstood
             _openAIPromptExecutionSettings = new()
             {
-                //ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions, // Prefer using FuctionChoiceBehavior.Auto(autoInvoke: true)
-                //FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: false, options: new(){AllowParallelCalls = true,AllowConcurrentInvocation=true }),
                 FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: true),
                 Temperature = 0.4,      // Precise and deterministic -- Creativity level (0 = deterministic, 2 = highly random)
                 TopP = 0.4,             // Limits randomness
@@ -139,6 +178,7 @@ public partial class MainPageViewModel : ObservableObject
         }
         CallTextInput = _userPrompts[_promptIndex];
     }
+
     int _lastTotalTokens = 0;
     public async Task GetResponseAsync(string prompt)
     {
@@ -149,8 +189,18 @@ public partial class MainPageViewModel : ObservableObject
                 CallTextResult = "Please enter a prompt";
                 return;
             }
+            // Get the current length of the chat history object
+            int currentChatHistoryLength = _history.Count;
 
             _history.AddUserMessage(prompt);
+
+            //var reducedMessages = await _reducer.ReduceAsync(_history);
+
+            //if (reducedMessages is not null)
+            //{
+            //    _history = new ChatHistory(reducedMessages);
+            //}
+
             var result = await _chatCompletionService.GetChatMessageContentAsync(
             _history,
             executionSettings: _openAIPromptExecutionSettings,
@@ -169,9 +219,6 @@ public partial class MainPageViewModel : ObservableObject
                 TotalTokens += totalTokens;
                 RequestTokens = totalTokens;
             }
-
-            _ = CheckForFunctionCallsAsync(result);
-
         }
         catch (Exception ex)
         {
@@ -179,40 +226,14 @@ public partial class MainPageViewModel : ObservableObject
             CallTextResult = $"Error getting response: {ex.Message}";
         }
     }
+}
 
-
-    /// <summary>
-    /// Check if the AI model has chosen any function for invocation.
-    /// </summary>
-    /// <param name="result"></param>
-    /// <returns></returns>
-    private async Task CheckForFunctionCallsAsync(ChatMessageContent result)
+public sealed class FunctionInvocationFilter : IFunctionInvocationFilter
+{
+    public async Task OnFunctionInvocationAsync(FunctionInvocationContext context, Func<FunctionInvocationContext, Task> next)
     {
-        // Check if the AI model has chosen any function for invocation.
-        IEnumerable<FunctionCallContent> functionCalls = FunctionCallContent.GetFunctionCalls(result);
-        if (!functionCalls.Any())
-        {
-            return;
-        }
-
-        // Sequentially iterating over each chosen function, invoke it, and add the result to the chat history.
-        foreach (FunctionCallContent functionCall in functionCalls)
-        {
-            try
-            {
-                // Invoking the function
-                FunctionResultContent resultContent = await functionCall.InvokeAsync(_kernel);
-
-                // Adding the function result to the chat history
-                //chatHistory.Add(resultContent.ToChatMessage());
-            }
-            catch (Exception ex)
-            {
-                // Adding function exception to the chat history.
-                //chatHistory.Add(new FunctionResultContent(functionCall, ex).ToChatMessage());
-                // or
-                //chatHistory.Add(new FunctionResultContent(functionCall, "Error details that the AI model can reason about.").ToChatMessage());
-            }
-        }
+        Debug.WriteLine($"Function {context.Function.Name} is about to be invoked.");
+        await next(context);
+        Debug.WriteLine($"Function {context.Function.Name} was invoked.");
     }
 }
