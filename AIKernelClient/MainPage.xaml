@@ -60,7 +60,7 @@
 			Command="{Binding SendRequestCommand}"
 			HeightRequest="40"
 			HorizontalOptions="End"
-			Source="repeat_icon.png"
+			Source="clippy.png"
 			WidthRequest="40" />
 		<Label
 			Grid.Row="3"

@@ -33,8 +33,8 @@
             // Lock the window size
             window.Width = newWidth;
             window.Height = newHeight;
-            window.MaximumHeight = newHeight;
-            window.MaximumWidth = newWidth;
+            //window.MaximumHeight = newHeight;
+            //window.MaximumWidth = newWidth;
             window.MinimumHeight = newHeight;
             window.MinimumWidth = newWidth;
 

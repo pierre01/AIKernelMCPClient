@@ -36,7 +36,8 @@ public class House
                 "I'm leaving",
                 "How many lights are currently on?",
                 "Create a C#  function that execute the calls for \"I'm home\" ",
-                "Switch all the house lights on", // talk about mispelling
+                // "Switch all the house lights on, don't generate code, just call functions.", // Will avoid context continuation of Code generation 
+                "Switch all the house lights on", // Will create code for this
                 "How many rooms are in the house?",
                 "Change the house lights to match a 70's party theme.",
                 "Use different colors for each light.",
