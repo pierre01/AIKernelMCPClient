@@ -1,136 +1,38 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AIKernelClient.Services.Interfaces;
+using CommunityToolkit.Maui.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LightsAPICommon;
-using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
-using Microsoft.SemanticKernel.Plugins.OpenApi;
-using System.Diagnostics;
+using System.Globalization;
 
 
 namespace AIKernelClient.ViewModels;
 
 public partial class MainPageViewModel : ObservableObject
 {
-    // Set upcredentials and endpoints.
-    private const string openAiApiKey = "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";
-    private const string chatModel = "gpt-4o-mini"; // or gpt-4 (but it is expensive)
-    private const string openApiOrgId = "org-RRBnXYYjTq5b4qr7TLaaHsLD";
-
-    //private const string apiLocation = "rh8xzzh8-5042.usw3.devtunnels.ms";
-    private const string apiLocation = "localhost:5042";
-
-    private ChatHistory _history;
-    private IKernelBuilder _builder;
-    private Kernel _kernel;
-    private IChatCompletionService _chatCompletionService;
-    private OpenAIPromptExecutionSettings _openAIPromptExecutionSettings;
 
     private int _promptIndex = -1;
 
-    #pragma warning disable SKEXP0001 // Suppress the warning for evaluation purposes
-    private IChatHistoryReducer _reducer;
-    #pragma warning restore SKEXP0001
-
     private readonly string[] _userPrompts = House.CustomPrompts;
 
+    //Voice Handling
+    private readonly ISpeechToText _speechToText;
+    private readonly IDialogService _dialogService;
+    private readonly ISemanticKernelService _semanticKernelService;
 
-    public MainPageViewModel()
+    private bool _isListening = false;
+    private bool _isSpeechEnabled = false;
+
+    public MainPageViewModel(ISpeechToText speechToText, IDialogService dialogService, ISemanticKernelService semanticKernelService)
     {
-        InitializeKernelAndPluginAsync().ConfigureAwait(true);
+        _speechToText = speechToText;
+        _dialogService = dialogService;
+        _semanticKernelService = semanticKernelService;
+
+        _semanticKernelService.InitializeKernelAndPluginAsync().ConfigureAwait(true);
     }
 
-
-    private async Task InitializeKernelAndPluginAsync()
-    {
-        try
-        {   // Initialize the ChatHistory object.
-            _history = [];
-            //TODO: Add Sytem prompts to keep the conversation context
-            // https://learn.microsoft.com/en-us/semantic-kernel/concepts/ai-services/chat-completion/chat-history?pivots=programming-language-csharp
-            //_history.AddSystemMessage("You are controlling lights functions in the house, first get all the lights, then all the rooms and remeber where all the lights are located");
-
-            #pragma warning disable SKEXP0001 // Suppress the warning for evaluation purposes
-            _reducer = new ChatHistoryTruncationReducer(targetCount: 4, thresholdCount: 6); // Keep System messages and reduce User messages
-            #pragma warning restore SKEXP0001
-
-            _builder = Kernel.CreateBuilder();
-
-            // Initialize the OpenAI Chat Connector.
-            _builder.Services.AddOpenAIChatCompletion(
-                modelId: chatModel,
-                apiKey: openAiApiKey,
-                orgId: openApiOrgId, // Optional; for OpenAI deployment
-                serviceId: "lights" // Optional; for targeting specific services within Semantic Kernel
-            );
-            _kernel = _builder.Build();
-
-            // Add filter directly to the Kernel instance
-            _kernel.FunctionInvocationFilters.Add(new FunctionInvocationFilter());
-
-// this does not seem to help much 
-
-//            _history.AddSystemMessage(@"
-//You are an AI assistant responsible for controlling smart lights.
-//To handle light control requests efficiently, follow this process:
-
-//1. **Initial API Calls (if data is not cached)**:
-//   - Retrieve all **rooms** using ('GetRooms').
-//   - Retrieve all **lights** using ('Getlights').
-//   - Store this data for quick access.
-
-//2. **Handling User Requests**:
-//   - If the user asks about a specific room, check stored room data before making API calls.
-//   - If the user asks about a specific light, check stored light data before making API calls.
-//   - Only update lights 'UpdateLights' if the light exists in stored data.
-
-//3. **Expected Commands & Responses**:
-//   - 'Turn on the desk light' → Validate existence, then 'UpdateLights'.
-//   - 'List all rooms' → Retrieve from stored rooms.
-//   - 'Get all light statuses' → Retrieve from stored lights.
-
-//Always prioritize retrieving data first before performing updates.
-//");
-
-
-            var uriOpenApi = new Uri($"https://{apiLocation}/openapi/v1/openapi.json");
-            var uriServer = new Uri($"https://{apiLocation}");
-            
-            // Import the OpenAPI plugin into the _kernel.
-            var client = new HttpClient
-            {
-                BaseAddress = uriServer
-            };
-            //client.DefaultRequestHeaders.Add("X-Tunnel-Authorization", "tunnel eyJhbGciOiJFUzI1NiIsImtpZCI6IkZCM0U2NTMwNjlDQ0I5MUFCQUUxRTNFQjk1RDc5NzdERDQxODM1QjYiLCJ0eXAiOiJKV1QifQ.eyJjbHVzdGVySWQiOiJ1c3czIiwidHVubmVsSWQiOiJmYW5jeS1yaXZlci0wY3JyNTUwIiwic2NwIjoiY29ubmVjdCIsImV4cCI6MTczOTA4NDAyMCwiaXNzIjoiaHR0cHM6Ly90dW5uZWxzLmFwaS52aXN1YWxzdHVkaW8uY29tLyIsIm5iZiI6MTczODk5NjcyMH0.J17Cw2wMJffdsp4_bFf2--PccruB7ikjNV92aWoK8G98vXuT-wQ_5oqZI33bOfpxP_LVGeI45jWBFMka_5dUOg");
-
-            // Creation of the plugin from the OpenAPI document Endpoint
-            var plugin = await _kernel.ImportPluginFromOpenApiAsync(
-               pluginName: "lights",
-               uri: uriOpenApi,
-
-               executionParameters: new OpenApiFunctionExecutionParameters
-               {
-                   ServerUrlOverride = uriServer
-               }
-            );
-
-            _chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
-
-            // tell the openAI connector to invoke sevice if the prompt is unnderstood
-            _openAIPromptExecutionSettings = new()
-            {
-                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: true),
-                Temperature = 0.4,      // Precise and deterministic -- Creativity level (0 = deterministic, 2 = highly random)
-                TopP = 0.4,             // Limits randomness
-                FrequencyPenalty = 0.0, // Allows repeated words like "Turning on..."
-                PresencePenalty = 0.0,  // Prevents forced resp,onse variations
-            };
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error initializing kernel: {ex.Message}");
-        }
-    }
 
     [ObservableProperty]
     public partial string CallTextInput { get; set; }
@@ -149,6 +51,9 @@ public partial class MainPageViewModel : ObservableObject
 
     [ObservableProperty]
     public partial int OutputTokens { get; set; }
+
+    [ObservableProperty]
+    public partial string ButtonImage { get; set; } = "microphone_off.png";
 
 
     [RelayCommand]
@@ -179,61 +84,77 @@ public partial class MainPageViewModel : ObservableObject
         CallTextInput = _userPrompts[_promptIndex];
     }
 
-    int _lastTotalTokens = 0;
-    public async Task GetResponseAsync(string prompt)
+    #region Voice Handling
+    [RelayCommand]
+    private async Task ListenOrPause()
     {
-        try
+        CancellationToken cancellationToken = default;
+        await StartListening(cancellationToken);
+    }
+
+
+    private async Task StartListening(CancellationToken cancellationToken)
+    {
+        if (_isListening)
         {
-            if (string.IsNullOrWhiteSpace(prompt))
+            await StopListening();
+            _isListening = false;
+            ButtonImage = "microphone_off.png";
+            return;
+        }
+        if (_isSpeechEnabled == false)
+        {
+            var isGranted = await _speechToText.RequestPermissions(cancellationToken);
+            if (!isGranted)
             {
-                CallTextResult = "Please enter a prompt";
+                await _dialogService.ShowToast("Permission not granted");
                 return;
             }
-            // Get the current length of the chat history object
-            int currentChatHistoryLength = _history.Count;
-
-            _history.AddUserMessage(prompt);
-
-            //var reducedMessages = await _reducer.ReduceAsync(_history);
-
-            //if (reducedMessages is not null)
-            //{
-            //    _history = new ChatHistory(reducedMessages);
-            //}
-
-            var result = await _chatCompletionService.GetChatMessageContentAsync(
-            _history,
-            executionSettings: _openAIPromptExecutionSettings,
-            kernel: _kernel);
-            CallTextResult = result.ToString();
-            // Check if result.Metadata contains the key "Usage" and get the total token totalTokens.
-            if (result.Metadata.ContainsKey("Usage"))
-            {
-                var usage = (OpenAI.Chat.ChatTokenUsage)result.Metadata["Usage"];
-                var totalTokens = usage.TotalTokenCount;
-                var inputTokens = usage.InputTokenCount - _lastTotalTokens;
-                _lastTotalTokens = usage.InputTokenCount;
-                var outputTokens = usage.OutputTokenCount;
-                InputTokens = inputTokens;
-                OutputTokens = outputTokens;
-                TotalTokens += totalTokens;
-                RequestTokens = totalTokens;
-            }
         }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error getting response: {ex.Message}");
-            CallTextResult = $"Error getting response: {ex.Message}";
-        }
+        _isSpeechEnabled = true;
+        _isListening = true;
+        CallTextInput ="";
+        _speechToText.RecognitionResultUpdated += OnRecognitionTextUpdated;
+        _speechToText.RecognitionResultCompleted += OnRecognitionTextCompleted;
+        ButtonImage = "microphone.png";
+        await _speechToText.StartListenAsync(new SpeechToTextOptions { Culture = CultureInfo.CurrentCulture, ShouldReportPartialResults = true }, CancellationToken.None);
+
     }
-}
 
-public sealed class FunctionInvocationFilter : IFunctionInvocationFilter
-{
-    public async Task OnFunctionInvocationAsync(FunctionInvocationContext context, Func<FunctionInvocationContext, Task> next)
+    async Task StopListening()
     {
-        Debug.WriteLine($"Function {context.Function.Name} is about to be invoked.");
-        await next(context);
-        Debug.WriteLine($"Function {context.Function.Name} was invoked.");
+        await _speechToText.StopListenAsync(CancellationToken.None);
+        _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
+        _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
+    }
+
+    void OnRecognitionTextUpdated(object sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
+    {
+        CallTextInput += args.RecognitionResult;
+    }
+
+    void OnRecognitionTextCompleted(object sender, SpeechToTextRecognitionResultCompletedEventArgs args)
+    {
+        CallTextInput = args.RecognitionResult.Text;
+    }
+    #endregion
+
+    public async Task GetResponseAsync(string prompt)
+    {
+        var result = await _semanticKernelService.GetResponseAsync(prompt);
+        if (result.IsSuccess)
+        {
+            CallTextResult = result.Result;
+            TotalTokens = result.TotalTokens;
+            RequestTokens = result.RequestTokens;
+            InputTokens = result.InputTokens;
+            OutputTokens = result.OutputTokens;
+        }
+        else
+        {
+            CallTextResult = result.Result;
+        }
     }
 }
+
+

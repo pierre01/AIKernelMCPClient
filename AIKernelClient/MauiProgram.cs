@@ -1,4 +1,6 @@
-﻿using AIKernelClient.ViewModels;
+﻿using AIKernelClient.Services;
+using AIKernelClient.Services.Interfaces;
+using AIKernelClient.ViewModels;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Media;
 using Microsoft.Extensions.Logging;
@@ -32,6 +34,8 @@ public static class MauiProgram
     public static MauiAppBuilder RegisterServices(this MauiAppBuilder mauiAppBuilder)
     {
         mauiAppBuilder.Services.AddSingleton<ISpeechToText>(SpeechToText.Default);
+        mauiAppBuilder.Services.AddSingleton<IDialogService, DialogService>();
+        mauiAppBuilder.Services.AddSingleton<ISemanticKernelService, SemanticKernelService>();
         return mauiAppBuilder;
     }    
     public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)

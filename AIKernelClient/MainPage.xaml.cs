@@ -7,69 +7,15 @@ namespace AIKernelClient
 {
     public partial class MainPage : ContentPage
     {
-    private MainPageViewModel _viewModel;
-    private readonly ISpeechToText _speechToText;
-    private bool _isListening = false;
-    private bool _isSpeechEnabled = false;
-
-    public MainPage(ISpeechToText speechToText, MainPageViewModel viewModel)
-    {
-        _viewModel = viewModel;
-        BindingContext = _viewModel;
-        InitializeComponent();
-        this._speechToText = speechToText;
-    }
-
-    public async void ListenOrPause(object sender, EventArgs args)
-    {
-        CancellationToken cancellationToken = default;
-        await StartListening(cancellationToken);
-    }
+        private MainPageViewModel _viewModel;
 
 
-    private async Task StartListening(CancellationToken cancellationToken)
-    {
-        if(_isListening)
+        public MainPage( MainPageViewModel viewModel)
         {
-            await StopListening(cancellationToken);
-            _isListening = false;
-            return;
+            _viewModel = viewModel;
+            BindingContext = _viewModel;
+            InitializeComponent();
         }
-        if(_isSpeechEnabled == false)
-        {
-
-            var isGranted = await _speechToText.RequestPermissions(cancellationToken);
-            if (!isGranted)
-            {
-                await Toast.Make("Permission not granted").Show(CancellationToken.None);
-                return;
-            }
-        }
-        _speechToText.RecognitionResultUpdated += OnRecognitionTextUpdated;
-        _speechToText.RecognitionResultCompleted += OnRecognitionTextCompleted;
-        await _speechToText.StartListenAsync(new SpeechToTextOptions { Culture = CultureInfo.CurrentCulture, ShouldReportPartialResults = true }, CancellationToken.None);
-        _isSpeechEnabled = true;
-
-
-    }
-
-    async Task StopListening(CancellationToken cancellationToken)
-    {
-        await _speechToText.StopListenAsync(CancellationToken.None);
-        _speechToText.RecognitionResultUpdated -= OnRecognitionTextUpdated;
-        _speechToText.RecognitionResultCompleted -= OnRecognitionTextCompleted;
-    }
-
-    void OnRecognitionTextUpdated(object sender, SpeechToTextRecognitionResultUpdatedEventArgs args)
-    {
-        //RecognitionText += args.RecognitionResult;
-    }
-
-    void OnRecognitionTextCompleted(object sender, SpeechToTextRecognitionResultCompletedEventArgs args)
-    {
-        //RecognitionText = args.RecognitionResult;
-    }
-
 
     }
 

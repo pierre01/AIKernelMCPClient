@@ -21,11 +21,13 @@
 			Text="Enter your request"
 			VerticalOptions="Center" />
 		<ImageButton
+			x:Name="MicrophoneButton"
 			Grid.Row="1"
 			Margin="8"
 			HeightRequest="40"
 			IsEnabled="True"
-			Source="microphone.png"
+			Source="{Binding ButtonImage}"
+			Command="{Binding ListenOrPauseCommand}"
 			WidthRequest="40" />
 		<HorizontalStackLayout Grid.Row="1" Grid.Column="2">
 			<ImageButton
