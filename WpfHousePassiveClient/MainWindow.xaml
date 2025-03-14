@@ -59,6 +59,7 @@
 						VerticalAlignment="Top"
 						DataContext="{Binding LaundryRoom}" />
 				</Grid>
+				<!-- First floor Walls -->
 				<Rectangle
 					Width="16"
 					Height="380"
@@ -288,6 +289,7 @@
 						VerticalAlignment="Top"
 						DataContext="{Binding GuestBedroom}" />
 				</Grid>
+				<!-- Second floor Walls -->
 				<Rectangle
 					Width="16"
 					Height="268"

@@ -24,10 +24,10 @@
 			x:Name="MicrophoneButton"
 			Grid.Row="1"
 			Margin="8"
+			Command="{Binding ListenOrPauseCommand}"
 			HeightRequest="40"
 			IsEnabled="True"
 			Source="{Binding ButtonImage}"
-			Command="{Binding ListenOrPauseCommand}"
 			WidthRequest="40" />
 		<HorizontalStackLayout Grid.Row="1" Grid.Column="2">
 			<ImageButton
