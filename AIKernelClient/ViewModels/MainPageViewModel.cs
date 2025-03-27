@@ -3,7 +3,6 @@ using CommunityToolkit.Maui.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LightsAPICommon;
-using Microsoft.SemanticKernel.ChatCompletion;
 using System.Globalization;
 
 

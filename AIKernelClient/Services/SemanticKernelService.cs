@@ -41,7 +41,8 @@ public class SemanticKernelService:ISemanticKernelService
             _history = [];
             //TODO: Add Sytem prompts to keep the conversation context
             // https://learn.microsoft.com/en-us/semantic-kernel/concepts/ai-services/chat-completion/chat-history?pivots=programming-language-csharp
-            // this does not seem to help much 
+           
+            // this does not seem to help much :
 
             //_history.AddSystemMessage(@"
             //You are an AI assistant responsible for controlling smart lights.
@@ -115,7 +116,7 @@ public class SemanticKernelService:ISemanticKernelService
                 Temperature = 0.4,      // Precise and deterministic -- Creativity level (0 = deterministic, 2 = highly random)
                 TopP = 0.4,             // Limits randomness
                 FrequencyPenalty = 0.0, // Allows repeated words like "Turning on..."
-                PresencePenalty = 0.0,  // Prevents forced resp,onse variations
+                PresencePenalty = 0.0,  // Prevents forced response variations
             };
         }
         catch (Exception ex)
@@ -187,7 +188,7 @@ public class SemanticKernelService:ISemanticKernelService
 /// <summary>
 /// Logs messages before and after a function is invoked. It allows for additional processing during the function
 /// invocation.
-/// Used if needed to decide which functions to call (invoked only if autoInvoke is false
+/// Used if needed to decide which functions to call (invoked only if autoInvoke is false)
 /// </summary>
 /// <example>
 /// 
