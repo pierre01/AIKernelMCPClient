@@ -31,3 +31,10 @@ The Solution is made of **4 C# .net 9.0 projects**
  - Maui Speech to Text
 
     https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/essentials/speech-to-text?tabs=windows
+
+   ![image](ReadMeImages/SimpleCommand.png)
+   ![image](ReadMeImages/SeventyParty.png)
+   ![image](ReadMeImages/ProtocolGeneration.png)
+   ![image](ReadMeImages/ProtocolExecution.png)
+   ![image](ReadMeImages/CodeGeneration.png)
+   
