@@ -23,7 +23,15 @@ public partial class MainWindow : Window
     }
 
 
-
-
+    protected override void OnActivated(EventArgs e)
+    {
+        base.OnActivated(e);
+        //// Set the window size to 500x900
+        //this.Width = 500;
+        //this.Height = 900;
+        //// Center the window on the screen
+        //this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+    }
 }
+
 
