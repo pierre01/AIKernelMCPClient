@@ -1,14 +1,9 @@
 ﻿using LightsAPICommon;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-
 
 internal partial class Program
 {
@@ -40,43 +35,6 @@ internal partial class Program
 
         var allLights = House.Instance.Lights;
         var allRooms = House.Instance.Rooms;
-
-        // Minimal API registration for MCP endpoint
-        app.MapGet("/mcp", () => Results.Ok(new
-        {
-            server = "Lights MCP Server",
-            version = "1.0.0",
-            description = "Model Control Protocol server for smart light and room control",
-            endpoints = new[] { "/rooms", "/lights", "/lights/{id}", "/lights/floor/{floor}", "/auth" }
-        }));
-
-        // Minimal API registration for Auth endpoint
-        app.MapPost("/auth", (AuthRequest request, IConfiguration config) =>
-        {
-            if (request.Username == "admin" && request.Password == "password")
-            {
-                var issuer = config["Jwt:Issuer"];
-                var audience = config["Jwt:Audience"];
-                var key = Encoding.UTF8.GetBytes(config["Jwt:Key"]!);
-                var signingKey = new SymmetricSecurityKey(key);
-                var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-
-                var tokenDescriptor = new JwtSecurityToken(
-                    issuer: issuer,
-                    audience: audience,
-                    claims: new[] { new Claim(ClaimTypes.Name, request.Username) },
-                    expires: DateTime.UtcNow.AddHours(1),
-                    signingCredentials: credentials
-                );
-
-                string jwt = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
-                return Results.Ok(new { token = jwt });
-            }
-            else
-            {
-                return Results.Unauthorized();
-            }
-        });
 
         //var houseApi = app.MapGroup("/house");
         //houseApi.WithTags(["Rooms", "Lights", "House", "Floors"]);
@@ -152,13 +110,13 @@ internal partial class Program
             Debug.WriteLine($">> Get all lights for floor#{floor} -> GetLightsOnFloor");
             // Get all the rooms on the floor
             var roomsOnFloor = allRooms.Where(r => r.Floor == floor).Select(r => r.RoomId).ToList();
-            if (roomsOnFloor == null || roomsOnFloor.Count == 0)
+            if(roomsOnFloor==null || roomsOnFloor.Count == 0)
             {
                 return Results.NotFound($"No rooms found on floor#{floor}");
             }
             // Get all the lights in the rooms on the floor
             var lightsOnFloor = allLights.Where(l => roomsOnFloor.Contains(l.RoomId)).ToList();
-            if (lightsOnFloor == null || lightsOnFloor.Count == 0)
+            if(lightsOnFloor==null || lightsOnFloor.Count == 0)
             {
                 return Results.NotFound($"No lights found on floor#{floor}");
             }
