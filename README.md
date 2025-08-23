@@ -17,7 +17,8 @@ The Solution is made of **4 C# .net 9.0 projects**
 
 2. **AIKernelClient:** The controller application  **talking to the AI**: a cross platform **MAUI** (Multi platform) application that controls the service through prompts Using Semantic Kernel with a connector to OpenAI (Chat GPT 4o Mini) it relays service calls from the AI.
       - Plugin creation and propmting occurs in the class Services/**SemanticKernelService.cs** injected to the MainPageViewModel.cs
-      - **SemanticKernelService.cs** contains some hardcoded credentials to OpenAI (not an elegant solution but easy to replace with yours to test with)
+      - **SemanticKernelService.cs** will create the kernel, load the plugin, and will call the AI model with the prompt
+      - **ApiKeyProvider.cs** will provide the OpenAI API key from secure storage or environment variable
       - **MainPageViewModel** will initialize the SemanticKernelService (**InitializeKernelAndPluginAsync**) and will call it to prompt the AI (**GetResponseAsync**)
       - Speech to Text is also implemented in the **MainPageViewModel.cs** class, by dependency injection.
 3. **WPFPassiveClient:** A visualization application  that displays the changes done by the controler on the service by polling at regular intervals the changes made to the service resources (lights) (WPF application). 

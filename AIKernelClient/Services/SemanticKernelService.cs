@@ -11,7 +11,7 @@ namespace AIKernelClient.Services;
 public class SemanticKernelService:ISemanticKernelService
 {
     // Set upcredentials and endpoints.
-    private const string chatModel = "gpt-4o-mini"; // or gpt-4 (but it is expensive)
+    private const string chatModel = "gpt-5-nano"; // or gpt-4 (but it is expensive) gpt-5-mini gpt-5-nano gpt-4o-mini
     private const string openApiOrgId = "org-RRBnXYYjTq5b4qr7TLaaHsLD";
 
     //private const string apiLocation = "rh8xzzh8-5042.usw3.devtunnels.ms";
@@ -117,12 +117,12 @@ public class SemanticKernelService:ISemanticKernelService
             
             _chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
 
-            // tell the openAI connector to invoke sevice if the prompt is unnderstood
+            // tell the openAI connector to invoke service if the prompt is understood
             _openAIPromptExecutionSettings = new()
             {
-                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: true),
-                Temperature = 0.4,      // Precise and deterministic -- Creativity level (0 = deterministic, 2 = highly random)
-                TopP = 0.4,             // Limits randomness
+                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                //FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(autoInvoke: true),
+                Temperature = 1,      // Precise and deterministic -- Creativity level (0 = deterministic, 2 = highly random)
                 FrequencyPenalty = 0.0, // Allows repeated words like "Turning on..."
                 PresencePenalty = 0.0,  // Prevents forced response variations
             };
