@@ -15,7 +15,7 @@ IMPORTANT: the AI will make decisions and will call directly functions on the se
 The Solution is made of **4 C# .net 9.0 projects**
 1. **LightControllerAPI:** The REST web service (Minimal API endpoints with OpenAPI generated definintion) **Is the service we want the AI to control** 
 
-2. **AIKernelClient:** The controller application  **talking to the AI**: a cross platform **MAUI** (Multi platform) application that controls the service through prompts Using Semantic Kernel with a connector to OpenAI (Chat GPT 4o Mini) it relays service calls from the AI.
+2. **AIKernelClient:** The controller application  **talking to the AI**: a cross platform **MAUI** (Multi platform) application that controls the service through prompts Using Semantic Kernel with a connector to OpenAI (Chat GPT 5 Mini or nano) it relays service calls from the AI.
       - Plugin creation and propmting occurs in the class Services/**SemanticKernelService.cs** injected to the MainPageViewModel.cs
       - **SemanticKernelService.cs** will create the kernel, load the plugin, and will call the AI model with the prompt
       - **ApiKeyProvider.cs** will provide the OpenAI API key from secure storage or environment variable
@@ -34,6 +34,7 @@ The Solution is made of **4 C# .net 9.0 projects**
 
     https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/essentials/speech-to-text?tabs=windows
 
+   ![image](ReadMeImages/BasicUI.png)
    ![image](ReadMeImages/SimpleCommand.png)
    ![image](ReadMeImages/SeventyParty.png)
    ![image](ReadMeImages/ProtocolGeneration.png)
