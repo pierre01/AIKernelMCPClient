@@ -11,7 +11,6 @@ namespace AIKernelClient.Services;
 public class SemanticKernelService:ISemanticKernelService
 {
     // Set upcredentials and endpoints.
-    private const string openAiApiKey = "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";
     private const string chatModel = "gpt-4o-mini"; // or gpt-4 (but it is expensive)
     private const string openApiOrgId = "org-RRBnXYYjTq5b4qr7TLaaHsLD";
 
@@ -41,7 +40,16 @@ public class SemanticKernelService:ISemanticKernelService
             _history = [];
             //TODO: Add Sytem prompts to keep the conversation context
             // https://learn.microsoft.com/en-us/semantic-kernel/concepts/ai-services/chat-completion/chat-history?pivots=programming-language-csharp
-           
+            
+            string openAiApiKey = await ApiKeyProvider.GetApiKeyAsync();
+
+            // Safety check
+            if (string.IsNullOrEmpty(openAiApiKey))
+            {
+                throw new InvalidOperationException("API key is not set in environment variables.");
+            }
+
+
             // this does not seem to help much :
 
             //_history.AddSystemMessage(@"
