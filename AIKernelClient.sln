@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfHousePassiveClient", "Wp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightsAPICommon", "LightsAPICommon\LightsAPICommon.csproj", "{368525B7-A79D-44E5-B9F8-4185B22E3467}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mcp.OpenApiBridge", "Mcp.OpenApiBridge\Mcp.OpenApiBridge.csproj", "{EF780311-50EB-42D5-ACD7-F34C8FCFD457}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightsMcpServer", "LightsMcpServer\LightsMcpServer.csproj", "{2C62DA98-FEF9-48AE-B5F9-E5094271DC9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{368525B7-A79D-44E5-B9F8-4185B22E3467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF780311-50EB-42D5-ACD7-F34C8FCFD457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF780311-50EB-42D5-ACD7-F34C8FCFD457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF780311-50EB-42D5-ACD7-F34C8FCFD457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF780311-50EB-42D5-ACD7-F34C8FCFD457}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C62DA98-FEF9-48AE-B5F9-E5094271DC9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C62DA98-FEF9-48AE-B5F9-E5094271DC9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C62DA98-FEF9-48AE-B5F9-E5094271DC9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C62DA98-FEF9-48AE-B5F9-E5094271DC9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

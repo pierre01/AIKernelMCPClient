@@ -11,7 +11,7 @@ namespace AIKernelClient.Services;
 public class SemanticKernelService:ISemanticKernelService
 {
     // Set upcredentials and endpoints.
-    private const string chatModel = "gpt-5-nano"; // or gpt-4 (but it is expensive) gpt-5-mini gpt-5-nano gpt-4o-mini
+    private const string chatModel = "gpt-5-mini"; // or gpt-4 (but it is expensive) gpt-5-mini gpt-5-nano gpt-4o-mini
     private const string openApiOrgId = "org-RRBnXYYjTq5b4qr7TLaaHsLD";
 
     //private const string apiLocation = "rh8xzzh8-5042.usw3.devtunnels.ms";
@@ -163,10 +163,11 @@ public class SemanticKernelService:ISemanticKernelService
             //    _history = new ChatHistory(reducedMessages);
             //}
 
-            var result = await _chatCompletionService.GetChatMessageContentAsync(
+            ChatMessageContent result = await _chatCompletionService.GetChatMessageContentAsync(
             _history,
             executionSettings: _openAIPromptExecutionSettings,
             kernel: _kernel);
+
             response.Result = result.ToString();
             // Check if result.Metadata contains the key "Usage" and get the total token totalTokens.
             if (result.Metadata.ContainsKey("Usage"))
