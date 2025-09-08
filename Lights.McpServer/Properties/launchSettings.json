@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Lights.McpServer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:54598;http://localhost:54599"
+    }
+  }
+}

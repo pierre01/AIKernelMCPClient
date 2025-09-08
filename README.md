@@ -11,18 +11,31 @@ In order to:
 This project intent is to show best practices in documenting an API, its entities, the protocol usage (REST), using standards (OpenAPI).
 In order to enable an AI to understand and communicate most precisely, accurately, with a user.
 IMPORTANT: the AI will make decisions and will call directly functions on the service API. 
-## Projects
-The Solution is made of **4 C# .net 9.0 projects**
-1. **LightControllerAPI:** The REST web service (Minimal API endpoints with OpenAPI generated definintion) **Is the service we want the AI to control** 
 
-2. **AIKernelClient:** The controller application  **talking to the AI**: a cross platform **MAUI** (Multi platform) application that controls the service through prompts Using Semantic Kernel with a connector to OpenAI (Chat GPT 5 Mini or nano) it relays service calls from the AI.
+# Variation in this branch MCP - Model Context Protocol
+We are implementing the Model Control Protocol (MCP) on both the server and client side.
+As the architecture shows, the client application (AIKernelClient) is designed to interact with the AI model, allowing it to send intents and receive actions that can be executed on the service.
+The Client now becomes an MCP Host, and the Server an MCP Server, acting as an intermediary between the client and the service.
+The MCP protocol allows the AI to control the service directly by using intents, actions, and API calls.
+The MCP protocol is enabled on both the server and client side, allowing the AI to control the service directly by using intents, actions, and API calls.
+
+## Projects
+The Solution is made of **5 C# .net 9.0 projects**
+1. **Lights.RestApi:** The REST web service (Minimal API endpoints with OpenAPI generated definintion) **Is the service we want the AI to control** 
+
+2. **Lights.MauiClient:** The controller application  **talking to the AI**: a cross platform **MAUI** (Multi platform) application that controls the service through prompts Using Semantic Kernel with a connector to OpenAI (Chat GPT 5 Mini or nano) it relays service calls from the AI.
       - Plugin creation and propmting occurs in the class Services/**SemanticKernelService.cs** injected to the MainPageViewModel.cs
       - **SemanticKernelService.cs** will create the kernel, load the plugin, and will call the AI model with the prompt
       - **ApiKeyProvider.cs** will provide the OpenAI API key from secure storage or environment variable
       - **MainPageViewModel** will initialize the SemanticKernelService (**InitializeKernelAndPluginAsync**) and will call it to prompt the AI (**GetResponseAsync**)
       - Speech to Text is also implemented in the **MainPageViewModel.cs** class, by dependency injection.
-3. **WPFPassiveClient:** A visualization application  that displays the changes done by the controler on the service by polling at regular intervals the changes made to the service resources (lights) (WPF application). 
-4. **LightsAPICommon:** A shared Entities library  (with seeded data) is only shared with AIKernelClient for it contains prompts. None of the entities are used in the client
+
+1. 3. **Lights.Wpf.House:** A visualization application  that displays the changes done by the controler on the service by polling at regular intervals the changes made to the service resources (lights) (WPF application). 
+4. **Lights.Common:** A shared Entities library  (with seeded data) is only shared with AIKernelClient for it contains prompts. None of the entities are used in the client
+
+## Architecture
+
+![image](ReadMeImages/Architecture.png)
 
 ## References
 

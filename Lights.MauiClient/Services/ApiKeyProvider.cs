@@ -17,7 +17,7 @@ namespace AIKernelClient.Services
     /// </summary>
     public static class ApiKeyProvider
     {
-        public static async Task<string?> GetApiKeyAsync()
+        public static async Task<string> GetApiKeyAsync()
         {
 #if WINDOWS || MACCATALYST || LINUX
             return Environment.GetEnvironmentVariable("MY_AI_API_KEY", EnvironmentVariableTarget.User); // Or Machine
