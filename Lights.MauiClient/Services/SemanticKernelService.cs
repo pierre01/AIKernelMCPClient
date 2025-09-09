@@ -22,7 +22,7 @@ public class SemanticKernelService : ISemanticKernelService
     // MCP_WS_URL: ws://localhost:5059/mcp (when WS)
     private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "STDIO";
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
-                                            ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net8.0\Lights.McpServer.exe";
+                                            ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
     private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "ws://localhost:5059/mcp";
 
     private ChatHistory _history;
@@ -62,10 +62,19 @@ public class SemanticKernelService : ISemanticKernelService
                 serviceId: "lights"
             );
 
+            // Let the model auto-invoke MCP tools when helpful
+            _openAIPromptExecutionSettings = new()
+            {
+                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                Temperature = 1,
+                FrequencyPenalty = 0.0,
+                PresencePenalty = 0.0,
+            };
+
             _kernel = _builder.Build();
 
             // ===== Attach MCP tools (choose transport by env) =====
-            if (string.Equals(McpMode, "WS", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
             {
                 // Connect to a running WS server (e.g., Program.cs with WebSocket transport)
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
@@ -87,14 +96,7 @@ public class SemanticKernelService : ISemanticKernelService
 
             _chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
 
-            // Let the model auto-invoke MCP tools when helpful
-            _openAIPromptExecutionSettings = new()
-            {
-                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
-                Temperature = 1,
-                FrequencyPenalty = 0.0,
-                PresencePenalty = 0.0,
-            };
+
         }
         catch (Exception ex)
         {

@@ -6,15 +6,37 @@ using ModelContextProtocol;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 
 // ====== Configuration (simple, env-variable friendly) ======
-string RestBaseUrl = Environment.GetEnvironmentVariable("REST_BASE_URL") ?? "https://localhost:7196";
+string RestBaseUrl = Environment.GetEnvironmentVariable("REST_BASE_URL") ?? "http://localhost:5042";
 bool UseBearer = (Environment.GetEnvironmentVariable("REST_USE_BEARER") ?? "false").Equals("true", StringComparison.OrdinalIgnoreCase);
 string BearerToken = Environment.GetEnvironmentVariable("REST_BEARER_TOKEN") ?? "";
 int TimeoutSeconds = int.TryParse(Environment.GetEnvironmentVariable("REST_TIMEOUT_SECONDS"), out var t) ? t : 60;
 string OpenApiPath = Environment.GetEnvironmentVariable("OPENAPI_PATH") ?? "APIDesc.json";
+
+if (!Debugger.IsAttached)
+{
+    Debugger.Launch();
+}
+Debug.WriteLine(">> Starting Lights.McpServer");
+
+static JObject ToJObject(IReadOnlyDictionary<string, JsonElement> dict)
+{
+    var obj = new JObject();
+    foreach (var kv in dict)
+    {
+        var el = kv.Value;
+        obj[kv.Key] = el.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null
+            ? JValue.CreateNull()
+            : JToken.Parse(el.GetRawText());
+    }
+    return obj;
+}
+
+
 
 // ====== Host/DI bootstrap ======
 var builder = Host.CreateApplicationBuilder(args);
@@ -61,59 +83,71 @@ builder.Services
         {
             Tools = new ToolsCapability
             {
-                // Expose the tool list
+                // === List tools
                 ListToolsHandler = (request, ct) =>
                 {
-                    var list = toolRegistry.Tools.Select(t => new Tool
+                    var tools = toolRegistry.Tools.Select(t => new Tool
                     {
                         Name = t.Name,
                         Description = t.Description,
-                        InputSchema = JsonSerializer.Deserialize<JsonElement>(t.InputSchema.ToString())
+                        InputSchema = JsonDocument.Parse(t.InputSchema.ToString()).RootElement.Clone()
                     }).ToList();
 
-                    return ValueTask.FromResult(new ListToolsResult { Tools = list });
+                    return ValueTask.FromResult(new ListToolsResult { Tools = tools });
                 },
 
-                // Route tool calls to Lights.RestApi
+
+                // === Call tool
                 CallToolHandler = async (request, ct) =>
                 {
-                    if (request?.Params is null)
-                        throw new McpException("Missing params.");
-
+                    if (request?.Params is null) throw new McpException("Missing params.");
                     var toolName = request.Params.Name ?? throw new McpException("Missing tool name.");
+
                     var mapped = toolRegistry.Tools.FirstOrDefault(x => x.Name == toolName)
                                  ?? throw new McpException($"Unknown tool '{toolName}'.");
 
-                    // Convert arguments (dictionary / JsonElement) → JObject safely
-                    JObject input = new();
-                    if (request.Params.Arguments is not null)
-                    {
-                        // Serialize back to JSON then parse to JObject for consistent handling
-                        var json = JsonSerializer.Serialize(request.Params.Arguments);
-                        input = JObject.Parse(json);
-                    }
+                    // request.Params.Arguments is IReadOnlyDictionary<string, JsonElement> in your SDK
+                    var argsDict = request.Params.Arguments
+                                   ?? throw new McpException("Missing tool arguments.");
+
+                    // Convert to JObject (preserve exact JSON per key)
+                    var input = ToJObject(argsDict);
 
                     var http = rootProvider!.GetRequiredService<IHttpClientFactory>().CreateClient("lights");
+                    var (url, bodyContent) = OpenApiToolMapper.BindHttpRequest(mapped.Route, mapped.Method, mapped, input);
 
-                    // Build HTTP request
-                    var (url, bodyContent) = OpenApiToolMapper.BindHttpRequest(
-                        mapped.Route, mapped.Method, mapped, input);
+                    // Compose the absolute URI for debugging
+                    Uri? absolute;
+                    Uri.TryCreate(http.BaseAddress, url, out absolute);
+                    var finalUri = absolute?.ToString() ?? (http.BaseAddress?.ToString() ?? "") + url;
 
+                    // Build the request
                     using var msg = new HttpRequestMessage(new HttpMethod(mapped.Method), url);
                     if (bodyContent is not null)
                         msg.Content = new StringContent(bodyContent, Encoding.UTF8, "application/json");
 
-                    var res = await http.SendAsync(msg, ct);
+                    // DEBUG LOGS
+                    Console.Error.WriteLine($"[Lights.McpServer] {mapped.Method} {finalUri}");
+                    if (bodyContent is not null) Console.Error.WriteLine($"[Lights.McpServer] Body: {bodyContent}");
+
+                    HttpResponseMessage res;
+                    try
+                    {
+                        res = await http.SendAsync(msg, ct);
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        // Network / TLS / DNS issues show up here
+                        throw new McpException($"Network error calling {finalUri}: {ex.Message}");
+                    }
+
                     var text = await res.Content.ReadAsStringAsync(ct);
 
                     if (!res.IsSuccessStatusCode)
                     {
-                        // Throwing McpException returns a proper MCP error to the client
-                        throw new McpException($"REST call failed ({(int)res.StatusCode} {res.ReasonPhrase}): {text}");
+                        throw new McpException(
+                            $"REST call failed {finalUri} -> {(int)res.StatusCode} {res.ReasonPhrase}\n{text}");
                     }
-
-                    // Try to pass JSON back as text block (client can parse if needed).
-                    // You can also construct a JSON content block if your host expects it.
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Type = "text", Text = text }]
