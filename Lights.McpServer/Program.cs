@@ -1,17 +1,15 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
 using ModelContextProtocol;
 using ModelContextProtocol.Protocol;
-using ModelContextProtocol.Server;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
 // ====== Configuration (simple, env-variable friendly) ======
-string RestBaseUrl = Environment.GetEnvironmentVariable("REST_BASE_URL") ?? "http://localhost:5042";
+string RestBaseUrl = Environment.GetEnvironmentVariable("REST_BASE_URL") ?? "https://localhost:5042";
 bool UseBearer = (Environment.GetEnvironmentVariable("REST_USE_BEARER") ?? "false").Equals("true", StringComparison.OrdinalIgnoreCase);
 string BearerToken = Environment.GetEnvironmentVariable("REST_BEARER_TOKEN") ?? "";
 int TimeoutSeconds = int.TryParse(Environment.GetEnvironmentVariable("REST_TIMEOUT_SECONDS"), out var t) ? t : 60;
@@ -23,19 +21,44 @@ if (!Debugger.IsAttached)
 }
 Debug.WriteLine(">> Starting Lights.McpServer");
 
+// Single shared HttpClient with optional dev-cert bypass in DEBUG
+HttpClient Http = CreateHttpClient();
+
+HttpClient CreateHttpClient()
+{
+#if DEBUG
+    var handler = new HttpClientHandler
+    {
+        // Dev only: accept self-signed certs so HTTPS localhost works
+        ServerCertificateCustomValidationCallback = (_, __, ___, ____) => true
+    };
+#else
+    var handler = new HttpClientHandler();
+#endif
+
+    var client = new HttpClient(handler)
+    {
+        BaseAddress = new Uri(RestBaseUrl),
+        Timeout = TimeSpan.FromSeconds(TimeoutSeconds)
+    };
+
+    if (UseBearer && !string.IsNullOrWhiteSpace(BearerToken))
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+
+    return client;
+}
+
 static JObject ToJObject(IReadOnlyDictionary<string, JsonElement> dict)
 {
     var obj = new JObject();
-    foreach (var kv in dict)
+    foreach (var (key, el) in dict)
     {
-        var el = kv.Value;
-        obj[kv.Key] = el.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null
+        obj[key] = el.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null
             ? JValue.CreateNull()
             : JToken.Parse(el.GetRawText());
     }
     return obj;
 }
-
 
 
 // ====== Host/DI bootstrap ======
@@ -97,7 +120,6 @@ builder.Services
                 },
 
 
-                // === Call tool
                 CallToolHandler = async (request, ct) =>
                 {
                     if (request?.Params is null) throw new McpException("Missing params.");
@@ -106,48 +128,57 @@ builder.Services
                     var mapped = toolRegistry.Tools.FirstOrDefault(x => x.Name == toolName)
                                  ?? throw new McpException($"Unknown tool '{toolName}'.");
 
-                    // request.Params.Arguments is IReadOnlyDictionary<string, JsonElement> in your SDK
+                    // In your SDK, Arguments is IReadOnlyDictionary<string, JsonElement>
                     var argsDict = request.Params.Arguments
-                                   ?? throw new McpException("Missing tool arguments.");
+                                  ?? throw new McpException("Missing tool arguments.");
 
-                    // Convert to JObject (preserve exact JSON per key)
+                    // Convert args → JObject for the OpenAPI mapper
                     var input = ToJObject(argsDict);
 
-                    var http = rootProvider!.GetRequiredService<IHttpClientFactory>().CreateClient("lights");
-                    var (url, bodyContent) = OpenApiToolMapper.BindHttpRequest(mapped.Route, mapped.Method, mapped, input);
+                    // Build relative URL + optional JSON body
+                    var (relativeUrl, bodyJson) = OpenApiToolMapper.BindHttpRequest(mapped.Route, mapped.Method, mapped, input);
 
-                    // Compose the absolute URI for debugging
-                    Uri? absolute;
-                    Uri.TryCreate(http.BaseAddress, url, out absolute);
-                    var finalUri = absolute?.ToString() ?? (http.BaseAddress?.ToString() ?? "") + url;
+                    // Compose absolute URL
+                    var finalUri = new Uri(Http.BaseAddress!, relativeUrl);
 
-                    // Build the request
-                    using var msg = new HttpRequestMessage(new HttpMethod(mapped.Method), url);
-                    if (bodyContent is not null)
-                        msg.Content = new StringContent(bodyContent, Encoding.UTF8, "application/json");
+                    using var msg = new HttpRequestMessage(new HttpMethod(mapped.Method), finalUri);
+                    if (bodyJson is not null &&
+                        (mapped.Method == "POST" || mapped.Method == "PUT" || mapped.Method == "PATCH"))
+                    {
+                        msg.Content = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+                    }
 
-                    // DEBUG LOGS
-                    Console.Error.WriteLine($"[Lights.McpServer] {mapped.Method} {finalUri}");
-                    if (bodyContent is not null) Console.Error.WriteLine($"[Lights.McpServer] Body: {bodyContent}");
+                    // Debug tracing
+                    Console.Error.WriteLine($"[MCP→REST] {mapped.Method} {finalUri}");
+                    if (bodyJson is not null) Console.Error.WriteLine($"[MCP→REST] Body: {bodyJson}");
 
                     HttpResponseMessage res;
                     try
                     {
-                        res = await http.SendAsync(msg, ct);
+                        switch(mapped.Method)
+                        {
+                            case "PATCH":
+                                res = await Http.PatchAsync(finalUri, msg.Content);
+                                break;
+                            case "GET":
+                                default:
+                                res = await Http.GetAsync(finalUri);
+                                break;
+                        }
+                        
                     }
                     catch (HttpRequestException ex)
                     {
-                        // Network / TLS / DNS issues show up here
                         throw new McpException($"Network error calling {finalUri}: {ex.Message}");
                     }
 
                     var text = await res.Content.ReadAsStringAsync(ct);
-
                     if (!res.IsSuccessStatusCode)
                     {
-                        throw new McpException(
-                            $"REST call failed {finalUri} -> {(int)res.StatusCode} {res.ReasonPhrase}\n{text}");
+                        throw new McpException($"REST call failed {finalUri} -> {(int)res.StatusCode} {res.ReasonPhrase}\n{text}");
                     }
+
+                    // Return raw text (JSON or not). You can switch to JSON content blocks if you prefer.
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Type = "text", Text = text }]
