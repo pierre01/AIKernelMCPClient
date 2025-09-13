@@ -20,7 +20,7 @@ public class SemanticKernelService : ISemanticKernelService
     // MCP_MODE: "STDIO" (default) or "WS"
     // MCP_EXE:  full path to Lights.McpServer.exe (when STDIO)
     // MCP_WS_URL: ws://localhost:5059/mcp (when WS)
-    private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "STDIO";
+    private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "SSE"; // SSE Or STDIO
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
                                             ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
     private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "ws://localhost:5059/mcp";
@@ -79,7 +79,7 @@ public class SemanticKernelService : ISemanticKernelService
                 // Connect to a running WS server (e.g., Program.cs with WebSocket transport)
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
-                    endpoint: "http://localhost:5059/sse");
+                    endpoint: "http://localhost:3001/");
             }
             else
             {
