@@ -79,7 +79,7 @@ public class SemanticKernelService : ISemanticKernelService
                 // Connect to a running WS server (e.g., Program.cs with WebSocket transport)
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
-                    endpoint: "http://localhost:3001/");
+                    endpoint: "https://localhost:3001/");
             }
             else
             {
@@ -172,8 +172,17 @@ public sealed class FunctionInvocationFilter : IFunctionInvocationFilter
 {
     public async Task OnFunctionInvocationAsync(FunctionInvocationContext context, Func<FunctionInvocationContext, Task> next)
     {
-        Debug.WriteLine($"Function {context.Function.Name} is about to be invoked.");
-        await next(context);
-        Debug.WriteLine($"Function {context.Function.Name} was invoked.");
+        try
+        {
+            Debug.WriteLine($"Function {context.Function.Name} is about to be invoked.");
+            await next(context);
+            Debug.WriteLine($"Function {context.Function.Name} was invoked.");
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
     }
 }

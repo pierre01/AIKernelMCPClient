@@ -1,10 +1,11 @@
-﻿using System.Net;
+﻿using Lights.McpServer.Serialization;
+using LightsAPICommon;
+using ModelContextProtocol.Server;
+using System.ComponentModel;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ModelContextProtocol.Server;
-using System.ComponentModel;
-using LightsAPICommon;
 using System.Threading.Tasks;
 
 namespace Lights.McpServer;
@@ -73,7 +74,7 @@ public static class LightsTool
         return _client.GetLightsByFloorAsync(floor).Result;
     }
 
-    [McpServerTool, Description("Allows batch updates for multiple lights, adjusting their states, colors, or brightness levels as specified. Returns a list of lights affected by the operation along with their updated values")]
+    [McpServerTool, Description("Update multiple lights with new states, colors, or brightness")]
     public static PatchResponse UpdateLights(PatchRequest lightUpdates)
     {
         if (_client == null)
@@ -104,7 +105,9 @@ public sealed class LightsApiClient : IDisposable
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            TypeInfoResolver = LightsJsonContext.Default
+
         };
     }
 
@@ -126,10 +129,10 @@ public sealed class LightsApiClient : IDisposable
         => await GetAsync<List<Light>>($"/lights/floor/{floor}", ct) ?? new List<Light>(); // GET /lights/floor/{floor} 
 
     // -------- Batch Patch --------
-    public async Task<PatchResponse> UpdateLightsAsync(IEnumerable<LightUpdateRequest> updates, CancellationToken ct = default)
+    public async Task<PatchResponse> UpdateLightsAsync(List<LightUpdateRequest> updates, CancellationToken ct = default)
     {
         if (updates is null) throw new ArgumentNullException(nameof(updates));
-        var body = new PatchRequest { LightUpdates = updates.ToList() }; // LightUpdateRequest[] 
+        var body = new PatchRequest { LightUpdates = updates }; // LightUpdateRequest[] 
 
         using var req = new HttpRequestMessage(HttpMethod.Patch, "/lights/")
         {

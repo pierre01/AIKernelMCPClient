@@ -35,7 +35,6 @@ internal partial class Program
         };
 
 
-
         builder.Services.AddMcpServer()
             .WithHttpTransport()
             .WithToolsFromAssembly(serializerOptions: toolSerializerOptions);
