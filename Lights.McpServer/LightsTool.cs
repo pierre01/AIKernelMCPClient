@@ -1,5 +1,5 @@
-﻿using Lights.McpServer.Serialization;
-using LightsAPICommon;
+﻿using LightsAPICommon;
+using LightsAPICommon.Serialization;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 using System.Net;
@@ -75,14 +75,14 @@ public static class LightsTool
     }
 
     [McpServerTool, Description("Update multiple lights with new states, colors, or brightness")]
-    public static PatchResponse UpdateLights(PatchRequest lightUpdates)
+    public static PatchResponse UpdateLights(List<LightUpdateRequest> lightUpdates)
     {
         if (_client == null)
         {
             _client = new LightsApiClient();
         }
 
-        return _client.UpdateLightsAsync(lightUpdates.LightUpdates).Result;
+        return _client.UpdateLightsAsync(lightUpdates).Result;
     }
 }
 

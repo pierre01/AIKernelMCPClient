@@ -19,6 +19,10 @@ The Client now becomes an MCP Host, and the Server an MCP Server, acting as an i
 The MCP protocol allows the AI to control the service directly by using intents, actions, and API calls.
 The MCP protocol is enabled on both the server and client side, allowing the AI to control the service directly by using intents, actions, and API calls.
 
+## Architecture
+
+![image](ReadMeImages/ArchitectureSimple.png)
+
 ## Projects
 The Solution is made of **5 C# .net 9.0 projects**
 1. **Lights.RestApi:** The REST web service (Minimal API endpoints with OpenAPI generated definintion) **Is the service we want the AI to control** 
@@ -30,10 +34,10 @@ The Solution is made of **5 C# .net 9.0 projects**
       - **MainPageViewModel** will initialize the SemanticKernelService (**InitializeKernelAndPluginAsync**) and will call it to prompt the AI (**GetResponseAsync**)
       - Speech to Text is also implemented in the **MainPageViewModel.cs** class, by dependency injection.
 
-1. 3. **Lights.Wpf.House:** A visualization application  that displays the changes done by the controler on the service by polling at regular intervals the changes made to the service resources (lights) (WPF application). 
+1. 3. **Lights.WpfHouse:** A visualization application  that displays the changes done by the controler on the service by polling at regular intervals the changes made to the service resources (lights) (WPF application). 
 4. **Lights.Common:** A shared Entities library  (with seeded data) is shared between Lights.RestApi, Lights.McpServer (for entities), and Lights.MauiClient (only for the pre created prompts)
 
-## Architecture
+## Detailed Architecture
 
 ![image](ReadMeImages/Architecture.png)
 

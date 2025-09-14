@@ -1,5 +1,7 @@
 ﻿using AIKernelClient.Services.Interfaces;
 using LightsAPICommon;
+using LightsAPICommon.Serialization;
+using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -7,6 +9,7 @@ using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.SemanticKernel.Extensions;
 using System.Diagnostics;
+using System.Net.Http.Json;
 
 namespace AIKernelClient.Services;
 
@@ -41,7 +44,7 @@ public class SemanticKernelService : ISemanticKernelService
     public async Task InitializeKernelAndPluginAsync()
     {
         try
-        {
+        {        
             _history = [];
 
 #pragma warning disable SKEXP0001
@@ -62,30 +65,37 @@ public class SemanticKernelService : ISemanticKernelService
                 serviceId: "lights"
             );
 
+
+
             // Let the model auto-invoke MCP tools when helpful
+#pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             _openAIPromptExecutionSettings = new()
             {
-                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                //ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(options: new() { RetainArgumentTypes = true, AllowStrictSchemaAdherence =true }),
                 Temperature = 1,
                 FrequencyPenalty = 0.0,
                 PresencePenalty = 0.0,
             };
+#pragma warning restore SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             _kernel = _builder.Build();
+
 
             // ===== Attach MCP tools (choose transport by env) =====
             if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
             {
-                // Connect to a running WS server (e.g., Program.cs with WebSocket transport)
+                // Connect to a running http  server 
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
+                   // httpClient: null,
                     endpoint: "https://localhost:3001/");
             }
             else
             {
                 // Default: start the MCP server locally via STDIO and bind its tools
                 // No arguments needed for our Program.cs (it just speaks MCP over stdio)
-                await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
+                var p = await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
                     serverName: "Lights.McpServer",
                     command: McpExe,
                     arguments: Array.Empty<string>());
@@ -93,6 +103,8 @@ public class SemanticKernelService : ISemanticKernelService
 
             // Optional: inspect/trace tool invocations
             _kernel.FunctionInvocationFilters.Add(new FunctionInvocationFilter());
+
+
 
             _chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
 
@@ -170,7 +182,7 @@ public class SemanticKernelService : ISemanticKernelService
 /// </summary>
 public sealed class FunctionInvocationFilter : IFunctionInvocationFilter
 {
-    public async Task OnFunctionInvocationAsync(FunctionInvocationContext context, Func<FunctionInvocationContext, Task> next)
+    public async Task OnFunctionInvocationAsync(Microsoft.SemanticKernel.FunctionInvocationContext context, Func<Microsoft.SemanticKernel.FunctionInvocationContext, Task> next)
     {
         try
         {
@@ -185,4 +197,6 @@ public sealed class FunctionInvocationFilter : IFunctionInvocationFilter
         }
 
     }
+
+
 }

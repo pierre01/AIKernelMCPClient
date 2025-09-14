@@ -1,6 +1,6 @@
 ﻿using Lights.McpServer;
-using Lights.McpServer.Serialization;
 using LightsAPICommon;
+using LightsAPICommon.Serialization;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol;
 using ModelContextProtocol.Protocol;

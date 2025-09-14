@@ -1,4 +1,5 @@
 ﻿using LightsAPICommon;
+using LightsAPICommon.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -27,7 +28,7 @@ internal partial class Program
 
         builder.Services.ConfigureHttpJsonOptions(options =>
         {
-            options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+            options.SerializerOptions.TypeInfoResolverChain.Insert(0, LightsJsonContext.Default);
         });
 
         var app = builder.Build();
@@ -253,23 +254,5 @@ internal partial class Program
 }
 
 
-[JsonSerializable(typeof(List<Light>))]
-[JsonSerializable(typeof(List<Room>))]
-[JsonSerializable(typeof(Light[]))]
-[JsonSerializable(typeof(Room[]))]
-[JsonSerializable(typeof(Light))]
-[JsonSerializable(typeof(Capabilities))]
-[JsonSerializable(typeof(List<LightUpdateRequest>))]
-[JsonSerializable(typeof(List<UpdateLightResponse>))]
-[JsonSerializable(typeof(LightUpdateRequest[]))]
-[JsonSerializable(typeof(UpdateLightResponse[]))]
-[JsonSerializable(typeof(UpdateLightResponse))]
-[JsonSerializable(typeof(LightUpdateRequest))]
-[JsonSerializable(typeof(PatchResponse))]
-[JsonSerializable(typeof(PatchRequest))]
-[JsonSerializable(typeof(House))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
-{
 
-}
 

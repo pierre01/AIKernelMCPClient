@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using LightsAPICommon; // where Light is defined
 
-namespace Lights.McpServer.Serialization;
+namespace LightsAPICommon.Serialization;
 
 // If you prefer Web defaults (camelCase, etc.), add: JsonSourceGenerationOptions(GenerationMode = ...)
 [JsonSerializable(typeof(List<Light>))]
@@ -20,6 +20,6 @@ namespace Lights.McpServer.Serialization;
 [JsonSerializable(typeof(PatchResponse))]
 [JsonSerializable(typeof(PatchRequest))]
 [JsonSerializable(typeof(House))]
-internal partial class LightsJsonContext : JsonSerializerContext
+public partial class LightsJsonContext : JsonSerializerContext
 {
 }

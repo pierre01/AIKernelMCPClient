@@ -27,8 +27,9 @@ public class LightUpdateRequest
     public int? Brightness { get; set; }
 }
 
-public class PatchRequest
+[JsonSerializable(typeof(PatchRequest))]
+public class PatchRequest(List<LightUpdateRequest>? lightUpdateRequests = null)
 {
-    public List<LightUpdateRequest> LightUpdates { get; set; }
+        public List<LightUpdateRequest>? LightUpdates { get; set; } = lightUpdateRequests;
 }
 
