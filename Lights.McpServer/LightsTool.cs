@@ -74,15 +74,31 @@ public static class LightsTool
         return _client.GetLightsByFloorAsync(floor).Result;
     }
 
-    [McpServerTool, Description("Update multiple lights with new states, colors, or brightness")]
-    public static PatchResponse UpdateLights(List<LightUpdateRequest> lightUpdates)
+    //[McpServerTool, Description("Update multiple lights with new states, colors, or brightness")]
+    //public static PatchResponse UpdateLights(List<LightUpdateRequest> lightUpdates)
+    //{
+    //    if (_client == null)
+    //    {
+    //        _client = new LightsApiClient();
+    //    }
+
+    //    return _client.UpdateLightsAsync(lightUpdates).Result;
+    //}
+
+    [McpServerTool, Description("Update one light with new On or Off state")]
+    public static List<UpdateLightResponse> TurnLightOnOrOff([Description("Id of the light to change")] int lightId, [Description("New On (true) or Off (false) state")] bool onOrOff )
     {
         if (_client == null)
         {
             _client = new LightsApiClient();
         }
+        List<LightUpdateRequest> lightUpdates = new List<LightUpdateRequest>();
 
-        return _client.UpdateLightsAsync(lightUpdates).Result;
+            if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
+            lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State = onOrOff ? "On" : "Off" });
+
+       
+        return [.. _client.UpdateLightsAsync(lightUpdates).Result.Results];
     }
 }
 
