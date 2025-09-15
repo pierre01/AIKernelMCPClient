@@ -15,8 +15,6 @@ namespace LightsAPICommon.Serialization;
 [JsonSerializable(typeof(List<UpdateLightResponse>))]
 [JsonSerializable(typeof(LightUpdateRequest[]))]
 [JsonSerializable(typeof(UpdateLightResponse[]))]
-[JsonSerializable(typeof(int[]))]
-[JsonSerializable(typeof(List<int[]>))]
 [JsonSerializable(typeof(UpdateLightResponse))]
 [JsonSerializable(typeof(LightUpdateRequest))]
 [JsonSerializable(typeof(PatchResponse))]
