@@ -20,7 +20,7 @@ public static class LightsTool
     static LightsApiClient? _client;
 
     [McpServerTool, Description("Returns a list of all available lights including their states, capabilities, and RoomId that references the room where it resides Name and Floor")]
-    public static  List<Light> GetAllLights()
+    public static List<Light> GetAllLights()
     {
         if (_client == null)
         {
@@ -43,7 +43,7 @@ public static class LightsTool
 
     [McpServerTool, Description("Retrieve a room’s name, and floor, from its unique ID")]
     public static Room GetRoom([Description("Unique identifier for the room")] int roomId)
-    {         
+    {
         if (_client == null)
         {
             _client = new LightsApiClient();
@@ -53,7 +53,7 @@ public static class LightsTool
     }
 
     [McpServerTool, Description("Returns details of a specific light, from its unique ID")]
-    public static Light GetLight(int lightId) 
+    public static Light GetLight(int lightId)
     {
         if (_client == null)
         {
@@ -64,7 +64,7 @@ public static class LightsTool
     }
 
     [McpServerTool, Description("Fetches all lights on a specified floor, detailing their IDs: LightId, current states and capabilities")]
-    public static List<Light> GetLightsOnFloor(int floor) 
+    public static List<Light> GetLightsOnFloor(int floor)
     {
         if (_client == null)
         {
@@ -85,8 +85,8 @@ public static class LightsTool
     //    return _client.UpdateLightsAsync(lightUpdates).Result;
     //}
 
-    [McpServerTool, Description("Update one light with new On or Off state")]
-    public static List<UpdateLightResponse> TurnLightOnOrOff([Description("Id of the light to change")] int lightId, [Description("New On (true) or Off (false) state")] bool onOrOff )
+    [McpServerTool, Description("Turn a light On")]
+    public static List<UpdateLightResponse> TurnLightOn(int lightId)
     {
         if (_client == null)
         {
@@ -94,10 +94,26 @@ public static class LightsTool
         }
         List<LightUpdateRequest> lightUpdates = new List<LightUpdateRequest>();
 
-            if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
-            lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State = onOrOff ? "On" : "Off" });
+        if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
+        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State ="On" });
 
-       
+
+        return [.. _client.UpdateLightsAsync(lightUpdates).Result.Results];
+    }
+
+    [McpServerTool, Description("Turn a light Off")]
+    public static List<UpdateLightResponse> TurnLightOff(int lightId)
+    {
+        if (_client == null)
+        {
+            _client = new LightsApiClient();
+        }
+        List<LightUpdateRequest> lightUpdates = new List<LightUpdateRequest>();
+
+        if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
+        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State = "Off" });
+
+
         return [.. _client.UpdateLightsAsync(lightUpdates).Result.Results];
     }
 }
@@ -115,7 +131,7 @@ public sealed class LightsApiClient : IDisposable
     {
         _http = handler is null ? new HttpClient() : new HttpClient(handler, disposeHandler: false);
         _http.BaseAddress = new Uri(baseAddress);
-        _http.DefaultRequestHeaders.UserAgent.ParseAdd("MCP SERVER REST CLIENT"); 
+        _http.DefaultRequestHeaders.UserAgent.ParseAdd("MCP SERVER REST CLIENT");
 
         _json = new JsonSerializerOptions
         {
