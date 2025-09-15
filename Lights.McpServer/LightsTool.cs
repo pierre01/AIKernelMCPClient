@@ -74,19 +74,19 @@ public static class LightsTool
         return _client.GetLightsByFloorAsync(floor).Result;
     }
 
-    //[McpServerTool, Description("Update multiple lights with new states, colors, or brightness")]
-    //public static PatchResponse UpdateLights(List<LightUpdateRequest> lightUpdates)
+    //[McpServerTool, Description("Update multiple lights at the same time with their new  state, or color, or brightness - Use this function when more than one light needs to be updated in one request")]
+    //public static PatchResponse UpdateLights(int[] lights, string[] states, int[] brightness, string[] colors)
     //{
     //    if (_client == null)
     //    {
     //        _client = new LightsApiClient();
     //    }
 
-    //    return _client.UpdateLightsAsync(lightUpdates).Result;
+    //    return new PatchResponse(null); //_client.UpdateLightsAsync(lightUpdates).Result;
     //}
 
-    [McpServerTool, Description("Turn a light On")]
-    public static List<UpdateLightResponse> TurnLightOn(int lightId)
+    [McpServerTool, Description("Turn a light 'On' or 'Off' ")]
+    public static List<UpdateLightResponse> TurnLightOnOrOff(int lightId, [Description("New State of the light 'On' or 'Off'")] string onOrOff)
     {
         if (_client == null)
         {
@@ -95,14 +95,12 @@ public static class LightsTool
         List<LightUpdateRequest> lightUpdates = new List<LightUpdateRequest>();
 
         if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
-        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State ="On" });
-
-
+        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State = onOrOff });
         return [.. _client.UpdateLightsAsync(lightUpdates).Result.Results];
     }
 
-    [McpServerTool, Description("Turn a light Off")]
-    public static List<UpdateLightResponse> TurnLightOff(int lightId)
+    [McpServerTool, Description("Change a Light Brightness / Intensity")]
+    public static List<UpdateLightResponse> ChangeLightBrightness(int lightId, [Description("New brightness or intensity from 0 to 100")] int brightness)
     {
         if (_client == null)
         {
@@ -111,11 +109,25 @@ public static class LightsTool
         List<LightUpdateRequest> lightUpdates = new List<LightUpdateRequest>();
 
         if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
-        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State = "Off" });
-
-
+        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, Brightness = brightness });
         return [.. _client.UpdateLightsAsync(lightUpdates).Result.Results];
     }
+
+    [McpServerTool, Description("Change a Light Color in format 'RRGGBB' ")]
+    public static List<UpdateLightResponse> ChangeLightColor(int lightId, [Description("New Color (must be a valid hex code RRGGB)")] string newColor)
+    {
+        if (_client == null)
+        {
+            _client = new LightsApiClient();
+        }
+        List<LightUpdateRequest> lightUpdates = new List<LightUpdateRequest>();
+
+        if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
+        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, Color = newColor });
+        return [.. _client.UpdateLightsAsync(lightUpdates).Result.Results];
+    }
+
+
 }
 
 public sealed class LightsApiClient : IDisposable

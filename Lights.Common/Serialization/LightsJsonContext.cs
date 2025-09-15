@@ -5,6 +5,8 @@ using LightsAPICommon; // where Light is defined
 namespace LightsAPICommon.Serialization;
 
 // If you prefer Web defaults (camelCase, etc.), add: JsonSourceGenerationOptions(GenerationMode = ...)
+[JsonSerializable(typeof(string[]))]
+[JsonSerializable(typeof(int[]))]
 [JsonSerializable(typeof(List<Light>))]
 [JsonSerializable(typeof(List<Room>))]
 [JsonSerializable(typeof(Light[]))]
