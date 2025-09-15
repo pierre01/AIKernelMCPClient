@@ -2,6 +2,7 @@
 using LightsAPICommon.Serialization;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -198,6 +199,8 @@ public sealed class LightsApiClient : IDisposable
     }
 
     // ---- internals ----
+    [RequiresUnreferencedCode("Calls System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsync<T>(JsonSerializerOptions, CancellationToken)")]
+    [RequiresDynamicCode("Calls System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsync<T>(JsonSerializerOptions, CancellationToken)")]
     private async Task<T?> GetAsync<T>(string path, CancellationToken ct)
     {
         using var res = await _http.GetAsync(path, ct);
@@ -205,6 +208,8 @@ public sealed class LightsApiClient : IDisposable
         return await res.Content.ReadFromJsonAsync<T>(_json, ct);
     }
 
+    [RequiresUnreferencedCode("Calls System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsync<T>(JsonSerializerOptions, CancellationToken)")]
+    [RequiresDynamicCode("Calls System.Net.Http.Json.HttpContentJsonExtensions.ReadFromJsonAsync<T>(JsonSerializerOptions, CancellationToken)")]
     private async Task<T?> GetOrNullAsync<T>(string path, CancellationToken ct)
     {
         using var res = await _http.GetAsync(path, ct);

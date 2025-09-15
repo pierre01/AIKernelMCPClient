@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.0.11010.61 d18.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Folder", "Solution Folder", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,21 +11,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lights.Common", "Lights.Common\Lights.Common.csproj", "{89912997-4725-EF8C-274E-F0739459D0D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lights.MauiClient", "Lights.MauiClient\Lights.MauiClient.csproj", "{92C0FC5D-882A-23B8-7483-3A4E3F3F1A1C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6CAC7BFD-8795-91D2-3938-CF63B2BA5B4C} = {6CAC7BFD-8795-91D2-3938-CF63B2BA5B4C}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lights.McpServer", "Lights.McpServer\Lights.McpServer.csproj", "{6CAC7BFD-8795-91D2-3938-CF63B2BA5B4C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A16FDA21-4E8D-30D6-1C15-EFBAB3CD0A77} = {A16FDA21-4E8D-30D6-1C15-EFBAB3CD0A77}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lights.RestApi", "Lights.RestApi\Lights.RestApi.csproj", "{A16FDA21-4E8D-30D6-1C15-EFBAB3CD0A77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lights.WpfHouse", "Lights.WPF.House\Lights.WpfHouse.csproj", "{C105BFE5-C1DC-D891-B4B6-126BCCE2A297}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A16FDA21-4E8D-30D6-1C15-EFBAB3CD0A77} = {A16FDA21-4E8D-30D6-1C15-EFBAB3CD0A77}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
