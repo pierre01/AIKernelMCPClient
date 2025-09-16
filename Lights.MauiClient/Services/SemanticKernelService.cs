@@ -16,7 +16,7 @@ namespace AIKernelClient.Services;
 public class SemanticKernelService : ISemanticKernelService
 {
     // ===== OpenAI chat model config =====
-    private const string chatModel = "gpt-5-mini";
+    private const string chatModel = "gpt-5-nano";
     private const string openApiOrgId = "org-RRBnXYYjTq5b4qr7TLaaHsLD";
 
     // ===== MCP transport config (override via env vars) =====
@@ -85,15 +85,14 @@ public class SemanticKernelService : ISemanticKernelService
             // ===== Attach MCP tools (choose transport by env) =====
             if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
             {
+                // Default: start the MCP server locally via SSE and bind its tools
                 // Connect to a running http  server 
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
-                   // httpClient: null,
                     endpoint: "https://localhost:3001/");
             }
             else
             {
-                // Default: start the MCP server locally via STDIO and bind its tools
                 // No arguments needed for our Program.cs (it just speaks MCP over stdio)
                 var p = await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
                     serverName: "Lights.McpServer",
