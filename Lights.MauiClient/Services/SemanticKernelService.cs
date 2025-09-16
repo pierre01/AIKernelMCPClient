@@ -26,7 +26,7 @@ public class SemanticKernelService : ISemanticKernelService
     private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "SSE"; // SSE Or STDIO
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
                                             ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
-    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "ws://localhost:5059/mcp";
+    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "ws://localhost:3001/mcp/";
 
     private ChatHistory _history;
     private IKernelBuilder _builder;
@@ -89,7 +89,7 @@ public class SemanticKernelService : ISemanticKernelService
                 // Connect to a running http  server 
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
-                    endpoint: "https://localhost:3001/");
+                     endpoint: "https://localhost:3001/mcp/");
             }
             else
             {

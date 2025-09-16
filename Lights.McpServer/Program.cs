@@ -43,7 +43,8 @@ internal partial class Program
 
         var app = builder.Build();
 
-        app.MapMcp();
+        var mcpGroup = app.MapGroup("/mcp");
+        mcpGroup.MapMcp();   // <— call MapMcp on the group; all routes get the prefix + auth
 
         app.Run();
     }
