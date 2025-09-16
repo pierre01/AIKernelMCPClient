@@ -75,16 +75,23 @@ public static class LightsTool
         return _client.GetLightsByFloorAsync(floor).Result;
     }
 
-    //[McpServerTool, Description("Update multiple lights at the same time with their new  state, or color, or brightness - Use this function when more than one light needs to be updated in one request")]
-    //public static PatchResponse UpdateLights(int[] lights, string[] states, int[] brightness, string[] colors)
-    //{
-    //    if (_client == null)
-    //    {
-    //        _client = new LightsApiClient();
-    //    }
 
-    //    return new PatchResponse(null); //_client.UpdateLightsAsync(lightUpdates).Result;
-    //}
+    [McpServerTool, Description("Change one or more properties of a light at once in a single call (state, or color, or brightness)")]
+    public static List<UpdateLightResponse> Change(int lightId, 
+        [Description("[optional] New State of the light 'On' or 'Off' (null when not used) ")] string? onOrOff,
+        [Description("[optional] New brightness or intensity from 0 to 100 (null when not used)")] int? brightness,
+        [Description("[optional] New Color (must be a valid hex code RRGGB) (null when not used)")] string? color)
+    {
+        if (_client == null)
+        {
+            _client = new LightsApiClient();
+        }
+        List<LightUpdateRequest> lightUpdates = new List<LightUpdateRequest>();
+
+        if (lightId < 0) throw new ArgumentException("LightId must be non-negative", nameof(lightId));
+        lightUpdates.Add(new LightUpdateRequest { LightId = lightId, State = string.IsNullOrEmpty(onOrOff)?null: onOrOff,Brightness= brightness, Color= string.IsNullOrEmpty(color) ? null : color });
+        return [.. _client.UpdateLightsAsync(lightUpdates).Result.Results];
+    }
 
     [McpServerTool, Description("Turn a light 'On' or 'Off' ")]
     public static List<UpdateLightResponse> TurnLightOnOrOff(int lightId, [Description("New State of the light 'On' or 'Off'")] string onOrOff)
