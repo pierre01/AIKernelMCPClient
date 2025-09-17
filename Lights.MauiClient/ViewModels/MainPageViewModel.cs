@@ -47,6 +47,9 @@ public partial class MainPageViewModel : ObservableObject
 
     [ObservableProperty]
     public partial int InputTokens { get; set; }
+    
+    [ObservableProperty]
+    public partial bool IsProgressVisible { get; set; }
 
     [ObservableProperty]
     public partial int OutputTokens { get; set; }
@@ -58,7 +61,9 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     private async Task SendRequest()
     {
+        IsProgressVisible = true;
         await GetResponseAsync(CallTextInput);
+        IsProgressVisible = false;
     }
 
     [RelayCommand]
