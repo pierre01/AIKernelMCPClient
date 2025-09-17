@@ -21,8 +21,6 @@ The Client now becomes an MCP Host, and the Server an MCP Server, acting as an i
 The MCP protocol allows the AI to control the service directly by using intents, actions, and API calls.
 The MCP protocol is enabled on both the server and client side, allowing the AI to control the service directly by using intents, actions, and API calls.
 
-
-
 ## Projects
 The Solution is made of **5 C# .net 9.0 projects**
 1. **Lights.RestApi:** The REST web service (Minimal API endpoints with OpenAPI generated definintion) **Is the service we want the AI to control** 
@@ -105,19 +103,8 @@ app.Run();
    
 ## Features at Work
 
-1. Remove the logic from the client application, allowing the AI to control the service directly.
 1. Create a smart service that can be controlled by a client with autorization.
 1. Use Semantic Kernel to create a plugin that allows the AI to interact with the service.
 1. Have the prompts sent to the smart service and redirect the intents to the service.
 1. Use memory storage to cache states per room/floor/light if needed.
-1. 1. Use the Model Control Protocol (MCP) to enable the AI to control the service by sending intents and receiving actions.
-2. Remove the logic from the client application, allowing the AI to control the service directly.
-1. Use the Model Control Protocol (MCP) to enable the AI to control the service by sending intents and receiving actions.
- 
-
-- **MCP**: Enable the Model Control Protocol On the Server.
-- **MCP**: Enable the Model Control Protocol On the Client.
-- The client application (AIKernelClient) is designed to interact with the AI model, allowing it to send intents and receive actions that can be executed on the service.
-- Let SK “think” in terms of intents → actions → API calls.
-Adding the Model Control Protocol (MCP) to the server allows the AI to control the service directly by using intents, actions, and API calls.
-- **Use MemoryStore** or vector memory to cache states per room/floor/light if needed.
+1 **Use MemoryStore** or vector memory to cache states per room/floor/light if needed.
