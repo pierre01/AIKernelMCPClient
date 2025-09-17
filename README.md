@@ -2,7 +2,7 @@
 
 ## Overview
 Ths project shows how to use Semantic Kernel inside a cross platform MAUI application to control a REST API service using OpenAI (ChatGPT) as the AI model.
-Controllig the RestAPI through a MCP protocol enabled server. anf Semantic Kernel MCP plugin on the client side.
+Controllig the RestAPI through a MCP protocol enabled server. and Semantic Kernel MCP plugin on the client side.
 
 ## Architecture
 
