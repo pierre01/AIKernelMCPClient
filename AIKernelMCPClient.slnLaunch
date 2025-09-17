@@ -18,7 +18,7 @@
         "DebugTarget": "http"
       },
       {
-        "Path": "Lights.WPF.House\\Lights.WpfHouse.csproj",
+        "Path": "Lights.WPFHouse\\Lights.WpfHouse.csproj",
         "Action": "Start",
         "DebugTarget": "Lights.WpfHouse"
       }
