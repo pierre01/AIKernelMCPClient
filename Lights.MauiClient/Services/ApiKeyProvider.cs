@@ -22,7 +22,16 @@ namespace AIKernelClient.Services
 #if WINDOWS || MACCATALYST || LINUX
             return Environment.GetEnvironmentVariable("MY_AI_API_KEY", EnvironmentVariableTarget.User); // Or Machine
 #else
-        return await SecureStorage.GetAsync("MY_AI_API_KEY");
+            return await SecureStorage.GetAsync("MY_AI_API_KEY");
+#endif
+        }
+
+        public static async Task<string> GetAiOrgId()
+        {
+#if WINDOWS || MACCATALYST || LINUX
+            return Environment.GetEnvironmentVariable("MY_AI_ORG_KEY", EnvironmentVariableTarget.User); // Or Machine
+#else
+            return await SecureStorage.GetAsync("MY_AI_ORG_KEY");
 #endif
         }
     }

@@ -33,7 +33,7 @@ internal partial class Program
         // Combine resolvers so AOT metadata is available for *all* involved types
         var toolSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
-            TypeInfoResolver = LightsJsonContext.Default   // <- only your context
+            TypeInfoResolver = LightsJsonContext.Default   // Jso serialization from LightsAPICommon
         };
 
 

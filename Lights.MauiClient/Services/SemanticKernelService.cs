@@ -1,15 +1,9 @@
 ﻿using AIKernelClient.Services.Interfaces;
-using LightsAPICommon;
-using LightsAPICommon.Serialization;
-using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol;
 using ModelContextProtocol.SemanticKernel.Extensions;
 using System.Diagnostics;
-using System.Net.Http.Json;
 
 namespace AIKernelClient.Services;
 
@@ -17,7 +11,6 @@ public class SemanticKernelService : ISemanticKernelService
 {
     // ===== OpenAI chat model config =====
     private const string chatModel = "gpt-5-nano";
-    private const string openApiOrgId = "org-RRBnXYYjTq5b4qr7TLaaHsLD";
 
     // ===== MCP transport config (override via env vars) =====
     // MCP_MODE: "STDIO" (default) or "WS"
@@ -26,7 +19,7 @@ public class SemanticKernelService : ISemanticKernelService
     private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "SSE"; // SSE Or STDIO
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
                                             ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
-    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "ws://localhost:3001/mcp/";
+    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "https://localhost:3001/mcp/";  //"ws://localhost:3001/mcp/"
 
     private ChatHistory _history;
     private IKernelBuilder _builder;
@@ -52,6 +45,7 @@ public class SemanticKernelService : ISemanticKernelService
 #pragma warning restore SKEXP0001
 
             var openAiApiKey = await ApiKeyProvider.GetApiKeyAsync();
+            var openApiOrgId = await ApiKeyProvider.GetAiOrgId();
             if (string.IsNullOrWhiteSpace(openAiApiKey))
                 throw new InvalidOperationException("API key is not set.");
 
@@ -89,7 +83,7 @@ public class SemanticKernelService : ISemanticKernelService
                 // Connect to a running http  server 
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
-                     endpoint: "https://localhost:3001/mcp/");
+                     endpoint: McpWsUrl);
             }
             else
             {
