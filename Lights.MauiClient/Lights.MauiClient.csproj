@@ -75,6 +75,8 @@
 		<PackageReference Include="Microsoft.SemanticKernel" Version="1.65.0" />
 		<PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.65.0" />
 		<PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.65.0" />
+		<PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.4" />
+		<PackageReference Include="ModelContextProtocol-SemanticKernel" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
