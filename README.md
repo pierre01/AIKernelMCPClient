@@ -1,7 +1,7 @@
 ﻿# AIKernelMCPClient
 
 ## Overview
-Ths project shows how to use Semantic Kernel inside a cross platform MAUI application to control a REST API service using OpenAI (ChatGPT) as the AI model.
+Ths project shows how to use Semantic Kernel inside a cross platform MAUI application (code works on nay type of app)  to control a REST API service using OpenAI (ChatGPT) as the AI model.
 Controllig the RestAPI through a MCP protocol enabled server. and Semantic Kernel MCP plugin on the client side.
 
 ## Architecture
@@ -9,9 +9,11 @@ Controllig the RestAPI through a MCP protocol enabled server. and Semantic Kerne
 ![image](ReadMeImages/ArchitectureSimple.png)
 
 ## Goals
+- **Demonstrate how to use the official C# SDK for the Model Context Protocol**, enabling .NET applications, services, and libraries to implement and interact with MCP clients and servers.
 - Create a MCP Server on top of an existing REST API service.
 - Create a MAUI client application that uses Semantic Kernel to interact with an OpenAI model (ChatGPT 5 Mini or Nano) to control the service through prompts.
-- Create A MCP client in the for of a Semantic Kernel plugin that connects to the MCP server.
+- Create A MCP client in the form of a Semantic Kernel plugin that connects to the MCP server.
+- Show how to create basic authentication between the MCP client and server (in branch).
 
 We are implementing the Model Control Protocol (MCP) on both the server and client side.
 As the architecture shows, the client application (AIKernelClient) is designed to interact with the AI model, allowing it to send intents and receive actions that can be executed on the service.
