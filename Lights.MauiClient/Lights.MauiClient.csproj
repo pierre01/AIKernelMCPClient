@@ -78,7 +78,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LightsAPICommon\LightsAPICommon.csproj" />
+	  <ProjectReference Include="..\Lights.Common\Lights.Common.csproj" />
 	</ItemGroup>
 
 </Project>

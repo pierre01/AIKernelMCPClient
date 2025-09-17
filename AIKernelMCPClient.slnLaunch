@@ -1,0 +1,27 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Lights.MauiClient\\Lights.MauiClient.csproj",
+        "Action": "Start",
+        "DebugTarget": "Windows Machine"
+      },
+      {
+        "Path": "Lights.McpServer\\Lights.McpServer.csproj",
+        "Action": "Start",
+        "DebugTarget": "http"
+      },
+      {
+        "Path": "Lights.RestApi\\Lights.RestApi.csproj",
+        "Action": "Start",
+        "DebugTarget": "http"
+      },
+      {
+        "Path": "Lights.WPF.House\\Lights.WpfHouse.csproj",
+        "Action": "Start",
+        "DebugTarget": "Lights.WpfHouse"
+      }
+    ]
+  }
+]

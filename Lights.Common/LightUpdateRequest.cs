@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace LightsAPICommon;
 
-[JsonSerializable(typeof(LightUpdateRequest))]
 public class LightUpdateRequest
 {
     [Required]
@@ -29,6 +28,6 @@ public class LightUpdateRequest
 
 public class PatchRequest
 {
-    public List<LightUpdateRequest> LightUpdates { get; set; }
+     public List<LightUpdateRequest>? LightUpdates { get; set; }
 }
 
