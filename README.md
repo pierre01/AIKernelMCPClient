@@ -1,27 +1,25 @@
 ﻿# AIKernelClient
 
 ## Overview
-This project Shows how to **document a REST API using OpenAPI** so it is friendly and ready **to be understood and directly controlled by an AI model.**
+Ths project shows how to use Semantic Kernel inside a cross platform MAUI application to control a REST API service using OpenAI (ChatGPT) as the AI model.
+Controllig the RestAPI through a MCP protocol enabled server. anf Semantic Kernel MCP plugin on the client side.
 
-In order to:
-- Use domain language to execute commands directly on the API
-- To create Domain related protocols
-- To translate those protocols into Compliant code or scripting language that works.
+## Architecture
+
+![image](ReadMeImages/ArchitectureSimple.png)
+
 ## Goals
-This project intent is to show best practices in documenting an API, its entities, the protocol usage (REST), using standards (OpenAPI).
-In order to enable an AI to understand and communicate most precisely, accurately, with a user.
-IMPORTANT: the AI will make decisions and will call directly functions on the service API. 
+- Create a MCP Server on top of an existing REST API service.
+- Create a MAUI client application that uses Semantic Kernel to interact with an OpenAI model (ChatGPT 5 Mini or Nano) to control the service through prompts.
+- Create A MCP client in the for of a Semantic Kernel plugin that connects to the MCP server.
 
-# Variation in this branch MCP - Model Context Protocol
 We are implementing the Model Control Protocol (MCP) on both the server and client side.
 As the architecture shows, the client application (AIKernelClient) is designed to interact with the AI model, allowing it to send intents and receive actions that can be executed on the service.
 The Client now becomes an MCP Host, and the Server an MCP Server, acting as an intermediary between the client and the service.
 The MCP protocol allows the AI to control the service directly by using intents, actions, and API calls.
 The MCP protocol is enabled on both the server and client side, allowing the AI to control the service directly by using intents, actions, and API calls.
 
-## Architecture
 
-![image](ReadMeImages/ArchitectureSimple.png)
 
 ## Projects
 The Solution is made of **5 C# .net 9.0 projects**
