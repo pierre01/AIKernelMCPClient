@@ -1,4 +1,4 @@
-﻿# AIKernelClient
+﻿# AIKernelMCPClient
 
 ## Overview
 Ths project shows how to use Semantic Kernel inside a cross platform MAUI application to control a REST API service using OpenAI (ChatGPT) as the AI model.
