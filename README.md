@@ -101,6 +101,15 @@ app.Run();
    ![image](ReadMeImages/ProtocolExecution.png)
    ![image](ReadMeImages/CodeGeneration.png)
    
+## Creating a Chat GPT Connector
+To create a Chat GPT connector, you need to Setup a DevTunnel in visual studio then just create a new connector with the devtunnel uri
+
+![image](ReadMeImages/DevTunnel.png)
+
+### Then create and run the connector in Chat GPT
+
+![image](ReadMeImages/MCPConnector.png)
+
 ## Features at Work
 
 1. Create a smart service that can be controlled by a client with autorization.
