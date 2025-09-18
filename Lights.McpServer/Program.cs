@@ -1,13 +1,6 @@
-﻿using Lights.McpServer;
-using LightsAPICommon;
-using LightsAPICommon.Serialization;
-using Microsoft.Extensions.AI;
-using ModelContextProtocol;
-using ModelContextProtocol.Protocol;
+﻿using LightsAPICommon.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 
 internal partial class Program
 {
