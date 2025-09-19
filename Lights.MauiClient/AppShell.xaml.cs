@@ -1,4 +1,4 @@
-﻿namespace AIKernelClient
+﻿namespace Lights.MauiClient
 {
     public partial class AppShell : Shell
     {

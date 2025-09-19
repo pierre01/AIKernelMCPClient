@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace LightsAPICommon;
+namespace Lights.Common;
 
 [Description("A Room where one or more lights are located, The house contains all the rooms and lights in the system")]
 /// <summary>

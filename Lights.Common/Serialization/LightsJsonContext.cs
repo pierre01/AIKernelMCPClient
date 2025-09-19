@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using LightsAPICommon; // where Light is defined
 
-namespace LightsAPICommon.Serialization;
+namespace Lights.Common.Serialization;
 
 // If you prefer Web defaults (camelCase, etc.), add: JsonSourceGenerationOptions(GenerationMode = ...)
 [JsonSerializable(typeof(string[]))]

@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LightsAPICommon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Lights.Common;
 using System.Windows;
 
 namespace WpfHousePassiveClient.ViewModels;

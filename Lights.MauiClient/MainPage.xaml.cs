@@ -1,22 +1,17 @@
-﻿using AIKernelClient.ViewModels;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Media;
-using System.Globalization;
+﻿using Lights.MauiClient.ViewModels;
 
-namespace AIKernelClient
+namespace Lights.MauiClient;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    private MainPageViewModel _viewModel;
+
+
+    public MainPage( MainPageViewModel viewModel)
     {
-        private MainPageViewModel _viewModel;
-
-
-        public MainPage( MainPageViewModel viewModel)
-        {
-            _viewModel = viewModel;
-            BindingContext = _viewModel;
-            InitializeComponent();
-        }
-
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
+        InitializeComponent();
     }
 
 }

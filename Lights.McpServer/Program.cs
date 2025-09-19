@@ -1,4 +1,4 @@
-﻿using LightsAPICommon.Serialization;
+﻿using Lights.Common.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 

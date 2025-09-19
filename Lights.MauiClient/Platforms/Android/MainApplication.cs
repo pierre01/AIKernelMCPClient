@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace AIKernelClient;
+namespace Lights.MauiClient;
 
 [Application]
 public class MainApplication : MauiApplication

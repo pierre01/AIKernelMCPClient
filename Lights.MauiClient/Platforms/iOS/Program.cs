@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace AIKernelClient;
+namespace Lights.MauiClient;
 
 public class Program
 {

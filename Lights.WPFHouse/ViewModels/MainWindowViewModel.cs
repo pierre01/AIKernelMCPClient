@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LightsAPICommon;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Diagnostics;
+using Lights.Common;
 
 namespace WpfHousePassiveClient.ViewModels;
 

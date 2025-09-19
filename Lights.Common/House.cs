@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
-namespace LightsAPICommon;
+namespace Lights.Common;
 
 /// <summary>
 /// Made the class a singleton to ensure only one instance of the house is created

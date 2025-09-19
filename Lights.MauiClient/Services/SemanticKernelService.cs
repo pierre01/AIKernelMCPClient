@@ -1,11 +1,11 @@
-﻿using AIKernelClient.Services.Interfaces;
+﻿using Lights.MauiClient.Services.Interfaces;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using ModelContextProtocol.SemanticKernel.Extensions;
 using System.Diagnostics;
 
-namespace AIKernelClient.Services;
+namespace Lights.MauiClient.Services;
 
 public class SemanticKernelService : ISemanticKernelService
 {

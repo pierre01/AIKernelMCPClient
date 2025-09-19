@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LightsAPICommon;
+using Lights.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

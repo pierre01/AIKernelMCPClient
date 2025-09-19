@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace AIKernelClient;
+namespace Lights.MauiClient;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

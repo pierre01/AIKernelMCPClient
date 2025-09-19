@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace LightsAPICommon;
+namespace Lights.Common;
 
 /// <summary>
 /// Defines the capabilities of a light, such as dimmability and color-changing support.

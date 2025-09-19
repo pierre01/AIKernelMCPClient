@@ -1,12 +1,12 @@
-﻿using AIKernelClient.Services.Interfaces;
+﻿using Lights.MauiClient.Services.Interfaces;
 using CommunityToolkit.Maui.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LightsAPICommon;
+using Lights.Common;
 using System.Globalization;
 
 
-namespace AIKernelClient.ViewModels;
+namespace Lights.MauiClient.ViewModels;
 
 public partial class MainPageViewModel : ObservableObject
 {

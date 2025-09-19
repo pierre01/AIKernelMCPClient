@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace AIKernelClient;
+namespace Lights.MauiClient;
 
 class Program : MauiApplication
 {

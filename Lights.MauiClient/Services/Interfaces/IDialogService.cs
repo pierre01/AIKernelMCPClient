@@ -1,4 +1,4 @@
-﻿namespace AIKernelClient.Services.Interfaces;
+﻿namespace Lights.MauiClient.Services.Interfaces;
 
 public interface IDialogService
 {

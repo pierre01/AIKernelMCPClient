@@ -2,7 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-namespace LightsAPICommon;
+
+namespace Lights.Common;
 
 [Description("A Light linked to a Room can optionally support brightness and color changes")]
 public class Light(int lightId, string name, int roomId, LightState state = LightState.Off, Capabilities capabilities = null, string color = "FFFFFF", int brightness = 100)

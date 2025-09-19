@@ -1,8 +1,8 @@
 ﻿<maui:MauiWinUIApplication
-    x:Class="AIKernelClient.WinUI.App"
+    x:Class="Lights.MauiClient.WinUI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:maui="using:Microsoft.Maui"
-    xmlns:local="using:AIKernelClient.WinUI">
+    xmlns:local="using:Lights.MauiClient.WinUI">
 
 </maui:MauiWinUIApplication>

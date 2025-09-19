@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace LightsAPICommon;
+namespace Lights.Common;
 
 public class UpdateLightResponse(int lightId, string status, string? error)
 {

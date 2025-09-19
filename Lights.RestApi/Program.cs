@@ -1,5 +1,5 @@
-﻿using LightsAPICommon;
-using LightsAPICommon.Serialization;
+﻿using Lights.Common;
+using Lights.Common.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Diagnostics;

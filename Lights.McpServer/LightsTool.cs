@@ -1,5 +1,5 @@
-﻿using LightsAPICommon;
-using LightsAPICommon.Serialization;
+﻿using Lights.Common;
+using Lights.Common.Serialization;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace LightsAPICommon;
+namespace Lights.Common;
 
 [Description("Response to a batch update request for multiple lights.")]
 public class PatchResponse

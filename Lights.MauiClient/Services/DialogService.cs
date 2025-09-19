@@ -1,9 +1,9 @@
-﻿using AIKernelClient.Services.Interfaces;
+﻿using Lights.MauiClient.Services.Interfaces;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 
 
-namespace AIKernelClient.Services;
+namespace Lights.MauiClient.Services;
 
 public class DialogService : IDialogService
 {

@@ -1,11 +1,11 @@
-﻿using AIKernelClient.Services;
-using AIKernelClient.Services.Interfaces;
-using AIKernelClient.ViewModels;
+﻿using Lights.MauiClient.Services;
+using Lights.MauiClient.Services.Interfaces;
+using Lights.MauiClient.ViewModels;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Media;
 using Microsoft.Extensions.Logging;
 
-namespace AIKernelClient;
+namespace Lights.MauiClient;
 
 public static class MauiProgram
 {
