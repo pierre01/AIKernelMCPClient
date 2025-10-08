@@ -3,7 +3,7 @@
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "lights",
+      "launchUrl": "mcp",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

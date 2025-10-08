@@ -66,7 +66,7 @@ public class SemanticKernelService : ISemanticKernelService
             _openAIPromptExecutionSettings = new()
             {
                 //ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
-                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(options: new() { RetainArgumentTypes = true, AllowStrictSchemaAdherence =true }),
+                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(options: new() { RetainArgumentTypes = true }),
                 Temperature = 1,
                 FrequencyPenalty = 0.0,
                 PresencePenalty = 0.0,
@@ -87,7 +87,7 @@ public class SemanticKernelService : ISemanticKernelService
             }
             else
             {
-                // No arguments needed for our Program.cs (it just speaks MCP over stdio)
+                // Not Supported anymore I switched to SSE by default
                 var p = await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
                     serverName: "Lights.McpServer",
                     command: McpExe,
