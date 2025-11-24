@@ -12,10 +12,7 @@ Execute steps below sequentially one by one in the order they are listed.
 6. Upgrade Lights.McpServer\Lights.McpServer.csproj
 7. Upgrade Lights.MauiClient\Lights.MauiClient.csproj
 
-
 ## Settings
-
-This section contains settings and data used by execution steps.
 
 ### Excluded projects
 
@@ -29,47 +26,37 @@ Table below contains projects that do belong to the dependency graph for selecte
 
 NuGet packages used across all selected projects or their dependencies that need version update in projects that reference them.
 
-| Package Name                                    | Current Version                         | New Version  | Description                                   |
-|:------------------------------------------------|:---------------------------------------:|:------------:|:----------------------------------------------|
-| Microsoft.AspNetCore.OpenApi                    | 9.0.9                                   | 10.0.0       | Replace with Microsoft.AspNetCore.OpenApi 10.0.0 for .NET 10.0 |
-| Microsoft.Extensions.ApiDescription.Server      | 9.0.9                                   | 10.0.0       | Replace with Microsoft.Extensions.ApiDescription.Server 10.0.0 for .NET 10.0 |
-| Microsoft.Extensions.Logging.Debug              | 10.0.0-preview.1.25080.5                | 10.0.0       | Update pre-release logging package to stable 10.0.0 |
-
+| Package Name                                | Current Version                       | New Version | Description                                   |
+|:--------------------------------------------|:--------------------------------------:|:-----------:|:----------------------------------------------|
+| Microsoft.AspNetCore.OpenApi                | 9.0.9                                 | 10.0.0      | Update recommended for .NET 10.0               |
+| Microsoft.Extensions.ApiDescription.Server  | 9.0.9                                 | 10.0.0      | Update recommended for .NET 10.0               |
+| Microsoft.Extensions.Logging.Debug          | 10.0.0-preview.1.25080.5              | 10.0.0      | Preview package: update to stable 10.0.0       |
 
 ### Project upgrade details
-This section contains details about each project upgrade and modifications that need to be done in the project.
 
-#### Lights.Common\Lights.Common.csproj modifications
+#### Lights.Common modifications
 
 Project properties changes:
   - Target framework should be changed from `net9.0` to `net10.0`
 
 NuGet packages changes:
-  - None detected for this project in analysis results.
-
-Feature upgrades:
-  - None identified.
+  - No NuGet package changes required by analysis for this project.
 
 Other changes:
-  - Ensure code compiles against .NET 10.0 and address any API breaking changes reported by the compiler.
+  - Verify code for any API breaking changes after target framework update.
 
-
-#### Lights.WPFHouse\Lights.WpfHouse.csproj modifications
+#### Lights.WPFHouse modifications
 
 Project properties changes:
   - Target framework should be changed from `net9.0-windows` to `net10.0-windows`
 
 NuGet packages changes:
-  - None detected for this project in analysis results.
-
-Feature upgrades:
-  - Verify any Windows-specific APIs and SDK requirements for .NET 10.0-windows.
+  - No NuGet package changes required by analysis for this project.
 
 Other changes:
-  - Ensure the project's RuntimeIdentifier/TargetFramework settings align with .NET 10.0-windows requirements.
+  - Verify WPF-specific APIs and Windows SDK targeting after upgrade.
 
-
-#### Lights.RestApi\Lights.RestApi.csproj modifications
+#### Lights.RestApi modifications
 
 Project properties changes:
   - Target framework should be changed from `net9.0` to `net10.0`
@@ -78,41 +65,27 @@ NuGet packages changes:
   - `Microsoft.AspNetCore.OpenApi` should be updated from `9.0.9` to `10.0.0`.
   - `Microsoft.Extensions.ApiDescription.Server` should be updated from `9.0.9` to `10.0.0`.
 
-Feature upgrades:
-  - Review OpenAPI/Swagger integration for any package API changes in the 10.0 packages.
-
 Other changes:
-  - Run the project build and fix any compilation or runtime issues introduced by package or framework changes.
+  - Verify OpenAPI and API description integration after package updates.
 
-
-#### Lights.McpServer\Lights.McpServer.csproj modifications
+#### Lights.McpServer modifications
 
 Project properties changes:
   - Target framework should be changed from `net9.0` to `net10.0`
 
 NuGet packages changes:
-  - None detected for this project in analysis results.
-
-Feature upgrades:
-  - None identified.
+  - No NuGet package changes required by analysis for this project.
 
 Other changes:
-  - Ensure server project builds and tests (if any) pass under .NET 10.0.
+  - Verify any runtime or hosting changes for Kestrel and middleware.
 
-
-#### Lights.MauiClient\Lights.MauiClient.csproj modifications
+#### Lights.MauiClient modifications
 
 Project properties changes:
-  - Project currently targets `net9.0-android;net9.0-ios;net9.0-maccatalyst;net9.0-windows10.0.19041.0`.
-  - Add `net10.0-windows` to the target frameworks so it becomes: `net9.0-android;net9.0-ios;net9.0-maccatalyst;net9.0-windows10.0.19041.0;net10.0-windows`
+  - Target frameworks should be changed from `net9.0-android;net9.0-ios;net9.0-maccatalyst;net9.0-windows10.0.19041.0` to `net9.0-android;net9.0-ios;net9.0-maccatalyst;net9.0-windows10.0.19041.0;net10.0-windows` (add `net10.0-windows` target)
 
 NuGet packages changes:
   - `Microsoft.Extensions.Logging.Debug` should be updated from `10.0.0-preview.1.25080.5` to `10.0.0`.
 
-Feature upgrades:
-  - Verify .NET MAUI compatibility with .NET 10.0 for the platforms targeted. Address any breaking changes noted in MAUI dependencies.
-
 Other changes:
-  - Validate MAUI resource dictionaries and platform-specific settings after the target framework update.
-
-
+  - Verify MAUI platform support for `net10.0-windows` and fix any AOT or platform-specific issues.
