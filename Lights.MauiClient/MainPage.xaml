@@ -6,8 +6,7 @@
     xmlns:vm="clr-namespace:Lights.MauiClient.ViewModels"
     x:DataType="vm:MainPageViewModel">
 
-
-    <Grid
+   <Grid
         Padding="8"
         ColumnDefinitions="Auto,*,Auto"
         RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
@@ -80,7 +79,7 @@
             Grid.Row="4"
             Grid.ColumnSpan="3"
             ColumnDefinitions="Auto,Auto,Auto,*"
-            RowDefinitions="Auto,Auto">
+            RowDefinitions="Auto,Auto,Auto">
 
             <Label
                 Grid.Column="0"
@@ -144,6 +143,41 @@
                 HorizontalOptions="Start"
                 Text="{Binding TotalTokens, StringFormat='{}{0:0,0} tokens'}"
                 VerticalOptions="Center" />
+
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="8,0,0,4"
+                FontSize="14"
+                HorizontalOptions="Start"
+                Text="Time:"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="8,0,0,4"
+                FontSize="14"
+                HorizontalOptions="Start"
+                Text="{Binding GenerationMilliseconds, StringFormat='{}{0:0,0} ms'}"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="2"
+                Margin="32,0,0,4"
+                FontSize="14"
+                HorizontalOptions="Start"
+                Text="Pipeline Tokens/Sec:"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="3"
+                Margin="8,0,0,4"
+                FontAttributes="Bold"
+                FontSize="14"
+                HorizontalOptions="Start"
+                Text="{Binding TokensPerSecond, StringFormat='{}{0:0,0.0} t/s'}"
+                VerticalOptions="Center" />
+
 
         </Grid>
         <ScrollView Grid.Row="5" Grid.ColumnSpan="3">

@@ -20,4 +20,12 @@ public class KernelPluginResult
     public int OutputTokens { get; set; }
     public int TotalTokens { get; set; }
     public int RequestTokens { get; set; }
+
+    /// <summary>
+    /// Pipeline TPS (Tokens Per Second)
+    /// Note: This is different from LLM TPS
+    /// </summary>
+    public double PipelineTokensPerSecond { get; set; }
+    public long GenerationMilliseconds { get; set; }
+
 }

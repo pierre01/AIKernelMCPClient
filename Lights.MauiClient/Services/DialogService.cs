@@ -10,21 +10,21 @@ public class DialogService : IDialogService
     public async Task<bool> ShowAlert(string title, string message, string accept, string cancel)
     {
         var page = Shell.Current.CurrentPage;
-        bool answer = await page.DisplayAlert(title, message, accept, cancel);
+        bool answer = await page.DisplayAlertAsync(title, message, accept, cancel);
         return answer;
     }
 
-    public async Task ShowAlert(string title, string message,  string cancel)
+    public async Task ShowAlert(string title, string message, string cancel)
     {
         var page = Shell.Current.CurrentPage;
-        await page.DisplayAlert(title, message,cancel,FlowDirection.MatchParent);
+        await page.DisplayAlertAsync(title, message, cancel, FlowDirection.MatchParent);
     }
 
     public async Task ShowToast(string message)
     {
 #if WINDOWS
         var page = Shell.Current.CurrentPage;
-        await page.DisplayAlert("", message, "OK");
+        await page.DisplayAlertAsync("", message, "OK");
 #else
         CancellationTokenSource cancellationTokenSource = new();
         ToastDuration duration = ToastDuration.Long;

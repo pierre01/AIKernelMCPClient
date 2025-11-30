@@ -53,6 +53,11 @@ public partial class MainPageViewModel : ObservableObject
 
     [ObservableProperty]
     public partial int OutputTokens { get; set; }
+    [ObservableProperty]
+    public partial double TokensPerSecond { get; set; }
+
+    [ObservableProperty]
+    public partial long GenerationMilliseconds { get; set; }
 
     [ObservableProperty]
     public partial string ButtonImage { get; set; } = "microphone_off.png";
@@ -153,6 +158,8 @@ public partial class MainPageViewModel : ObservableObject
             RequestTokens = result.RequestTokens;
             InputTokens = result.InputTokens;
             OutputTokens = result.OutputTokens;
+            TokensPerSecond = result.PipelineTokensPerSecond;
+            GenerationMilliseconds = result.GenerationMilliseconds;
         }
         else
         {
@@ -160,5 +167,6 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 }
+
 
 
