@@ -11,7 +11,7 @@ namespace Lights.MauiClient.Services;
 public class SemanticKernelService : ISemanticKernelService
 {
     // ===== OpenAI chat model config =====
-    private const string chatModel = "gpt-5-nano";
+    private const string chatModel = "gpt-5-mini";
 
     // ===== MCP transport config (override via env vars) =====
     // MCP_MODE: "STDIO" (default) or "WS"
@@ -36,16 +36,38 @@ public class SemanticKernelService : ISemanticKernelService
     public async Task InitializeKernelAndPluginAsync()
     {
         try
-        {        
+        {
             _history = [];
+            _history.AddSystemMessage("""
+You are Lights' local copilot, helping Pierre control his lights and environment and answer questions.
 
-            _reducer = new ChatHistoryTruncationReducer(targetCount: 4, thresholdCount: 6);
+GENERAL BEHAVIOR
+- Talk to the user in normal, natural language.
+- You can explain what you are doing, think step by step, and be conversational.
+- Use MCP tools only when they are genuinely helpful (for example to inspect or change lights).
+
+TOOL USE MODE (IMPORTANT)
+When you decide that a tool should be used in a turn:
+
+1. Do NOT talk to the user in that same turn.
+2. Instead, return only a tool call with strict, valid JSON arguments that match the tool schema.
+3. Do NOT include any explanations, comments, or other text inside the tool call.
+4. Do NOT add phrases like "Wait function...", "We can iterate", or any similar commentary.
+5. Do NOT wrap the JSON in markdown, backticks, XML-ish tags, or special markers.
+
+After the tool has been run and its result is available, you may send a new assistant message in normal language that explains the result to the user.
+
+If you are not calling a tool in a given turn, just answer the user in natural language and do not emit any tool calls.
+""");
+
+
+            _reducer = new ChatHistoryTruncationReducer(targetCount: 30, thresholdCount: 40);
 
             // If you keep cloud as an option, set useLocal = true/false to toggle
             var useLocal = true;
-_builder = Kernel.CreateBuilder();
+            _builder = Kernel.CreateBuilder();
 
-            string serviceID = "LocalGPT";
+            string serviceID = "";
             if (!useLocal)
             {
                 serviceID = "RemoteGPT"; //Use OpenAI API
@@ -102,8 +124,12 @@ _builder = Kernel.CreateBuilder();
                 // This is the key line – lets the model pick functions
                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
 
-                MaxTokens = 4096
+                MaxTokens = 1024
             };
+
+            //_openAIPromptExecutionSettings.ResponseFormat =
+            //    OpenAIChatResponseFormat.JsonObject;
+
 
             _kernel = _builder.Build();
 
@@ -167,11 +193,6 @@ _builder = Kernel.CreateBuilder();
                 return response;
             }
 
-            _history.AddUserMessage(prompt);
-
-            // If you want trimming, uncomment to apply reducer:
-            // var reduced = await _reducer.ReduceAsync(_history);
-            // if (reduced is not null) _history = new ChatHistory(reduced);
 
             if (_chatCompletionService is null)
             {
@@ -180,9 +201,13 @@ _builder = Kernel.CreateBuilder();
                 return response;
             }
 
+
+            _history.AddUserMessage(prompt);
+
+
             var stopwatch = Stopwatch.StartNew();
 
-            ChatMessageContent result = await _chatCompletionService.GetChatMessageContentAsync(
+            var result = await _chatCompletionService.GetChatMessageContentAsync(
                 _history,
                 executionSettings: _openAIPromptExecutionSettings,
                 kernel: _kernel);
@@ -202,6 +227,9 @@ _builder = Kernel.CreateBuilder();
                 result.Metadata.TryGetValue("Usage", out var usageObj) &&
                 usageObj is OpenAI.Chat.ChatTokenUsage usage)
             {
+                //if (_lastTotalTokens==0)
+                //    _history.AddAssistantMessage(result.Content ?? result.ToString());
+
                 var totalTokens = usage.TotalTokenCount;
                 var inputTokens = usage.InputTokenCount - _lastTotalTokens;
                 _lastTotalTokens = usage.InputTokenCount;
@@ -221,6 +249,11 @@ _builder = Kernel.CreateBuilder();
                     response.PipelineTokensPerSecond =
                         (outputTokens + inputTokens) / (llmTimeMs / 1000.0);
                 }
+
+                // If you want trimming, uncomment to apply reducer:
+                var reduced = await _reducer.ReduceAsync(_history);
+                if (reduced is not null) _history = [.. reduced];
+
             }
 
             response.IsSuccess = true;

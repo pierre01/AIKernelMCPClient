@@ -20,6 +20,7 @@ public class House
 
     public static string[] CustomPrompts { get; private set; } =
         [
+                "Get all the Rooms, Get all the Lights, get all the floors",
                 "Turn all the living room lights on.",
                 "Switch all the lights in the Kitchen on, as well as the office lights, then change them to a medium intensity",
                 "Change the kitchen lights color to a value similar to a 2000K bulb",
