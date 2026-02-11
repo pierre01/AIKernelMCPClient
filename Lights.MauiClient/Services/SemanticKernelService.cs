@@ -20,7 +20,8 @@ public class SemanticKernelService : ISemanticKernelService
     private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "SSE"; // SSE Or STDIO
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
                                             ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
-    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "https://localhost:3001/mcp/";  //"ws://localhost:3001/mcp/"
+    // When using WS/SSE transport (websocket), set the MCP server URL here
+    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "https://localhost:5042/mcp/";  //"ws://localhost:3001/mcp/"
 
     private ChatHistory _history;
     private IKernelBuilder _builder;
@@ -38,33 +39,33 @@ public class SemanticKernelService : ISemanticKernelService
         try
         {
             _history = [];
-            _history.AddSystemMessage("""
-You are Lights' local copilot, helping Pierre control his lights and environment and answer questions.
+//            _history.AddSystemMessage("""
+//You are Lights' local copilot, helping Pierre control his lights and environment and answer questions.
 
-GENERAL BEHAVIOR
-- Talk to the user in normal, natural language.
-- You can explain what you are doing, think step by step, and be conversational.
-- Use MCP tools only when they are genuinely helpful (for example to inspect or change lights).
+//GENERAL BEHAVIOR
+//- Talk to the user in normal, natural language.
+//- You can explain what you are doing, think step by step, and be conversational.
+//- Use MCP tools only when they are genuinely helpful (for example to inspect or change lights).
 
-TOOL USE MODE (IMPORTANT)
-When you decide that a tool should be used in a turn:
+//TOOL USE MODE (IMPORTANT)
+//When you decide that a tool should be used in a turn:
 
-1. Do NOT talk to the user in that same turn.
-2. Instead, return only a tool call with strict, valid JSON arguments that match the tool schema.
-3. Do NOT include any explanations, comments, or other text inside the tool call.
-4. Do NOT add phrases like "Wait function...", "We can iterate", or any similar commentary.
-5. Do NOT wrap the JSON in markdown, backticks, XML-ish tags, or special markers.
+//1. Do NOT talk to the user in that same turn.
+//2. Instead, return only a tool call with strict, valid JSON arguments that match the tool schema.
+//3. Do NOT include any explanations, comments, or other text inside the tool call.
+//4. Do NOT add phrases like "Wait function...", "We can iterate", or any similar commentary.
+//5. Do NOT wrap the JSON in markdown, backticks, XML-ish tags, or special markers.
 
-After the tool has been run and its result is available, you may send a new assistant message in normal language that explains the result to the user.
+//After the tool has been run and its result is available, you may send a new assistant message in normal language that explains the result to the user.
 
-If you are not calling a tool in a given turn, just answer the user in natural language and do not emit any tool calls.
-""");
+//If you are not calling a tool in a given turn, just answer the user in natural language and do not emit any tool calls.
+//""");
 
 
             _reducer = new ChatHistoryTruncationReducer(targetCount: 30, thresholdCount: 40);
 
             // If you keep cloud as an option, set useLocal = true/false to toggle
-            var useLocal = true;
+            var useLocal = false;
             _builder = Kernel.CreateBuilder();
 
             string serviceID = "";

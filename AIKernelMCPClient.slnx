@@ -7,7 +7,6 @@
   <Project Path="Lights.MauiClient/Lights.MauiClient.csproj">
     <Deploy Solution="Debug|*" />
   </Project>
-  <Project Path="Lights.McpServer/Lights.McpServer.csproj" />
   <Project Path="Lights.RestApi/Lights.RestApi.csproj" />
   <Project Path="Lights.WPFHouse/Lights.WpfHouse.csproj" />
 </Solution>
