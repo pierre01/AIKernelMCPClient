@@ -4,7 +4,11 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using ModelContextProtocol.SemanticKernel.Extensions;
 using System.Diagnostics;
+using System;
+using System.Net;
+using System.Net.Http;
 using System.Net.Security;
+using System.Text.Json;
 
 namespace Lights.MauiClient.Services;
 
@@ -12,6 +16,9 @@ public class SemanticKernelService : ISemanticKernelService
 {
     // ===== OpenAI chat model config =====
     private const string chatModel = "gpt-5-mini";
+
+    // Stable session id required by MCP SSE server
+    private readonly string _mcpSessionId = Guid.NewGuid().ToString();
 
     // ===== MCP transport config (override via env vars) =====
     // MCP_MODE: "STDIO" (default) or "WS"
@@ -21,7 +28,7 @@ public class SemanticKernelService : ISemanticKernelService
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
                                             ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
     // When using WS/SSE transport (websocket), set the MCP server URL here
-    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "https://localhost:5042/mcp/";  //"ws://localhost:3001/mcp/"
+    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "https://localhost:5042/mcp/sse";  //"ws://localhost:3001/mcp/"
 
     private ChatHistory _history;
     private IKernelBuilder _builder;
@@ -65,7 +72,7 @@ public class SemanticKernelService : ISemanticKernelService
             _reducer = new ChatHistoryTruncationReducer(targetCount: 30, thresholdCount: 40);
 
             // If you keep cloud as an option, set useLocal = true/false to toggle
-            var useLocal = false;
+            var useLocal = true;
             _builder = Kernel.CreateBuilder();
 
             string serviceID = "";
@@ -119,7 +126,7 @@ public class SemanticKernelService : ISemanticKernelService
             }
 
             // Let the model auto-invoke MCP tools when helpful
-            _openAIPromptExecutionSettings = new()
+             _openAIPromptExecutionSettings = new()
             {
                 Temperature = 1,
                 // This is the key line – lets the model pick functions
@@ -139,10 +146,24 @@ public class SemanticKernelService : ISemanticKernelService
             if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
             {
                 // Default: start the MCP server locally via SSE and bind its tools
-                // Connect to a running http  server 
+                // Connect to a running http server
+                var mcpHttpClient = new HttpClient(new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (req, cert, chain, errors) =>
+                    {
+                        if (cert?.Subject?.Contains("CN=localhost", StringComparison.OrdinalIgnoreCase) == true)
+                            return true;
+
+                        return errors == SslPolicyErrors.None;
+                    }
+                });
+
+                mcpHttpClient.DefaultRequestHeaders.Add("Mcp-Session-Id", _mcpSessionId);
+
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
                     serverName: "Lights.McpServer",
-                     endpoint: McpWsUrl);
+                    endpoint: McpWsUrl,
+                    httpClient: mcpHttpClient);
             }
             else
             {

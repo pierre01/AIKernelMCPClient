@@ -16,7 +16,6 @@ internal partial class Program
     [GeneratedRegex("^[0-9A-Fa-f]{6}$")]
     private static partial Regex ColorRegex();
 
-
      private static void Main(string[] args)
     {
         var builder = WebApplication.CreateSlimBuilder(args);
