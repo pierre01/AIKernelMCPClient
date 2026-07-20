@@ -10,7 +10,6 @@ Controllig the RestAPI through a MCP protocol enabled server. and Semantic Kerne
 
 ## Goals
 - **Demonstrate how to use the official C# SDK for the Model Context Protocol**, enabling .NET applications, services, and libraries to implement and interact with MCP clients and servers.
-- Create a MCP Server on top of an existing REST API service.
 - Create a MAUI client application that uses Semantic Kernel to interact with an OpenAI model (ChatGPT 5 Mini or Nano) to control the service through prompts.
 - Create A MCP client in the form of a Semantic Kernel plugin that connects to the MCP server.
 - Show how to create basic authentication between the MCP client and server (in branch).
@@ -22,7 +21,7 @@ The MCP protocol allows the AI to control the service directly by using intents,
 The MCP protocol is enabled on both the server and client side, allowing the AI to control the service directly by using intents, actions, and API calls.
 
 ## Projects
-The Solution is made of **5 C# .net 9.0 projects**
+The Solution is made of **4 C# .net 10.0 projects**
 1. **Lights.RestApi:** The REST web service (Minimal API endpoints with OpenAPI generated definintion) **Is the service we want the AI to control** 
 
 2. **Lights.MauiClient:** The controller application  **talking to the AI**: a cross platform **MAUI** (Multi platform) application that controls the service through prompts Using Semantic Kernel with a connector to OpenAI (Chat GPT 5 Mini or nano) it relays service calls from the AI.
