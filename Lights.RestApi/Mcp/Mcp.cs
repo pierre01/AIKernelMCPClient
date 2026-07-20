@@ -1,7 +1,6 @@
 ﻿using ModelContextProtocol.Protocol;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace Lights.RestApi.Mcp;
 internal static class Mcp
@@ -15,7 +14,7 @@ internal static class Mcp
     {
         var r = new CallToolResult { IsError = false };
 
-        r.StructuredContent = JsonNode.Parse(JsonSerializer.Serialize(value, json));
+        r.StructuredContent = JsonSerializer.SerializeToElement(value, json);
 
         if (!string.IsNullOrWhiteSpace(message))
             r.Content.Add(new TextContentBlock { Text = message });
@@ -34,7 +33,7 @@ internal static class Mcp
 
         r.Content.Add(new TextContentBlock { Text = message });
 
-        r.StructuredContent = JsonNode.Parse(JsonSerializer.Serialize(new
+        r.StructuredContent = JsonSerializer.SerializeToElement(new
         {
             error = new
             {
@@ -42,7 +41,7 @@ internal static class Mcp
                 message,
                 details
             }
-        }));
+        });
 
         return r;
     }

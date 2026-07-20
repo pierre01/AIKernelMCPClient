@@ -2,6 +2,7 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using ModelContextProtocol.Client;
 using ModelContextProtocol.SemanticKernel.Extensions;
 using System.Diagnostics;
 using System;
@@ -17,18 +18,15 @@ public class SemanticKernelService : ISemanticKernelService
     // ===== OpenAI chat model config =====
     private const string chatModel = "gpt-5-mini";
 
-    // Stable session id required by MCP SSE server
-    private readonly string _mcpSessionId = Guid.NewGuid().ToString();
-
     // ===== MCP transport config (override via env vars) =====
-    // MCP_MODE: "STDIO" (default) or "WS"
+    // MCP_MODE: "HTTP" (default) or "STDIO"
     // MCP_EXE:  full path to Lights.McpServer.exe (when STDIO)
-    // MCP_WS_URL: ws://localhost:5059/mcp (when WS)
-    private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "SSE"; // SSE Or STDIO
+    // MCP_HTTP_URL: Streamable HTTP endpoint exposed by Lights.RestApi
+    private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "HTTP";
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
                                             ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
-    // When using WS/SSE transport (websocket), set the MCP server URL here
-    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "https://localhost:5042/mcp/sse";  //"ws://localhost:3001/mcp/"
+    private static readonly string McpHttpUrl = Environment.GetEnvironmentVariable("MCP_HTTP_URL")
+                                                ?? "https://localhost:5042/mcp";
 
     private ChatHistory _history;
     private IKernelBuilder _builder;
@@ -116,7 +114,7 @@ public class SemanticKernelService : ISemanticKernelService
                 // Register the local vLLM endpoint with Semantic Kernel
                 _builder.AddOpenAIChatCompletion(
                     apiKey: "local-key",
-                    modelId: "openai/gpt-oss-20b",            // must match --served-model-name
+                    modelId: "qwen/qwen3.6-35b-a3b",            // must match --served-model-name
                     orgId: null,
                     serviceId: serviceID,
                     httpClient: httpsClient
@@ -126,14 +124,23 @@ public class SemanticKernelService : ISemanticKernelService
             }
 
             // Let the model auto-invoke MCP tools when helpful
-             _openAIPromptExecutionSettings = new()
+#pragma warning disable SKEXP0010 // ExtraBody is required for Qwen's enable_thinking option.
+            _openAIPromptExecutionSettings = new()
             {
                 Temperature = 1,
                 // This is the key line – lets the model pick functions
                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
 
-                MaxTokens = 1024
+                MaxTokens = 4096,
+
+                // Qwen otherwise spends the full completion budget reasoning about
+                // tool arguments instead of emitting the tool call.
+                ExtraBody = new Dictionary<string, object>
+                {
+                    ["enable_thinking"] = false
+                }
             };
+#pragma warning restore SKEXP0010
 
             //_openAIPromptExecutionSettings.ResponseFormat =
             //    OpenAIChatResponseFormat.JsonObject;
@@ -143,10 +150,9 @@ public class SemanticKernelService : ISemanticKernelService
 
 
             // ===== Attach MCP tools (choose transport by env) =====
-            if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(McpMode, "HTTP", StringComparison.OrdinalIgnoreCase))
             {
-                // Default: start the MCP server locally via SSE and bind its tools
-                // Connect to a running http server
+                // Connect to the REST API's MCP Streamable HTTP endpoint.
                 var mcpHttpClient = new HttpClient(new HttpClientHandler
                 {
                     ServerCertificateCustomValidationCallback = (req, cert, chain, errors) =>
@@ -158,17 +164,18 @@ public class SemanticKernelService : ISemanticKernelService
                     }
                 });
 
-                mcpHttpClient.DefaultRequestHeaders.Add("Mcp-Session-Id", _mcpSessionId);
-
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
-                    serverName: "Lights.McpServer",
-                    endpoint: McpWsUrl,
+                    options =>
+                    {
+                        options.Name = "Lights.McpServer";
+                        options.Endpoint = new Uri(McpHttpUrl);
+                        options.TransportMode = HttpTransportMode.StreamableHttp;
+                    },
                     httpClient: mcpHttpClient);
             }
             else
             {
-                // Not Supported anymore I switched to SSE by default
-                var p = await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
+                await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
                     serverName: "Lights.McpServer",
                     command: McpExe,
                     arguments: Array.Empty<string>());
@@ -198,7 +205,7 @@ public class SemanticKernelService : ISemanticKernelService
     /// </summary>
     public async Task<KernelPluginResult> GetResponseAsync(string prompt)
     {
-        var response = new KernelPluginResult();
+         var response = new KernelPluginResult();
         try
         {
             if (string.IsNullOrWhiteSpace(prompt))

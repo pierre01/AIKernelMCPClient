@@ -45,68 +45,72 @@ public static partial class LightsMcpTools
         return AllLights.Where(l => roomsOnFloor.Contains(l.RoomId)).ToList();
     }
 
-    [McpServerTool, Description("Batch update multiple lights with new states, colors, or brightness")]
-    public static PatchResponse UpdateLights([Description("Batch of light updates")] PatchRequest request)
+    [McpServerTool, Description("Apply the same state, brightness, and/or color change to multiple lights")]
+    public static PatchResponse UpdateLights(
+        [Description("IDs of the lights to update")] int[] lightIds,
+        [Description("Optional state: On or Off")] string? state = null,
+        [Description("Optional brightness from 0 to 100")] int? brightness = null,
+        [Description("Optional six-digit RRGGBB color")] string? color = null)
     {
-        if (request?.LightUpdates == null || request.LightUpdates.Count == 0)
+        if (lightIds == null || lightIds.Length == 0)
             return new PatchResponse(Array.Empty<UpdateLightResponse>());
 
         var results = new List<UpdateLightResponse>();
 
-        foreach (var lightUpdate in request.LightUpdates)
+        foreach (var lightId in lightIds.Distinct())
         {
-            var light = AllLights.FirstOrDefault(l => l.LightId == lightUpdate.LightId);
+            var light = AllLights.FirstOrDefault(l => l.LightId == lightId);
             if (light == null)
             {
-                results.Add(new UpdateLightResponse(lightUpdate.LightId, "failed", "Light not found"));
+                results.Add(new UpdateLightResponse(lightId, "failed", "Light not found"));
                 continue;
             }
 
             var errors = new List<string>();
             var partial = false;
 
-            if (lightUpdate.Brightness.HasValue)
+            if (brightness.HasValue)
             {
                 if (!light.Capabilities.IsDimmable)
                 {
                     partial = true;
                     errors.Add("This light does not support Brightness changes (IsDimmable = false)");
                 }
-                else if (lightUpdate.Brightness.Value is < 0 or > 100)
+                else if (brightness.Value is < 0 or > 100)
                 {
                     partial = true;
                     errors.Add("Brightness value must be between 0 and 100");
                 }
-                else light.Brightness = lightUpdate.Brightness.Value;
+                else light.Brightness = brightness.Value;
             }
 
-            if (!string.IsNullOrEmpty(lightUpdate.Color))
+            if (!string.IsNullOrEmpty(color))
             {
                 if (!light.Capabilities.CanChangeColor)
                 {
                     partial = true;
                     errors.Add("Color cannot be changed");
                 }
-                else if (!ColorRegex().IsMatch(lightUpdate.Color))
+                else if (!ColorRegex().IsMatch(color))
                 {
                     partial = true;
-                    errors.Add($"Request Color invalid format:({lightUpdate.Color}). Must be in the format 'RRGGBB'");
+                    errors.Add($"Request Color invalid format:({color}). Must be in the format 'RRGGBB'");
                 }
-                else light.Color = lightUpdate.Color;
+                else light.Color = color;
             }
 
-            if (!string.IsNullOrEmpty(lightUpdate.State))
+            if (!string.IsNullOrEmpty(state))
             {
-                if (!Enum.TryParse<LightState>(lightUpdate.State, true, out var newState))
+                if (!Enum.TryParse<LightState>(state, true, out var newState))
                 {
                     partial = true;
-                    errors.Add($"{lightUpdate.State} is an invalid State. Use 'On' or 'Off'");
+                    errors.Add($"{state} is an invalid State. Use 'On' or 'Off'");
                 }
                 else light.State = newState;
             }
 
             results.Add(new UpdateLightResponse(
-                lightUpdate.LightId,
+                lightId,
                 partial ? "partial" : "success",
                 partial ? string.Join("; ", errors) : null));
         }

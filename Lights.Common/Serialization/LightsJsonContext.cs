@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Lights.Common.Serialization;
 
-// If you prefer Web defaults (camelCase, etc.), add: JsonSourceGenerationOptions(GenerationMode = ...)
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(string[]))]
 [JsonSerializable(typeof(int[]))]
 [JsonSerializable(typeof(List<Light>))]
