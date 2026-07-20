@@ -1,55 +1,62 @@
 ﻿using Lights.Common;
 using Lights.Common.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using ModelContextProtocol;
+using ModelContextProtocol.AspNetCore;   // MapMcp extension
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text.Json.Serialization;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text.RegularExpressions;
+
+// ...
 
 internal partial class Program
 {
     [GeneratedRegex("^[0-9A-Fa-f]{6}$")]
     private static partial Regex ColorRegex();
 
-    private static void Main(string[] args)
+     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateSlimBuilder(args);
 
-        // Configure Kestrel to use HTTPS
+        // existing Kestrel + OpenAPI + HttpJsonOptions...
         builder.WebHost.ConfigureKestrel(options =>
         {
             options.ListenAnyIP(5042, listenOptions =>
             {
-                listenOptions.UseHttps(); // HTTPS
+                listenOptions.UseHttps();
             });
         });
 
-        builder.Services.AddOpenApi(); // documentName =v1
+        builder.Services.AddOpenApi();
 
         builder.Services.ConfigureHttpJsonOptions(options =>
         {
             options.SerializerOptions.TypeInfoResolverChain.Insert(0, LightsJsonContext.Default);
         });
 
+        // 1) MCP: create serializer options used specifically for tool IO
+        //    (keep your source-gen context first in the resolver chain)
+        var toolSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        toolSerializerOptions.TypeInfoResolverChain.Insert(0, LightsJsonContext.Default);
+
+        // 2) MCP: register server + HTTP transport + tools from this assembly
+        builder.Services.AddMcpServer()
+            .WithHttpTransport()
+            .WithToolsFromAssembly(serializerOptions: toolSerializerOptions);
+
         var app = builder.Build();
+
+        // existing OpenAPI mapping
         app.MapOpenApi("/openapi/{documentName}/openapi.json");
 
+        // 3) MCP: map endpoints under /mcp
+        // This mounts the MCP transport endpoints with the prefix you want.
+        app.MapMcp(pattern: "/mcp");
         var allLights = House.Instance.Lights;
         var allRooms = House.Instance.Rooms;
 
-        //var houseApi = app.MapGroup("/house");
-        //houseApi.WithTags(["Rooms", "Lights", "House", "Floors"]);
-
-        //// GET /house (Retrieve the entire house structure)
-        //houseApi.MapGet("/", () =>
-        //{
-        //    Debug.WriteLine(">> Get House -> GetHouse");
-        //    return Results.Ok(House.Instance);
-        //})
-        //.Produces<House>(200)
-        //.WithName("GetHouse")
-        //.WithSummary("Retrieve the entire house structure including Lights, the Rooms they are in, and The Floor floors, and lights")
-        //.WithDescription("Returns all the lights and for each Light the Room it is located in as well as its floor in the house. Remember this information as it remains unchanged during the session to optimize future queries");
 
         var roomsApi = app.MapGroup("/rooms");
         roomsApi.WithTags("Rooms");
@@ -111,13 +118,13 @@ internal partial class Program
             Debug.WriteLine($">> Get all lights for floor#{floor} -> GetLightsOnFloor");
             // Get all the rooms on the floor
             var roomsOnFloor = allRooms.Where(r => r.Floor == floor).Select(r => r.RoomId).ToList();
-            if(roomsOnFloor==null || roomsOnFloor.Count == 0)
+            if (roomsOnFloor == null || roomsOnFloor.Count == 0)
             {
                 return Results.NotFound($"No rooms found on floor#{floor}");
             }
             // Get all the lights in the rooms on the floor
             var lightsOnFloor = allLights.Where(l => roomsOnFloor.Contains(l.RoomId)).ToList();
-            if(lightsOnFloor==null || lightsOnFloor.Count == 0)
+            if (lightsOnFloor == null || lightsOnFloor.Count == 0)
             {
                 return Results.NotFound($"No lights found on floor#{floor}");
             }
@@ -249,9 +256,4 @@ internal partial class Program
 
         app.Run();
     }
-
-
 }
-
-
-

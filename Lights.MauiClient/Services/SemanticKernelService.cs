@@ -2,9 +2,14 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using ModelContextProtocol.Client;
 using ModelContextProtocol.SemanticKernel.Extensions;
 using System.Diagnostics;
+using System;
+using System.Net;
+using System.Net.Http;
 using System.Net.Security;
+using System.Text.Json;
 
 namespace Lights.MauiClient.Services;
 
@@ -14,13 +19,14 @@ public class SemanticKernelService : ISemanticKernelService
     private const string chatModel = "gpt-5-mini";
 
     // ===== MCP transport config (override via env vars) =====
-    // MCP_MODE: "STDIO" (default) or "WS"
+    // MCP_MODE: "HTTP" (default) or "STDIO"
     // MCP_EXE:  full path to Lights.McpServer.exe (when STDIO)
-    // MCP_WS_URL: ws://localhost:5059/mcp (when WS)
-    private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "SSE"; // SSE Or STDIO
+    // MCP_HTTP_URL: Streamable HTTP endpoint exposed by Lights.RestApi
+    private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "HTTP";
     private static readonly string McpExe = Environment.GetEnvironmentVariable("MCP_EXE")
                                             ?? @"G:\Dev\AI\AIKernelClient\Lights.McpServer\bin\Debug\net9.0\Lights.McpServer.exe";
-    private static readonly string McpWsUrl = Environment.GetEnvironmentVariable("MCP_WS_URL") ?? "https://localhost:3001/mcp/";  //"ws://localhost:3001/mcp/"
+    private static readonly string McpHttpUrl = Environment.GetEnvironmentVariable("MCP_HTTP_URL")
+                                                ?? "https://localhost:5042/mcp";
 
     private ChatHistory _history;
     private IKernelBuilder _builder;
@@ -38,27 +44,27 @@ public class SemanticKernelService : ISemanticKernelService
         try
         {
             _history = [];
-            _history.AddSystemMessage("""
-You are Lights' local copilot, helping Pierre control his lights and environment and answer questions.
+//            _history.AddSystemMessage("""
+//You are Lights' local copilot, helping Pierre control his lights and environment and answer questions.
 
-GENERAL BEHAVIOR
-- Talk to the user in normal, natural language.
-- You can explain what you are doing, think step by step, and be conversational.
-- Use MCP tools only when they are genuinely helpful (for example to inspect or change lights).
+//GENERAL BEHAVIOR
+//- Talk to the user in normal, natural language.
+//- You can explain what you are doing, think step by step, and be conversational.
+//- Use MCP tools only when they are genuinely helpful (for example to inspect or change lights).
 
-TOOL USE MODE (IMPORTANT)
-When you decide that a tool should be used in a turn:
+//TOOL USE MODE (IMPORTANT)
+//When you decide that a tool should be used in a turn:
 
-1. Do NOT talk to the user in that same turn.
-2. Instead, return only a tool call with strict, valid JSON arguments that match the tool schema.
-3. Do NOT include any explanations, comments, or other text inside the tool call.
-4. Do NOT add phrases like "Wait function...", "We can iterate", or any similar commentary.
-5. Do NOT wrap the JSON in markdown, backticks, XML-ish tags, or special markers.
+//1. Do NOT talk to the user in that same turn.
+//2. Instead, return only a tool call with strict, valid JSON arguments that match the tool schema.
+//3. Do NOT include any explanations, comments, or other text inside the tool call.
+//4. Do NOT add phrases like "Wait function...", "We can iterate", or any similar commentary.
+//5. Do NOT wrap the JSON in markdown, backticks, XML-ish tags, or special markers.
 
-After the tool has been run and its result is available, you may send a new assistant message in normal language that explains the result to the user.
+//After the tool has been run and its result is available, you may send a new assistant message in normal language that explains the result to the user.
 
-If you are not calling a tool in a given turn, just answer the user in natural language and do not emit any tool calls.
-""");
+//If you are not calling a tool in a given turn, just answer the user in natural language and do not emit any tool calls.
+//""");
 
 
             _reducer = new ChatHistoryTruncationReducer(targetCount: 30, thresholdCount: 40);
@@ -108,7 +114,7 @@ If you are not calling a tool in a given turn, just answer the user in natural l
                 // Register the local vLLM endpoint with Semantic Kernel
                 _builder.AddOpenAIChatCompletion(
                     apiKey: "local-key",
-                    modelId: "openai/gpt-oss-20b",            // must match --served-model-name
+                    modelId: "qwen/qwen3.6-35b-a3b",            // must match --served-model-name
                     orgId: null,
                     serviceId: serviceID,
                     httpClient: httpsClient
@@ -118,14 +124,23 @@ If you are not calling a tool in a given turn, just answer the user in natural l
             }
 
             // Let the model auto-invoke MCP tools when helpful
+#pragma warning disable SKEXP0010 // ExtraBody is required for Qwen's enable_thinking option.
             _openAIPromptExecutionSettings = new()
             {
                 Temperature = 1,
                 // This is the key line – lets the model pick functions
                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
 
-                MaxTokens = 1024
+                MaxTokens = 4096,
+
+                // Qwen otherwise spends the full completion budget reasoning about
+                // tool arguments instead of emitting the tool call.
+                ExtraBody = new Dictionary<string, object>
+                {
+                    ["enable_thinking"] = false
+                }
             };
+#pragma warning restore SKEXP0010
 
             //_openAIPromptExecutionSettings.ResponseFormat =
             //    OpenAIChatResponseFormat.JsonObject;
@@ -135,18 +150,32 @@ If you are not calling a tool in a given turn, just answer the user in natural l
 
 
             // ===== Attach MCP tools (choose transport by env) =====
-            if (string.Equals(McpMode, "SSE", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(McpMode, "HTTP", StringComparison.OrdinalIgnoreCase))
             {
-                // Default: start the MCP server locally via SSE and bind its tools
-                // Connect to a running http  server 
+                // Connect to the REST API's MCP Streamable HTTP endpoint.
+                var mcpHttpClient = new HttpClient(new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (req, cert, chain, errors) =>
+                    {
+                        if (cert?.Subject?.Contains("CN=localhost", StringComparison.OrdinalIgnoreCase) == true)
+                            return true;
+
+                        return errors == SslPolicyErrors.None;
+                    }
+                });
+
                 await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
-                    serverName: "Lights.McpServer",
-                     endpoint: McpWsUrl);
+                    options =>
+                    {
+                        options.Name = "Lights.McpServer";
+                        options.Endpoint = new Uri(McpHttpUrl);
+                        options.TransportMode = HttpTransportMode.StreamableHttp;
+                    },
+                    httpClient: mcpHttpClient);
             }
             else
             {
-                // Not Supported anymore I switched to SSE by default
-                var p = await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
+                await _kernel.Plugins.AddMcpFunctionsFromStdioServerAsync(
                     serverName: "Lights.McpServer",
                     command: McpExe,
                     arguments: Array.Empty<string>());
@@ -176,7 +205,7 @@ If you are not calling a tool in a given turn, just answer the user in natural l
     /// </summary>
     public async Task<KernelPluginResult> GetResponseAsync(string prompt)
     {
-        var response = new KernelPluginResult();
+         var response = new KernelPluginResult();
         try
         {
             if (string.IsNullOrWhiteSpace(prompt))
