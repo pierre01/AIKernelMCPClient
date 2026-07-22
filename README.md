@@ -1,118 +1,151 @@
-﻿# AIKernelMCPClient
+# AIKernelMCPClient
 
-## Overview
-Ths project shows how to use Semantic Kernel inside a cross platform MAUI application (code works on nay type of app)  to control a REST API service using OpenAI (ChatGPT) as the AI model.
-Controllig the RestAPI through a MCP protocol enabled server. and Semantic Kernel MCP plugin on the client side.
+AIKernelMCPClient is a .NET 10 sample that demonstrates how a .NET MAUI application can use Semantic Kernel and the Model Context Protocol (MCP) to let a chat model inspect and control a lighting service.
+
+The repository models a small house in memory. A user enters or dictates a command such as “turn the kitchen lights on.” Semantic Kernel sends the conversation and the available MCP tool definitions to the configured model. When the model selects a tool, the MAUI app invokes that tool through MCP, and `Lights.RestApi` reads or updates the shared house state. A WPF application visualizes the resulting state by polling the REST API.
 
 ## Architecture
 
-![image](ReadMeImages/ArchitectureSimple.png)
+There are four projects in the solution. MCP is not a separate project or process in the current architecture: the MCP server is hosted by `Lights.RestApi` alongside its REST endpoints.
 
-## Goals
-- **Demonstrate how to use the official C# SDK for the Model Context Protocol**, enabling .NET applications, services, and libraries to implement and interact with MCP clients and servers.
-- Create a MAUI client application that uses Semantic Kernel to interact with an OpenAI model (ChatGPT 5 Mini or Nano) to control the service through prompts.
-- Create A MCP client in the form of a Semantic Kernel plugin that connects to the MCP server.
-- Show how to create basic authentication between the MCP client and server (in branch).
+```mermaid
+flowchart LR
+    User["User"] -->|text or speech| Maui["Lights.MauiClient<br/>MAUI + Semantic Kernel<br/>MCP host/client"]
+    Maui <-->|chat completion + tool calls| Model["Configured chat model<br/>local OpenAI-compatible endpoint<br/>or OpenAI"]
+    Maui <-->|MCP over Streamable HTTP<br/>/mcp| Api["Lights.RestApi<br/>REST API + MCP server"]
+    Api --> State["House.Instance<br/>in-memory rooms and lights"]
+    Wpf["Lights.WpfHouse<br/>read-only visualizer"] -->|GET /lights every second| Api
+    Common["Lights.Common<br/>models, seeded data, JSON context"] -.-> Maui
+    Common -.-> Api
+    Common -.-> Wpf
+```
 
-We are implementing the Model Control Protocol (MCP) on both the server and client side.
-As the architecture shows, the client application (AIKernelClient) is designed to interact with the AI model, allowing it to send intents and receive actions that can be executed on the service.
-The Client now becomes an MCP Host, and the Server an MCP Server, acting as an intermediary between the client and the service.
-The MCP protocol allows the AI to control the service directly by using intents, actions, and API calls.
-The MCP protocol is enabled on both the server and client side, allowing the AI to control the service directly by using intents, actions, and API calls.
+### Request flow
+
+1. `MainPageViewModel` accepts typed input or speech-to-text and passes the prompt to `SemanticKernelService`.
+2. `SemanticKernelService` maintains the chat history and calls the configured OpenAI-compatible chat-completion service with automatic function invocation enabled.
+3. During initialization, the service connects to `https://localhost:5042/mcp` and imports the MCP tools into the Semantic Kernel as functions.
+4. If the model decides a tool is needed, Semantic Kernel invokes it through the MCP client using Streamable HTTP.
+5. `Lights.RestApi` executes the matching method in `LightsMcpTools`. Both the MCP tools and REST endpoints operate directly on the singleton `House.Instance` state.
+6. The tool result returns to the model, which produces the natural-language response shown in the MAUI UI.
+7. Independently, `Lights.WpfHouse` polls `GET /lights` and redraws the house when state, brightness, or color changes.
+
+The model does not call the REST endpoints through MCP. The REST API and MCP tools are two interfaces over the same in-process state:
+
+- MCP tools are the AI-facing interface used by the MAUI client.
+- REST endpoints expose the same data to conventional HTTP clients and the WPF visualizer.
 
 ## Projects
-The Solution is made of **4 C# .net 10.0 projects**
-1. **Lights.RestApi:** The REST web service (Minimal API endpoints with OpenAPI generated definintion) **Is the service we want the AI to control** 
 
-2. **Lights.MauiClient:** The controller application  **talking to the AI**: a cross platform **MAUI** (Multi platform) application that controls the service through prompts Using Semantic Kernel with a connector to OpenAI (Chat GPT 5 Mini or nano) it relays service calls from the AI.
-- **ApiKeyProvider.cs** will provide the OpenAI API key from secure storage or environment variable
-- **SemanticKernelService.cs** will create the kernel, load the plugin, and will call the AI model with the prompt
+### `Lights.RestApi`
 
-```csharp
-var openAiApiKey = await ApiKeyProvider.GetApiKeyAsync();
-var openApiOrgId = await ApiKeyProvider.GetAiOrgId();
-// OpenAI chat connector
-_builder.Services.AddOpenAIChatCompletion(
-    modelId: chatModel,
-    apiKey: openAiApiKey,
-    orgId: openApiOrgId,
-    serviceId: "lights"
-);
-``` 
-- MCP Plugin creation and prompting occurs in the class Services/**SemanticKernelService.cs** injected to the MainPageViewModel.cs
+An ASP.NET Core minimal API that owns the running house state and exposes it through two interfaces:
 
-```csharp
-// Default: start the MCP server locally via SSE and bind its tools
-// Connect to a running http  server 
-await _kernel.Plugins.AddMcpFunctionsFromSseServerAsync(
-       serverName: "Lights.McpServer",
-       endpoint: McpWsUrl);
+- REST endpoints under `/rooms` and `/lights`.
+- An MCP Streamable HTTP endpoint at `/mcp`.
+
+The MCP server is registered with `AddMcpServer()`, `WithHttpTransport()`, and `WithToolsFromAssembly()`. `LightsMcpTools` currently exposes:
+
+- `GetAllLights`
+- `GetAllRooms`
+- `GetRoom`
+- `GetLight`
+- `GetLightsOnFloor`
+- `UpdateLights`
+
+`UpdateLights` validates each light's capabilities before changing its state, brightness, or six-digit RGB color. The API stores all changes in memory, so restarting the process resets the house to its seeded state.
+
+### `Lights.MauiClient`
+
+The cross-platform chat controller and MCP host. Its main responsibilities are:
+
+- Capture typed commands or speech using .NET MAUI Community Toolkit speech-to-text.
+- Configure Semantic Kernel and the chat-completion service.
+- Import the server's MCP tools as Kernel functions.
+- Allow the model to select and automatically invoke those functions.
+- Maintain and truncate chat history and display token/timing information when the connector supplies it.
+
+The current code defaults to a local OpenAI-compatible endpoint:
+
+```text
+http://127.0.0.1:8931/v1
+model: qwen/qwen3.6-35b-a3b
 ```
 
-- **MainPageViewModel** will initialize the SemanticKernelService (**InitializeKernelAndPluginAsync**) and will call it to prompt the AI (**GetResponseAsync**)
-- Speech to Text is also implemented in the **MainPageViewModel.cs** class, by dependency injection.
+`SemanticKernelService` also contains an OpenAI configuration for `gpt-5-mini`, using `MY_AI_API_KEY` and optionally `MY_AI_ORG_KEY`, but switching between local and OpenAI is currently controlled by the `useLocal` value in that class.
 
-3. **Lights.WpfHouse:** A visualization application  that displays the changes done by the controller on the service by polling at regular intervals the changes made to the service resources (lights) (WPF application). 
-4. **Lights.Common:** A shared Entities library  (with seeded data) is shared between Lights.RestApi, Lights.McpServer (for entities), and Lights.MauiClient (only for the pre created prompts)
-5. **Lights.McpServer:** The MCP enabled server, a web application HTTP SSE service  that interacts with Lights.RestApi and enables the MCP protocol on it. It communicates with the MCP client (Lights.MauiClient) which relays the intents and actions from OpenAI chat LLM to The MCP Server.
-```csharp
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.TypeInfoResolverChain.Insert(0, LightsJsonContext.Default);
-});
+The MCP transport is selected with environment variables:
 
-// Combine resolvers so AOT metadata is available for *all* involved types
-var toolSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
-{
-    TypeInfoResolver = LightsJsonContext.Default   // Jso serialization from LightsAPICommon
-};
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `MCP_MODE` | `HTTP` | Uses Streamable HTTP when set to `HTTP`; any other value selects the stdio branch. |
+| `MCP_HTTP_URL` | `https://localhost:5042/mcp` | MCP endpoint hosted by `Lights.RestApi`. |
+| `MCP_EXE` | Legacy local path | Executable used by the optional stdio branch. It must point to a compatible MCP server; no separate stdio server project exists in this solution. |
 
+### `Lights.WpfHouse`
 
-builder.Services.AddMcpServer()
-    .WithHttpTransport()
-    .WithToolsFromAssembly(serializerOptions: toolSerializerOptions);
+A Windows-only passive visualization of the house. It sends `GET https://localhost:5042/lights` approximately once per second and updates the displayed lights. It does not use MCP and does not modify the API state.
 
-var app = builder.Build();
+### `Lights.Common`
 
-var mcpGroup = app.MapGroup("/mcp");
-mcpGroup.MapMcp();   // <— call MapMcp on the group; all routes get the prefix + auth
+The shared model library containing `House`, `Room`, `Light`, capability and request/response types, seeded rooms and lights, sample prompts, and source-generated JSON metadata.
 
-app.Run();
-```
-## Detailed Architecture
+Each executable has its own process-local `House.Instance`. The authoritative state for a running demo is the instance inside `Lights.RestApi`; the WPF client replaces its local display values with data fetched from that API.
 
-![image](ReadMeImages/Architecture.png)
+## Running the sample
+
+### Prerequisites
+
+- .NET 10 SDK and the workloads required for .NET MAUI.
+- Windows when running `Lights.WpfHouse`.
+- A chat-completion endpoint compatible with the configuration in `SemanticKernelService`.
+- A trusted ASP.NET Core development HTTPS certificate for the local API.
+
+### Start the applications
+
+1. Start the REST API:
+
+   ```powershell
+   dotnet run --project Lights.RestApi
+   ```
+
+   It listens at `https://localhost:5042`, exposes MCP at `/mcp`, and publishes OpenAPI at `/openapi/v1/openapi.json`.
+
+2. Start the MAUI client from Visual Studio using the desired target platform. Ensure its configured model endpoint is running and can perform tool calls.
+
+3. Optionally start `Lights.WpfHouse` on Windows to watch changes made through MCP:
+
+   ```powershell
+   dotnet run --project Lights.WPFHouse
+   ```
+
+The API must remain running while either client is in use.
+
+## Example interactions
+
+- “Turn all the living room lights on.”
+- “Change the kitchen lights to a warm 2000K-like color.”
+- “Are the office lights on or off?”
+- “Turn off every light on the second floor.”
+
+![MAUI client](ReadMeImages/BasicUI.png)
+
+![Executing a command](ReadMeImages/SimpleCommand.png)
+
+## Connecting another MCP client
+
+`Lights.RestApi` can also be exposed through a secure tunnel and connected to another MCP-capable host. Point that host at the tunneled `/mcp` endpoint; the exact setup depends on the host and tunnel provider.
+
+![Visual Studio dev tunnel](ReadMeImages/DevTunnel.png)
+
+![MCP connector configuration](ReadMeImages/MCPConnector.png)
 
 ## References
 
-- Semantic Kernel
+- [Semantic Kernel overview](https://learn.microsoft.com/semantic-kernel/overview/)
+- [.NET MAUI speech-to-text](https://learn.microsoft.com/dotnet/communitytoolkit/maui/essentials/speech-to-text)
+- [Model Context Protocol C# SDK](https://github.com/modelcontextprotocol/csharp-sdk)
 
-    https://learn.microsoft.com/en-us/semantic-kernel/overview/
+## Current scope
 
- - Maui Speech to Text
-
-    https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/essentials/speech-to-text?tabs=windows
-
-   ![image](ReadMeImages/BasicUI.png)
-   ![image](ReadMeImages/SimpleCommand.png)
-   ![image](ReadMeImages/SeventyParty.png)
-   ![image](ReadMeImages/ProtocolGeneration.png)
-   ![image](ReadMeImages/ProtocolExecution.png)
-   ![image](ReadMeImages/CodeGeneration.png)
-   
-## Creating a Chat GPT Connector
-To create a Chat GPT connector, you need to Setup a DevTunnel in visual studio then just create a new connector with the devtunnel uri
-
-![image](ReadMeImages/DevTunnel.png)
-
-### Then create and run the connector in Chat GPT
-
-![image](ReadMeImages/MCPConnector.png)
-
-## Features at Work
-
-1. Create a smart service that can be controlled by a client with autorization.
-1. Use Semantic Kernel to create a plugin that allows the AI to interact with the service.
-1. Have the prompts sent to the smart service and redirect the intents to the service.
-1. Use memory storage to cache states per room/floor/light if needed.
-1 **Use MemoryStore** or vector memory to cache states per room/floor/light if needed.
+This repository is a demonstration rather than a production home-automation service. State is ephemeral, the local HTTPS certificate handling is development-oriented, and authentication/authorization is not enabled in the current branch.
