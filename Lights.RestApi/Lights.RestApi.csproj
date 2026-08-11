@@ -15,7 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 		<PackageReference Include="Microsoft.OpenApi" Version="2.7.5" />
-		<PackageReference Include="ModelContextProtocol.AspNetCore" Version="1.4.1" />
+		<PackageReference Include="ModelContextProtocol.AspNetCore" Version="2.1.0" />
 	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lights.Common\Lights.Common.csproj" />

@@ -53,14 +53,14 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Maui" Version="14.2.2" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="15.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.80" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.90" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.10" />
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.78.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.78.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.78.0" />
-    <PackageReference Include="ModelContextProtocol" Version="1.4.1" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.79.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.79.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.79.0" />
+    <PackageReference Include="ModelContextProtocol" Version="2.1.0" />
     <PackageReference Include="Stef.ModelContextProtocol.SemanticKernel" Version="0.10.0" />
   </ItemGroup>
   <ItemGroup>
