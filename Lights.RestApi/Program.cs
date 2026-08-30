@@ -88,7 +88,7 @@ internal partial class Program
         // Get all the lights
         lightsApi.MapGet("/", (HttpRequest request) =>
         {
-            // Check user agent to remove the soft client calls and only show the Kernel calls
+            // Check user agent to remove the soft-client calls and only show the agent calls
             if (!request.Headers.UserAgent.ToString().Contains("API SoftClient"))
             {
                 Debug.WriteLine(">> Get all lights -> GetLights");

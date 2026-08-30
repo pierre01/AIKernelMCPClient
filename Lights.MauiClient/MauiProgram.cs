@@ -35,7 +35,7 @@ public static class MauiProgram
     {
         mauiAppBuilder.Services.AddSingleton<ISpeechToText>(SpeechToText.Default);
         mauiAppBuilder.Services.AddSingleton<IDialogService, DialogService>();
-        mauiAppBuilder.Services.AddSingleton<ISemanticKernelService, SemanticKernelService>();
+        mauiAppBuilder.Services.AddSingleton<IMicrosoftAgentsService, MicrosoftAgentsService>();
         return mauiAppBuilder;
     }    
     public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)

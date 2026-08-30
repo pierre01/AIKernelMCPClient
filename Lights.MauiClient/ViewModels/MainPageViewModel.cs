@@ -18,18 +18,18 @@ public partial class MainPageViewModel : ObservableObject
     //Voice Handling
     private readonly ISpeechToText _speechToText;
     private readonly IDialogService _dialogService;
-    private readonly ISemanticKernelService _semanticKernelService;
+    private readonly IMicrosoftAgentsService _microsoftAgentsService;
 
     private bool _isListening = false;
     private bool _isSpeechEnabled = false;
 
-    public MainPageViewModel(ISpeechToText speechToText, IDialogService dialogService, ISemanticKernelService semanticKernelService)
+    public MainPageViewModel(ISpeechToText speechToText, IDialogService dialogService, IMicrosoftAgentsService microsoftAgentsService)
     {
         _speechToText = speechToText;
         _dialogService = dialogService;
-        _semanticKernelService = semanticKernelService;
+        _microsoftAgentsService = microsoftAgentsService;
 
-        _semanticKernelService.InitializeKernelAndPluginAsync().ConfigureAwait(true);
+        _microsoftAgentsService.InitializeAgentAndToolsAsync().ConfigureAwait(true);
     }
 
 
@@ -150,7 +150,7 @@ public partial class MainPageViewModel : ObservableObject
 
     public async Task GetResponseAsync(string prompt)
     {
-        var result = await _semanticKernelService.GetResponseAsync(prompt);
+        var result = await _microsoftAgentsService.GetResponseAsync(prompt);
         if (result.IsSuccess)
         {
             CallTextResult = result.Result;

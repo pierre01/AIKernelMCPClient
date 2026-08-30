@@ -13,7 +13,7 @@ namespace Lights.MauiClient.Services;
 /// Provides the application's conversational agent and its MCP-backed light tools.
 /// The legacy class name is retained so the UI-facing service contract does not change.
 /// </summary>
-public sealed class SemanticKernelService : ISemanticKernelService, IAsyncDisposable
+public sealed class MicrosoftAgentsService : IMicrosoftAgentsService, IAsyncDisposable
 {
     private const string RemoteModel = "gpt-5-mini";
     private const string LocalModel = "qwen/qwen3.6-35b-a3b";
@@ -30,7 +30,7 @@ public sealed class SemanticKernelService : ISemanticKernelService, IAsyncDispos
     private McpClient _mcpClient;
     private long _totalTokens;
 
-    public async Task InitializeKernelAndPluginAsync()
+    public async Task InitializeAgentAndToolsAsync()
     {
         try
         {
@@ -74,9 +74,9 @@ public sealed class SemanticKernelService : ISemanticKernelService, IAsyncDispos
         }
     }
 
-    public async Task<KernelPluginResult> GetResponseAsync(string prompt)
+    public async Task<AgentResponseResult> GetResponseAsync(string prompt)
     {
-        var response = new KernelPluginResult();
+        var response = new AgentResponseResult();
 
         try
         {
