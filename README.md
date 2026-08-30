@@ -2,6 +2,8 @@
 
 AIKernelMCPClient is a .NET 10 sample that demonstrates how a .NET MAUI application can use Microsoft Agent Framework and the Model Context Protocol (MCP) to let a chat model inspect and control a lighting service.
 
+![Executing a command](ReadMeImages/SimpleCommand.png)
+
 The repository models a small house in memory. A user enters or dictates a command such as “turn the kitchen lights on.” Microsoft Agent Framework sends the conversation and the available MCP tool definitions to the configured model. When the model selects a tool, the MAUI app invokes that tool through MCP, and `Lights.RestApi` reads or updates the shared house state. A WPF application visualizes the resulting state by polling the REST API.
 
 ## Architecture
@@ -130,7 +132,6 @@ The API must remain running while either client is in use.
 
 ![MAUI client](ReadMeImages/BasicUI.png)
 
-![Executing a command](ReadMeImages/SimpleCommand.png)
 
 ## Connecting another MCP client
 
