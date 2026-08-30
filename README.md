@@ -1,8 +1,8 @@
 # AIKernelMCPClient
 
-AIKernelMCPClient is a .NET 10 sample that demonstrates how a .NET MAUI application can use Semantic Kernel and the Model Context Protocol (MCP) to let a chat model inspect and control a lighting service.
+AIKernelMCPClient is a .NET 10 sample that demonstrates how a .NET MAUI application can use Microsoft Agent Framework and the Model Context Protocol (MCP) to let a chat model inspect and control a lighting service.
 
-The repository models a small house in memory. A user enters or dictates a command such as “turn the kitchen lights on.” Semantic Kernel sends the conversation and the available MCP tool definitions to the configured model. When the model selects a tool, the MAUI app invokes that tool through MCP, and `Lights.RestApi` reads or updates the shared house state. A WPF application visualizes the resulting state by polling the REST API.
+The repository models a small house in memory. A user enters or dictates a command such as “turn the kitchen lights on.” Microsoft Agent Framework sends the conversation and the available MCP tool definitions to the configured model. When the model selects a tool, the MAUI app invokes that tool through MCP, and `Lights.RestApi` reads or updates the shared house state. A WPF application visualizes the resulting state by polling the REST API.
 
 ## Architecture
 
@@ -10,7 +10,7 @@ There are four projects in the solution. MCP is not a separate project or proces
 
 ```mermaid
 flowchart LR
-    User["User"] -->|text or speech| Maui["Lights.MauiClient<br/>MAUI + Semantic Kernel<br/>MCP host/client"]
+    User["User"] -->|text or speech| Maui["Lights.MauiClient<br/>MAUI + Microsoft Agent Framework<br/>MCP client"]
     Maui <-->|chat completion + tool calls| Model["Configured chat model<br/>local OpenAI-compatible endpoint<br/>or OpenAI"]
     Maui <-->|MCP over Streamable HTTP<br/>/mcp| Api["Lights.RestApi<br/>REST API + MCP server"]
     Api --> State["House.Instance<br/>in-memory rooms and lights"]
@@ -22,10 +22,10 @@ flowchart LR
 
 ### Request flow
 
-1. `MainPageViewModel` accepts typed input or speech-to-text and passes the prompt to `SemanticKernelService`.
-2. `SemanticKernelService` maintains the chat history and calls the configured OpenAI-compatible chat-completion service with automatic function invocation enabled.
-3. During initialization, the service connects to `https://localhost:5042/mcp` and imports the MCP tools into the Semantic Kernel as functions.
-4. If the model decides a tool is needed, Semantic Kernel invokes it through the MCP client using Streamable HTTP.
+1. `MainPageViewModel` accepts typed input or speech-to-text and passes the prompt to `MicrosoftAgentsService`.
+2. `MicrosoftAgentsService` maintains the agent session and calls the configured OpenAI-compatible chat-completion service with automatic function invocation enabled.
+3. During initialization, the service connects to `https://localhost:5042/mcp` and registers the discovered MCP tools with the agent.
+4. If the model decides a tool is needed, Microsoft Agent Framework invokes it through the MCP client using Streamable HTTP.
 5. `Lights.RestApi` executes the matching method in `LightsMcpTools`. Both the MCP tools and REST endpoints operate directly on the singleton `House.Instance` state.
 6. The tool result returns to the model, which produces the natural-language response shown in the MAUI UI.
 7. Independently, `Lights.WpfHouse` polls `GET /lights` and redraws the house when state, brightness, or color changes.
@@ -60,8 +60,8 @@ The MCP server is registered with `AddMcpServer()`, `WithHttpTransport()`, and `
 The cross-platform chat controller and MCP host. Its main responsibilities are:
 
 - Capture typed commands or speech using .NET MAUI Community Toolkit speech-to-text.
-- Configure Semantic Kernel and the chat-completion service.
-- Import the server's MCP tools as Kernel functions.
+- Configure Microsoft Agent Framework and the chat-completion service.
+- Register the server's MCP tools as agent tools.
 - Allow the model to select and automatically invoke those functions.
 - Maintain and truncate chat history and display token/timing information when the connector supplies it.
 
@@ -72,7 +72,7 @@ http://127.0.0.1:8931/v1
 model: qwen/qwen3.6-35b-a3b
 ```
 
-`SemanticKernelService` also contains an OpenAI configuration for `gpt-5-mini`, using `MY_AI_API_KEY` and optionally `MY_AI_ORG_KEY`, but switching between local and OpenAI is currently controlled by the `useLocal` value in that class.
+`MicrosoftAgentsService` also contains an OpenAI configuration for `gpt-5-mini`, using `MY_AI_API_KEY` and optionally `MY_AI_ORG_KEY`, but switching between local and OpenAI is currently controlled by the `useLocal` value in that class.
 
 The MCP transport is selected with environment variables:
 
@@ -98,7 +98,7 @@ Each executable has its own process-local `House.Instance`. The authoritative st
 
 - .NET 10 SDK and the workloads required for .NET MAUI.
 - Windows when running `Lights.WpfHouse`.
-- A chat-completion endpoint compatible with the configuration in `SemanticKernelService`.
+- A chat-completion endpoint compatible with the configuration in `MicrosoftAgentsService`.
 - A trusted ASP.NET Core development HTTPS certificate for the local API.
 
 ### Start the applications
@@ -142,7 +142,7 @@ The API must remain running while either client is in use.
 
 ## References
 
-- [Semantic Kernel overview](https://learn.microsoft.com/semantic-kernel/overview/)
+- [Microsoft Agent Framework overview](https://learn.microsoft.com/agent-framework/overview/agent-framework-overview)
 - [.NET MAUI speech-to-text](https://learn.microsoft.com/dotnet/communitytoolkit/maui/essentials/speech-to-text)
 - [Model Context Protocol C# SDK](https://github.com/modelcontextprotocol/csharp-sdk)
 

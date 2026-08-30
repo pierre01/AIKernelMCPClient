@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Lights.MauiClient.Services.Interfaces;
 
-public  interface ISemanticKernelService
+public interface IMicrosoftAgentsService
 {
-    Task InitializeKernelAndPluginAsync();
-    Task<KernelPluginResult> GetResponseAsync(string prompt);
+    Task InitializeAgentAndToolsAsync();
+    Task<AgentResponseResult> GetResponseAsync(string prompt);
 }
 
-public class KernelPluginResult
+public class AgentResponseResult
 {
     public bool IsSuccess { get; set; } = true;
     public string Result { get; set; }
