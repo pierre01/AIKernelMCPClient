@@ -16,7 +16,7 @@ namespace Lights.MauiClient.Services;
 public sealed class MicrosoftAgentsService : IMicrosoftAgentsService, IAsyncDisposable
 {
     private const string RemoteModel = "gpt-5-mini";
-    private const string LocalModel = "qwen/qwen3.6-35b-a3b";
+    private const string LocalModel = "qwen/qwen3.8-27b";
     private const int MaxOutputTokens = 4096;
 
     private static readonly string McpMode = Environment.GetEnvironmentVariable("MCP_MODE") ?? "HTTP";
