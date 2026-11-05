@@ -55,11 +55,19 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.110" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.13" />
-    <PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.25.0" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.120" />
+    <PackageReference Include="Microsoft.Maui.Controls.Build.Tasks" Version="10.0.120" />
+    <PackageReference Include="Microsoft.Maui.Resizetizer" Version="10.0.120" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.27.0" />
+    <PackageReference Include="Microsoft.Agents.AI" Version="1.27.0" />
     <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.11.0" />
-    <PackageReference Include="ModelContextProtocol" Version="2.2.0" />
+    <PackageReference Include="ModelContextProtocol" Version="2.3.1" />
+    <PackageReference Include="ModelContextProtocol.Core" Version="2.3.1" />
+    <PackageReference Include="System.ClientModel" Version="1.16.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lights.Common\Lights.Common.csproj" />
